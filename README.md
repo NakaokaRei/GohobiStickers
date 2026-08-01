@@ -29,7 +29,7 @@ Each goal interval is counted from the previous goal. For example, intervals of 
 
 1. Open `GohobiStickers.xcodeproj` in Xcode.
 2. Select your development team under Signing & Capabilities.
-3. Confirm that the iCloud capability uses the `iCloud.com.me.n.rei.GohobiStickers` CloudKit container.
+3. Confirm that the iCloud capability uses the `iCloud.com.nakaokarei.GohobiStickers.7ZJJ7KR6WA` CloudKit container.
 4. Select a run destination and run the `GohobiStickers` scheme.
 
 ## Stamp Images
@@ -56,6 +56,8 @@ User-entered comments and reward names are stored and displayed exactly as enter
 Stamps, comments, goals, and appearance settings are stored in `GohobiStickers/stamp-book.json` under the app's Application Support directory and synchronized as a private CloudKit record. The local copy remains available offline. Cloud sync uses the iCloud account configured on the device, so the app does not require a separate sign-in flow or backend server.
 
 CloudKit requires an Apple Developer Program team, an iCloud-enabled provisioning profile, and a device signed in to iCloud. Before releasing the app, deploy the CloudKit development schema to production in CloudKit Console.
+
+To inspect `StampBook` records in CloudKit Console, add a `QUERYABLE` index for the `recordName` system field under Schema > Indexes.
 
 ## Testing
 

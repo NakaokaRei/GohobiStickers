@@ -128,7 +128,10 @@ final class StampStore {
             } catch CloudSyncError.accountUnavailable {
                 cloudSyncStatus = .accountUnavailable
             } catch {
-                cloudSyncStatus = .failed(error.localizedDescription)
+                let cocoaError = error as NSError
+                cloudSyncStatus = .failed(
+                    "\(cocoaError.localizedDescription) [\(cocoaError.domain):\(cocoaError.code)]"
+                )
             }
 
             if data.modifiedAt > snapshot.modifiedAt {

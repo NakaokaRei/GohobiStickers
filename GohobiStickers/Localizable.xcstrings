@@ -704,6 +704,13 @@
         "ja" : { "stringUnit" : { "state" : "translated", "value" : "この端末のiCloudアカウントを使い、スタンプ・コメント・ゴール・設定を非公開で同期します。オフラインでもローカルデータを利用できます。" } }
       }
     },
+    "icloud.last-synced" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Last synced: %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最終同期: %@" } }
+      }
+    },
     "icloud.status.account-unavailable" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -197,14 +197,19 @@ private struct CloudSyncStatusRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(title)
                 if case .synced(let date) = status {
-                    Text(date, style: .relative)
+                    Text(
+                        L10n.format(
+                            "icloud.last-synced",
+                            date.formatted(date: .omitted, time: .shortened)
+                        )
+                    )
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 } else if case .failed(let message) = status {
                     Text(message)
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                        .lineLimit(4)
                 }
             }
         } icon: {
