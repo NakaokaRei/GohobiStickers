@@ -811,104 +811,121 @@
         }
       }
     },
-    "preset.crown" : {
+    "preset.blue-hero" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Amazing"
+            "value" : "Blue Hero"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "すごい"
+            "value" : "ブルーヒーロー"
           }
         }
       }
     },
-    "preset.flower" : {
+    "preset.frog-blue" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lovely"
+            "value" : "Blue Frog"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "すてき"
+            "value" : "ブルーのかえる"
           }
         }
       }
     },
-    "preset.heart" : {
+    "preset.frog-green" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Thank you"
+            "value" : "Green Frog"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ありがとう"
+            "value" : "グリーンのかえる"
           }
         }
       }
     },
-    "preset.rainbow" : {
+    "preset.frog-pink" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Congratulations"
+            "value" : "Pink Frog"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "おめでとう"
+            "value" : "ピンクのかえる"
           }
         }
       }
     },
-    "preset.sparkle" : {
+    "preset.pink-hero" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Great effort"
+            "value" : "Pink Hero"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "がんばった"
+            "value" : "ピンクヒーロー"
           }
         }
       }
     },
-    "preset.sun" : {
+    "preset.sea-lion" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Well done"
+            "value" : "Sea Lion"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "よくできた"
+            "value" : "アシカ"
+          }
+        }
+      }
+    },
+    "preset.shell" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shell"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "かい"
           }
         }
       }

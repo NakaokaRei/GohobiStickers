@@ -33,14 +33,14 @@ struct GohobiStickersTests {
 
     @Test func stampCRUDUpdatesTotalAndContent() throws {
         let store = makeStore()
-        store.addEntry(presetID: "heart", comment: "  できた！  ")
+        store.addEntry(presetID: "frog_pink", comment: "  できた！  ")
 
         #expect(store.totalStampCount == 1)
         let entry = try #require(store.entries.first)
         #expect(entry.comment == "できた！")
 
-        store.updateEntry(id: entry.id, presetID: "crown", comment: "更新")
-        #expect(store.entries.first?.presetID == "crown")
+        store.updateEntry(id: entry.id, presetID: "blue_hero", comment: "更新")
+        #expect(store.entries.first?.presetID == "blue_hero")
         #expect(store.entries.first?.comment == "更新")
 
         store.deleteEntry(id: entry.id)
@@ -50,7 +50,7 @@ struct GohobiStickersTests {
     @Test func dataPersistsAndReloads() {
         let url = temporaryURL()
         let firstStore = StampStore(fileURL: url)
-        firstStore.addEntry(presetID: "sun", comment: "保存テスト")
+        firstStore.addEntry(presetID: "blue_hero", comment: "保存テスト")
         firstStore.addGoal(interval: 7, rewardName: "旅行")
 
         let reloadedStore = StampStore(fileURL: url)
@@ -97,10 +97,10 @@ struct GohobiStickersTests {
         let store = makeStore()
 
         for _ in 0..<4 {
-            store.addEntry(presetID: "sun", comment: "")
+            store.addEntry(presetID: "blue_hero", comment: "")
             #expect(store.celebration == nil)
         }
-        store.addEntry(presetID: "crown", comment: "")
+        store.addEntry(presetID: "shell", comment: "")
 
         #expect(store.celebration?.targetCount == 5)
         #expect(store.celebration?.goal.rewardName == L10n.string("default.reward.cake"))
@@ -111,7 +111,7 @@ struct GohobiStickersTests {
 
     @Test func newerCloudDataReplacesTheLocalCopy() async throws {
         let remoteData = StampBookData(
-            entries: [StampEntry(presetID: "rainbow", comment: "iCloud")],
+            entries: [StampEntry(presetID: "sea_lion", comment: "iCloud")],
             goals: [Goal(interval: 7, rewardName: "旅行")],
             appearance: .dark,
             modifiedAt: .now.addingTimeInterval(60)
@@ -126,6 +126,20 @@ struct GohobiStickersTests {
         #expect(store.goalPlacements.map(\.targetCount) == [7])
         #expect(store.appearance == .dark)
         #expect(store.cloudSyncStatus == .synced(syncDate))
+    }
+
+    @Test func presetCatalogContainsOnlyBundledArtwork() {
+        #expect(
+            StampPreset.all.map(\.id) == [
+                "blue_hero",
+                "pink_hero",
+                "frog_pink",
+                "frog_blue",
+                "frog_green",
+                "sea_lion",
+                "shell"
+            ]
+        )
     }
 
     private func makeStore() -> StampStore {

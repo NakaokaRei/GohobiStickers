@@ -34,16 +34,27 @@ Each goal interval is counted from the previous goal. For example, intervals of 
 
 ## Stamp Images
 
-Add production images to the following Image Sets in `GohobiStickers/Assets.xcassets`:
+Bundled artwork is stored in the following Image Sets in `GohobiStickers/Assets.xcassets/Stamps`:
 
-- `stamp_sun`
-- `stamp_flower`
-- `stamp_crown`
-- `stamp_heart`
-- `stamp_sparkle`
-- `stamp_rainbow`
+- `stamp_blue_hero`
+- `stamp_pink_hero`
+- `stamp_frog_pink`
+- `stamp_frog_blue`
+- `stamp_frog_green`
+- `stamp_sea_lion`
+- `stamp_shell`
 
-Until images are added, the app displays SF Symbols as fallbacks. Preset metadata is defined in `StampPreset.all` in `GohobiStickers/Models.swift`.
+Presets without bundled artwork display SF Symbols as fallbacks. Preset metadata is defined in `StampPreset.all` in `GohobiStickers/Models/Models.swift`.
+
+## Project Structure
+
+- `App`: app entry point and root configuration
+- `Models`: Codable data models and stamp preset definitions
+- `Services`: CloudKit integration
+- `Stores`: application state, persistence, and sync coordination
+- `DesignSystem`: shared colors and stamp artwork components
+- `Views`: feature-based SwiftUI screens and their components
+- `Support`: localization helpers
 
 ## Localization
 

@@ -1,0 +1,38 @@
+import SwiftUI
+
+struct GoalBadge: View {
+    let placement: GoalPlacement
+    let isAchieved: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: isAchieved ? "checkmark.seal.fill" : "gift.fill")
+                .font(.title2)
+                .foregroundStyle(isAchieved ? AppColors.mint : AppColors.coral)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(L10n.format("goal.position", placement.targetCount))
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                Text(placement.goal.rewardName)
+                    .font(.headline)
+                    .foregroundStyle(AppColors.ink)
+            }
+            Spacer()
+            if isAchieved {
+                Text(L10n.string("goal.achieved"))
+                    .font(.caption.bold())
+                    .foregroundStyle(AppColors.mint)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .frame(maxWidth: 300)
+        .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .stroke(isAchieved ? AppColors.mint.opacity(0.45) : AppColors.coral.opacity(0.25), lineWidth: 2)
+        }
+        .shadow(color: AppColors.ink.opacity(0.06), radius: 8, y: 4)
+        .accessibilityElement(children: .combine)
+    }
+}

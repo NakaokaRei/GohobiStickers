@@ -54,12 +54,13 @@ struct StampPreset: Identifiable, Equatable, Sendable {
     let fallbackColorName: String
 
     static let all: [StampPreset] = [
-        .init(id: "sun", name: L10n.string("preset.sun"), assetName: "stamp_sun", fallbackSymbol: "sun.max.fill", fallbackColorName: "sun"),
-        .init(id: "flower", name: L10n.string("preset.flower"), assetName: "stamp_flower", fallbackSymbol: "camera.macro", fallbackColorName: "flower"),
-        .init(id: "crown", name: L10n.string("preset.crown"), assetName: "stamp_crown", fallbackSymbol: "crown.fill", fallbackColorName: "crown"),
-        .init(id: "heart", name: L10n.string("preset.heart"), assetName: "stamp_heart", fallbackSymbol: "heart.fill", fallbackColorName: "heart"),
-        .init(id: "sparkle", name: L10n.string("preset.sparkle"), assetName: "stamp_sparkle", fallbackSymbol: "sparkles", fallbackColorName: "sparkle"),
-        .init(id: "rainbow", name: L10n.string("preset.rainbow"), assetName: "stamp_rainbow", fallbackSymbol: "rainbow", fallbackColorName: "rainbow")
+        .init(id: "blue_hero", name: L10n.string("preset.blue-hero"), assetName: "stamp_blue_hero", fallbackSymbol: "figure.wave", fallbackColorName: "sky"),
+        .init(id: "pink_hero", name: L10n.string("preset.pink-hero"), assetName: "stamp_pink_hero", fallbackSymbol: "person.fill", fallbackColorName: "flower"),
+        .init(id: "frog_pink", name: L10n.string("preset.frog-pink"), assetName: "stamp_frog_pink", fallbackSymbol: "face.smiling", fallbackColorName: "flower"),
+        .init(id: "frog_blue", name: L10n.string("preset.frog-blue"), assetName: "stamp_frog_blue", fallbackSymbol: "face.smiling", fallbackColorName: "sky"),
+        .init(id: "frog_green", name: L10n.string("preset.frog-green"), assetName: "stamp_frog_green", fallbackSymbol: "face.smiling", fallbackColorName: "green"),
+        .init(id: "sea_lion", name: L10n.string("preset.sea-lion"), assetName: "stamp_sea_lion", fallbackSymbol: "water.waves", fallbackColorName: "sky"),
+        .init(id: "shell", name: L10n.string("preset.shell"), assetName: "stamp_shell", fallbackSymbol: "fossil.shell.fill", fallbackColorName: "sun")
     ]
 
     static func preset(for id: String) -> StampPreset {
