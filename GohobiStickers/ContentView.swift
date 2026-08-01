@@ -5,12 +5,13 @@ struct ContentView: View {
     @Environment(StampStore.self) private var store
     @State private var isAddingStamp = false
     @State private var isShowingGoals = false
+    @State private var isShowingAppearance = false
     @State private var editingEntry: StampEntry?
 
     private let routeOffsets: [CGFloat] = [-88, 0, 88, 0]
 
     private var routeEnd: Int {
-        max(store.totalStampCount, store.goalPlacements.last?.targetCount ?? 1, 1)
+        max(store.totalStampCount + 1, store.goalPlacements.last?.targetCount ?? 1, 1)
     }
 
     var body: some View {
@@ -31,9 +32,14 @@ struct ContentView: View {
                             RouteNode(
                                 position: position,
                                 entry: entry,
+                                isNext: position == store.totalStampCount + 1,
                                 offset: offset
                             ) {
-                                if let entry { editingEntry = entry }
+                                if let entry {
+                                    editingEntry = entry
+                                } else if position == store.totalStampCount + 1 {
+                                    isAddingStamp = true
+                                }
                             }
 
                             if let placement = goal(at: position) {
@@ -51,16 +57,35 @@ struct ContentView: View {
 
                         endOfRoute
                             .padding(.top, 24)
-                            .padding(.bottom, 120)
+                            .padding(.bottom, 40)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 12)
                 }
                 .scrollIndicators(.hidden)
+
+                if let celebration = store.celebration {
+                    GoalCelebrationView(placement: celebration) {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                            store.clearCelebration()
+                        }
+                    }
+                    .transition(.opacity.combined(with: .scale(scale: 0.88)))
+                    .zIndex(10)
+                }
             }
             .navigationTitle(L10n.string("home.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        isShowingAppearance = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .fontWeight(.bold)
+                    }
+                    .accessibilityLabel(L10n.string("appearance.settings.accessibility"))
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         isShowingGoals = true
@@ -71,11 +96,11 @@ struct ContentView: View {
                     .accessibilityLabel(L10n.string("goal.settings.accessibility"))
                 }
             }
-            .safeAreaInset(edge: .bottom) {
-                addStampButton
-            }
             .sheet(isPresented: $isAddingStamp) {
                 StampEditorView()
+            }
+            .sheet(isPresented: $isShowingAppearance) {
+                AppearanceSettingsView()
             }
             .sheet(isPresented: $isShowingGoals) {
                 GoalSettingsView()
@@ -85,6 +110,7 @@ struct ContentView: View {
             }
         }
         .tint(AppColors.coral)
+        .sensoryFeedback(.success, trigger: store.celebration?.id)
     }
 
     private var totalHeader: some View {
@@ -114,10 +140,10 @@ struct ContentView: View {
             Spacer()
         }
         .padding(18)
-        .background(.white.opacity(0.82), in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .stroke(.white, lineWidth: 2)
+                .stroke(AppColors.surfaceHighlight, lineWidth: 2)
         }
         .shadow(color: AppColors.ink.opacity(0.08), radius: 18, y: 8)
     }
@@ -142,25 +168,6 @@ struct ContentView: View {
         .background(AppColors.mint.opacity(0.12), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 
-    private var addStampButton: some View {
-        Button {
-            isAddingStamp = true
-        } label: {
-            Label(L10n.string("stamp.add.button"), systemImage: "hand.tap.fill")
-                .font(.headline.weight(.bold))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.white)
-        .background(AppColors.coral, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .shadow(color: AppColors.coral.opacity(0.3), radius: 12, y: 6)
-        .padding(.horizontal, 20)
-        .padding(.top, 10)
-        .padding(.bottom, 8)
-        .background(.ultraThinMaterial)
-    }
-
     private func entry(at position: Int) -> StampEntry? {
         let index = position - 1
         return store.entries.indices.contains(index) ? store.entries[index] : nil
@@ -174,6 +181,7 @@ struct ContentView: View {
 private struct RouteNode: View {
     let position: Int
     let entry: StampEntry?
+    let isNext: Bool
     let offset: CGFloat
     let action: () -> Void
 
@@ -195,19 +203,35 @@ private struct RouteNode: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(L10n.format("node.completed.accessibility", position, StampPreset.preset(for: entry.presetID).name))
+                .accessibilityIdentifier("stamp-node-\(position)")
             } else {
-                ZStack {
-                    Circle()
-                        .fill(AppColors.emptyNode)
-                    Circle()
-                        .strokeBorder(.white.opacity(0.9), lineWidth: 5)
-                    Text(position, format: .number)
-                        .font(.title2.bold())
-                        .foregroundStyle(AppColors.ink.opacity(0.38))
+                Button(action: action) {
+                    ZStack {
+                        Circle()
+                            .fill(isNext ? AppColors.coral.opacity(0.16) : AppColors.emptyNode)
+                        Circle()
+                            .strokeBorder(isNext ? AppColors.coral : AppColors.surfaceHighlight, lineWidth: 5)
+                        if isNext {
+                            Image(systemName: "hand.tap.fill")
+                                .font(.title2.bold())
+                                .foregroundStyle(AppColors.coral)
+                        } else {
+                            Text(position, format: .number)
+                                .font(.title2.bold())
+                                .foregroundStyle(AppColors.ink.opacity(0.48))
+                        }
+                    }
+                    .frame(width: 72, height: 72)
+                    .shadow(color: AppColors.ink.opacity(0.08), radius: 6, y: 4)
                 }
-                .frame(width: 72, height: 72)
-                .shadow(color: AppColors.ink.opacity(0.08), radius: 6, y: 4)
-                .accessibilityLabel(L10n.format("node.empty.accessibility", position))
+                .buttonStyle(.plain)
+                .disabled(!isNext)
+                .accessibilityLabel(
+                    isNext
+                        ? L10n.format("node.next.accessibility", position)
+                        : L10n.format("node.empty.accessibility", position)
+                )
+                .accessibilityIdentifier(isNext ? "next-stamp-node" : "future-stamp-node-\(position)")
             }
         }
         .frame(maxWidth: .infinity)
@@ -267,13 +291,102 @@ private struct GoalBadge: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .frame(maxWidth: 300)
-        .background(.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(isAchieved ? AppColors.mint.opacity(0.45) : AppColors.coral.opacity(0.25), lineWidth: 2)
         }
         .shadow(color: AppColors.ink.opacity(0.06), radius: 8, y: 4)
         .accessibilityElement(children: .combine)
+    }
+}
+
+private struct GoalCelebrationView: View {
+    let placement: GoalPlacement
+    let dismiss: () -> Void
+    @State private var isBursting = false
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.58)
+                .ignoresSafeArea()
+
+            ForEach(0..<20, id: \.self) { index in
+                Image(systemName: index.isMultiple(of: 3) ? "star.fill" : "circle.fill")
+                    .font(.system(size: index.isMultiple(of: 3) ? 17 : 11, weight: .bold))
+                    .foregroundStyle(particleColor(at: index))
+                    .offset(
+                        x: isBursting ? cos(angle(at: index)) * 175 : 0,
+                        y: isBursting ? sin(angle(at: index)) * 300 : 10
+                    )
+                    .rotationEffect(.degrees(isBursting ? Double(index * 75) : 0))
+                    .opacity(isBursting ? 0 : 1)
+                    .animation(
+                        .easeOut(duration: 1.25).delay(Double(index % 5) * 0.035),
+                        value: isBursting
+                    )
+            }
+
+            VStack(spacing: 18) {
+                ZStack {
+                    Circle()
+                        .fill(AppColors.sun.opacity(0.2))
+                        .frame(width: 104, height: 104)
+                    Image(systemName: "gift.fill")
+                        .font(.system(size: 50, weight: .bold))
+                        .foregroundStyle(AppColors.sun)
+                        .symbolEffect(.bounce, value: isBursting)
+                }
+
+                VStack(spacing: 8) {
+                    Text(L10n.string("celebration.title"))
+                        .font(.system(size: 30, weight: .black, design: .rounded))
+                        .foregroundStyle(AppColors.ink)
+                    Text(placement.goal.rewardName)
+                        .font(.title2.bold())
+                        .foregroundStyle(AppColors.coral)
+                    Text(L10n.format("celebration.message", placement.targetCount))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .multilineTextAlignment(.center)
+
+                Button(L10n.string("celebration.dismiss"), action: dismiss)
+                    .font(.headline.bold())
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(AppColors.coral, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            }
+            .padding(28)
+            .frame(maxWidth: 330)
+            .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .stroke(AppColors.surfaceHighlight, lineWidth: 2)
+            }
+            .shadow(color: .black.opacity(0.28), radius: 30, y: 14)
+            .padding(24)
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.62)) {
+                isBursting = true
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    private func angle(at index: Int) -> CGFloat {
+        CGFloat(index) / 20 * .pi * 2 - .pi / 2
+    }
+
+    private func particleColor(at index: Int) -> Color {
+        switch index % 4 {
+        case 0: AppColors.coral
+        case 1: AppColors.sun
+        case 2: AppColors.mint
+        default: AppColors.sky
+        }
     }
 }
 
@@ -286,7 +399,7 @@ struct StampArtwork: View {
             Circle()
                 .fill(fallbackColor.opacity(0.17))
             Circle()
-                .strokeBorder(.white.opacity(0.95), lineWidth: max(3, size * 0.06))
+                .strokeBorder(AppColors.surfaceHighlight, lineWidth: max(3, size * 0.06))
 
             if let image = UIImage(named: preset.assetName) {
                 Image(uiImage: image)
@@ -316,14 +429,40 @@ struct StampArtwork: View {
 }
 
 enum AppColors {
-    static let background = Color(red: 0.99, green: 0.96, blue: 0.89)
-    static let ink = Color(red: 0.18, green: 0.20, blue: 0.24)
+    static let background = adaptive(
+        light: UIColor(red: 0.99, green: 0.96, blue: 0.89, alpha: 1),
+        dark: UIColor(red: 0.07, green: 0.075, blue: 0.085, alpha: 1)
+    )
+    static let surface = adaptive(
+        light: UIColor(white: 1, alpha: 0.9),
+        dark: UIColor(red: 0.14, green: 0.145, blue: 0.16, alpha: 1)
+    )
+    static let surfaceHighlight = adaptive(
+        light: UIColor(white: 1, alpha: 0.96),
+        dark: UIColor(white: 1, alpha: 0.16)
+    )
+    static let ink = adaptive(
+        light: UIColor(red: 0.18, green: 0.20, blue: 0.24, alpha: 1),
+        dark: UIColor(red: 0.96, green: 0.95, blue: 0.92, alpha: 1)
+    )
     static let coral = Color(red: 0.95, green: 0.35, blue: 0.30)
     static let mint = Color(red: 0.18, green: 0.63, blue: 0.52)
     static let sun = Color(red: 0.97, green: 0.67, blue: 0.16)
     static let sky = Color(red: 0.28, green: 0.62, blue: 0.88)
-    static let route = Color(red: 0.76, green: 0.69, blue: 0.58).opacity(0.55)
-    static let emptyNode = Color(red: 0.91, green: 0.87, blue: 0.78)
+    static let route = adaptive(
+        light: UIColor(red: 0.76, green: 0.69, blue: 0.58, alpha: 0.55),
+        dark: UIColor(red: 0.48, green: 0.49, blue: 0.53, alpha: 0.7)
+    )
+    static let emptyNode = adaptive(
+        light: UIColor(red: 0.91, green: 0.87, blue: 0.78, alpha: 1),
+        dark: UIColor(red: 0.22, green: 0.23, blue: 0.26, alpha: 1)
+    )
+
+    private static func adaptive(light: UIColor, dark: UIColor) -> Color {
+        Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark ? dark : light
+        })
+    }
 }
 
 #Preview {

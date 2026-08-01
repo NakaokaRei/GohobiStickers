@@ -1,6 +1,76 @@
 {
   "sourceLanguage" : "ja",
   "strings" : {
+    "appearance.dark" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dark" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ダーク" } }
+      }
+    },
+    "appearance.footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "System follows your device appearance setting." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "システムを選ぶと、端末の外観設定に合わせます。" } }
+      }
+    },
+    "appearance.light" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Light" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ライト" } }
+      }
+    },
+    "appearance.picker.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "外観" } }
+      }
+    },
+    "appearance.settings.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance settings" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "表示設定" } }
+      }
+    },
+    "appearance.settings.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "表示設定" } }
+      }
+    },
+    "appearance.system" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "System" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "システム" } }
+      }
+    },
+    "celebration.dismiss" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Awesome!" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "やった！" } }
+      }
+    },
+    "celebration.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You reached the goal at stamp %lld." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lldこ目のゴールに到達しました。" } }
+      }
+    },
+    "celebration.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Goal achieved!" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ゴール達成！" } }
+      }
+    },
     "common.cancel" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -82,6 +152,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "保存"
+          }
+        }
+      }
+    },
+    "common.undo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Undo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "元に戻す"
           }
         }
       }
@@ -235,6 +322,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "累計 %lld"
+          }
+        }
+      }
+    },
+    "goal.delete.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal deleted"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゴールを削除しました"
           }
         }
       }
@@ -579,6 +683,76 @@
         }
       }
     },
+    "icloud.error.account-unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sign in to iCloud in Settings to sync your data." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "データを同期するには、設定からiCloudにサインインしてください。" } }
+      }
+    },
+    "icloud.error.invalid-data" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The iCloud data could not be read." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloudのデータを読み込めませんでした。" } }
+      }
+    },
+    "icloud.footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stamps, comments, goals, and settings sync privately through the iCloud account on this device. Local data remains available offline." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この端末のiCloudアカウントを使い、スタンプ・コメント・ゴール・設定を非公開で同期します。オフラインでもローカルデータを利用できます。" } }
+      }
+    },
+    "icloud.status.account-unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud is unavailable" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloudを利用できません" } }
+      }
+    },
+    "icloud.status.failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn’t sync" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期できませんでした" } }
+      }
+    },
+    "icloud.status.idle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Waiting to sync" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期を待機中" } }
+      }
+    },
+    "icloud.status.synced" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Synced" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期済み" } }
+      }
+    },
+    "icloud.status.syncing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Syncing…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期中…" } }
+      }
+    },
+    "icloud.sync-now" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sync Now" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今すぐ同期" } }
+      }
+    },
+    "icloud.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud Sync" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud同期" } }
+      }
+    },
     "node.completed.accessibility" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -609,6 +783,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld個目、まだスタンプはありません"
+          }
+        }
+      }
+    },
+    "node.next.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add stamp %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld個目のスタンプを押す"
           }
         }
       }

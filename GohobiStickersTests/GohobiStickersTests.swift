@@ -24,6 +24,11 @@ struct GohobiStickersTests {
 
         store.deleteGoals(at: IndexSet(integer: 1))
         #expect(store.goalPlacements.map(\.targetCount) == [2, 6])
+
+        let deletedGoal = Goal(interval: 5, rewardName: "ケーキ")
+        store.restoreGoals([(offset: 1, goal: deletedGoal)])
+        #expect(store.goals.map(\.interval) == [2, 5, 4])
+        #expect(store.goalPlacements.map(\.targetCount) == [2, 7, 11])
     }
 
     @Test func stampCRUDUpdatesTotalAndContent() throws {
@@ -64,12 +69,83 @@ struct GohobiStickersTests {
         #expect(store.goalPlacements.map(\.targetCount) == [5, 8, 10])
     }
 
+    @Test func legacyDataWithoutAppearanceMigratesToSystem() throws {
+        let url = temporaryURL()
+        let legacyJSON = """
+        {
+          "entries": [],
+          "goals": [{"id":"00000000-0000-0000-0000-000000000001","interval":4,"rewardName":"Test"}]
+        }
+        """
+        try Data(legacyJSON.utf8).write(to: url)
+
+        let store = StampStore(fileURL: url)
+        #expect(store.appearance == .system)
+        #expect(store.goalPlacements.map(\.targetCount) == [4])
+    }
+
+    @Test func appearancePersists() {
+        let url = temporaryURL()
+        let store = StampStore(fileURL: url)
+        store.setAppearance(.dark)
+
+        let reloadedStore = StampStore(fileURL: url)
+        #expect(reloadedStore.appearance == .dark)
+    }
+
+    @Test func completingGoalCreatesCelebration() {
+        let store = makeStore()
+
+        for _ in 0..<4 {
+            store.addEntry(presetID: "sun", comment: "")
+            #expect(store.celebration == nil)
+        }
+        store.addEntry(presetID: "crown", comment: "")
+
+        #expect(store.celebration?.targetCount == 5)
+        #expect(store.celebration?.goal.rewardName == L10n.string("default.reward.cake"))
+
+        store.clearCelebration()
+        #expect(store.celebration == nil)
+    }
+
+    @Test func newerCloudDataReplacesTheLocalCopy() async throws {
+        let remoteData = StampBookData(
+            entries: [StampEntry(presetID: "rainbow", comment: "iCloud")],
+            goals: [Goal(interval: 7, rewardName: "旅行")],
+            appearance: .dark,
+            modifiedAt: .now.addingTimeInterval(60)
+        )
+        let syncDate = Date.now
+        let service = FakeCloudSyncService(outcome: .downloaded(remoteData, syncDate))
+        let store = StampStore(fileURL: temporaryURL(), cloudSyncService: service)
+
+        await store.synchronizeWithCloud()
+
+        #expect(store.entries.first?.comment == "iCloud")
+        #expect(store.goalPlacements.map(\.targetCount) == [7])
+        #expect(store.appearance == .dark)
+        #expect(store.cloudSyncStatus == .synced(syncDate))
+    }
+
     private func makeStore() -> StampStore {
-        StampStore(fileURL: temporaryURL())
+        StampStore(fileURL: temporaryURL(), cloudSyncService: nil)
     }
 
     private func temporaryURL() -> URL {
         FileManager.default.temporaryDirectory
             .appending(path: "GohobiStickersTests-\(UUID().uuidString).json")
+    }
+}
+
+private actor FakeCloudSyncService: CloudSyncing {
+    let outcome: CloudSyncOutcome
+
+    init(outcome: CloudSyncOutcome) {
+        self.outcome = outcome
+    }
+
+    func synchronize(_ localData: StampBookData) async throws -> CloudSyncOutcome {
+        outcome
     }
 }

@@ -4,13 +4,18 @@ GohobiStickers is a SwiftUI app for collecting stamps on the way to personal rew
 
 ## Features
 
+- Add a stamp by tapping the next available node on the route
 - Choose stamps from images bundled with the app
 - Add an optional comment to each stamp
 - Edit or delete stamps and comments
 - View the total number of collected stamps
 - Set a different interval and reward name for every goal
 - Add, edit, delete, and reorder goals
-- Store all data locally in a JSON file
+- Undo a recent goal deletion
+- Celebrate completed goals with animation and haptic feedback
+- Choose System, Dark, or Light appearance inside the app
+- Sync stamps, comments, goals, and settings through the user's private iCloud database
+- Keep a local JSON copy so the app remains usable offline
 - Japanese and English localization using a String Catalog
 
 Each goal interval is counted from the previous goal. For example, intervals of `5, 3, 2` place goals at cumulative stamp counts of `5, 8, 10`.
@@ -24,7 +29,8 @@ Each goal interval is counted from the previous goal. For example, intervals of 
 
 1. Open `GohobiStickers.xcodeproj` in Xcode.
 2. Select your development team under Signing & Capabilities.
-3. Select a run destination and run the `GohobiStickers` scheme.
+3. Confirm that the iCloud capability uses the `iCloud.com.me.n.rei.GohobiStickers` CloudKit container.
+4. Select a run destination and run the `GohobiStickers` scheme.
 
 ## Stamp Images
 
@@ -45,9 +51,11 @@ Standard interface text is managed in `GohobiStickers/Localizable.xcstrings`. Ja
 
 User-entered comments and reward names are stored and displayed exactly as entered; they are not translated.
 
-## Local Storage
+## Storage and iCloud Sync
 
-Stamps, comments, and goals are stored in `GohobiStickers/stamp-book.json` under the app's Application Support directory. The app does not require an account or send data to an external server.
+Stamps, comments, goals, and appearance settings are stored in `GohobiStickers/stamp-book.json` under the app's Application Support directory and synchronized as a private CloudKit record. The local copy remains available offline. Cloud sync uses the iCloud account configured on the device, so the app does not require a separate sign-in flow or backend server.
+
+CloudKit requires an Apple Developer Program team, an iCloud-enabled provisioning profile, and a device signed in to iCloud. Before releasing the app, deploy the CloudKit development schema to production in CloudKit Console.
 
 ## Testing
 

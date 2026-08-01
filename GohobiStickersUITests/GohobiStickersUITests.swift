@@ -12,7 +12,7 @@ final class GohobiStickersUITests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["いままでのスタンプ"].waitForExistence(timeout: 3))
 
-        app.buttons["スタンプを押す"].tap()
+        app.buttons["next-stamp-node"].tap()
         XCTAssertTrue(app.navigationBars["スタンプを押す"].waitForExistence(timeout: 2))
         app.buttons["キャンセル"].tap()
 

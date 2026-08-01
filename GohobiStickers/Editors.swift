@@ -38,7 +38,7 @@ struct StampEditorView: View {
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 12)
                                     .background(
-                                        presetID == preset.id ? AppColors.coral.opacity(0.13) : .white.opacity(0.72),
+                                        presetID == preset.id ? AppColors.coral.opacity(0.18) : AppColors.surface,
                                         in: RoundedRectangle(cornerRadius: 20, style: .continuous)
                                     )
                                     .overlay {
@@ -67,7 +67,7 @@ struct StampEditorView: View {
                             .frame(minHeight: 110)
                             .padding(10)
                             .scrollContentBackground(.hidden)
-                            .background(.white.opacity(0.8), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                            .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                             .overlay(alignment: .topLeading) {
                                 if comment.isEmpty {
                                     Text(L10n.string("stamp.comment.placeholder"))
@@ -133,11 +133,135 @@ struct StampEditorView: View {
     }
 }
 
+struct AppearanceSettingsView: View {
+    @Environment(StampStore.self) private var store
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Picker(
+                        L10n.string("appearance.picker.title"),
+                        selection: Binding(
+                            get: { store.appearance },
+                            set: { store.setAppearance($0) }
+                        )
+                    ) {
+                        ForEach(AppAppearance.allCases) { appearance in
+                            Label(appearance.localizedName, systemImage: appearance.symbolName)
+                                .tag(appearance)
+                        }
+                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                } header: {
+                    Text(L10n.string("appearance.picker.title"))
+                } footer: {
+                    Text(L10n.string("appearance.footer"))
+                }
+
+                Section {
+                    CloudSyncStatusRow(status: store.cloudSyncStatus)
+
+                    Button {
+                        Task { await store.synchronizeWithCloud() }
+                    } label: {
+                        Label(L10n.string("icloud.sync-now"), systemImage: "arrow.triangle.2.circlepath")
+                    }
+                    .disabled(store.cloudSyncStatus == .syncing)
+                } header: {
+                    Text(L10n.string("icloud.title"))
+                } footer: {
+                    Text(L10n.string("icloud.footer"))
+                }
+            }
+            .navigationTitle(L10n.string("appearance.settings.title"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(L10n.string("common.close")) { dismiss() }
+                }
+            }
+        }
+        .preferredColorScheme(store.appearance.colorScheme)
+        .animation(.easeInOut(duration: 0.2), value: store.appearance)
+    }
+}
+
+private struct CloudSyncStatusRow: View {
+    let status: CloudSyncStatus
+
+    var body: some View {
+        Label {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                if case .synced(let date) = status {
+                    Text(date, style: .relative)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else if case .failed(let message) = status {
+                    Text(message)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            }
+        } icon: {
+            Image(systemName: symbolName)
+                .foregroundStyle(symbolColor)
+        }
+    }
+
+    private var title: String {
+        switch status {
+        case .idle: L10n.string("icloud.status.idle")
+        case .syncing: L10n.string("icloud.status.syncing")
+        case .synced: L10n.string("icloud.status.synced")
+        case .accountUnavailable: L10n.string("icloud.status.account-unavailable")
+        case .failed: L10n.string("icloud.status.failed")
+        }
+    }
+
+    private var symbolName: String {
+        switch status {
+        case .idle: "icloud"
+        case .syncing: "icloud.and.arrow.up"
+        case .synced: "checkmark.icloud.fill"
+        case .accountUnavailable: "icloud.slash"
+        case .failed: "exclamationmark.icloud.fill"
+        }
+    }
+
+    private var symbolColor: Color {
+        switch status {
+        case .synced: AppColors.mint
+        case .accountUnavailable, .failed: AppColors.coral
+        case .idle, .syncing: .secondary
+        }
+    }
+}
+
+private extension AppAppearance {
+    var localizedName: String {
+        L10n.string("appearance.\(rawValue)")
+    }
+
+    var symbolName: String {
+        switch self {
+        case .system: "circle.lefthalf.filled"
+        case .dark: "moon.fill"
+        case .light: "sun.max.fill"
+        }
+    }
+}
+
 struct GoalSettingsView: View {
     @Environment(StampStore.self) private var store
     @Environment(\.dismiss) private var dismiss
     @State private var isAddingGoal = false
     @State private var editingGoal: Goal?
+    @State private var deletedGoals: GoalDeletion?
 
     var body: some View {
         NavigationStack {
@@ -158,7 +282,7 @@ struct GoalSettingsView: View {
                             }
                             .buttonStyle(.plain)
                         }
-                        .onDelete(perform: store.deleteGoals)
+                        .onDelete(perform: deleteGoals)
                         .onMove(perform: store.moveGoals)
                     }
                 } header: {
@@ -192,8 +316,67 @@ struct GoalSettingsView: View {
             .sheet(item: $editingGoal) { goal in
                 GoalEditorView(goal: goal)
             }
+            .safeAreaInset(edge: .bottom) {
+                if let deletedGoals {
+                    HStack(spacing: 16) {
+                        Text(L10n.string("goal.delete.message"))
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(AppColors.ink)
+                        Spacer()
+                        Button(L10n.string("common.undo")) {
+                            undoDeletion(deletedGoals)
+                        }
+                        .font(.subheadline.bold())
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 14)
+                    .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(AppColors.surfaceHighlight, lineWidth: 1)
+                    }
+                    .shadow(color: .black.opacity(0.14), radius: 12, y: 5)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 8)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .task(id: deletedGoals?.id) {
+                guard let deletionID = deletedGoals?.id else { return }
+                try? await Task.sleep(for: .seconds(6))
+                guard !Task.isCancelled, deletedGoals?.id == deletionID else { return }
+                withAnimation { deletedGoals = nil }
+            }
         }
     }
+
+    private func deleteGoals(at offsets: IndexSet) {
+        let items = offsets.sorted().compactMap { offset -> GoalDeletion.Item? in
+            guard store.goals.indices.contains(offset) else { return nil }
+            return GoalDeletion.Item(offset: offset, goal: store.goals[offset])
+        }
+        guard !items.isEmpty else { return }
+
+        store.deleteGoals(at: offsets)
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+            deletedGoals = GoalDeletion(items: items)
+        }
+    }
+
+    private func undoDeletion(_ deletion: GoalDeletion) {
+        store.restoreGoals(deletion.items.map { (offset: $0.offset, goal: $0.goal) })
+        withAnimation { deletedGoals = nil }
+    }
+}
+
+private struct GoalDeletion: Identifiable {
+    struct Item {
+        let offset: Int
+        let goal: Goal
+    }
+
+    let id = UUID()
+    let items: [Item]
 }
 
 private struct GoalSettingsRow: View {

@@ -1,5 +1,13 @@
 import Foundation
 
+enum AppAppearance: String, CaseIterable, Codable, Identifiable, Sendable {
+    case system
+    case dark
+    case light
+
+    var id: String { rawValue }
+}
+
 struct StampEntry: Identifiable, Codable, Equatable, Sendable {
     let id: UUID
     var presetID: String
@@ -62,6 +70,43 @@ struct StampPreset: Identifiable, Equatable, Sendable {
 struct StampBookData: Codable, Equatable, Sendable {
     var entries: [StampEntry]
     var goals: [Goal]
+    var appearance: AppAppearance
+    var modifiedAt: Date
+
+    init(
+        entries: [StampEntry],
+        goals: [Goal],
+        appearance: AppAppearance = .system,
+        modifiedAt: Date = .distantPast
+    ) {
+        self.entries = entries
+        self.goals = goals
+        self.appearance = appearance
+        self.modifiedAt = modifiedAt
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case entries
+        case goals
+        case appearance
+        case modifiedAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        entries = try container.decodeIfPresent([StampEntry].self, forKey: .entries) ?? []
+        goals = try container.decodeIfPresent([Goal].self, forKey: .goals) ?? []
+        appearance = try container.decodeIfPresent(AppAppearance.self, forKey: .appearance) ?? .system
+        modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? .distantPast
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(entries, forKey: .entries)
+        try container.encode(goals, forKey: .goals)
+        try container.encode(appearance, forKey: .appearance)
+        try container.encode(modifiedAt, forKey: .modifiedAt)
+    }
 
     static let initial = StampBookData(
         entries: [],
@@ -69,6 +114,7 @@ struct StampBookData: Codable, Equatable, Sendable {
             Goal(interval: 5, rewardName: L10n.string("default.reward.cake")),
             Goal(interval: 3, rewardName: L10n.string("default.reward.movie")),
             Goal(interval: 2, rewardName: L10n.string("default.reward.book"))
-        ]
+        ],
+        appearance: .system
     )
 }
