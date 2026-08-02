@@ -64,20 +64,23 @@ struct StampEditorView: View {
             Text(L10n.string("stamp.editor.choose"))
                 .font(.headline)
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 92))], spacing: 14) {
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: StampMetrics.pickerMinimumColumnWidth))],
+                spacing: 14
+            ) {
                 ForEach(StampPreset.all) { preset in
                     Button {
                         withAnimation(.snappy) { presetID = preset.id }
                     } label: {
                         VStack(spacing: 8) {
-                            StampArtwork(preset: preset, size: 68)
+                            StampArtwork(preset: preset, size: StampMetrics.pickerArtworkSize)
                             Text(preset.name)
                                 .font(.caption.bold())
                                 .foregroundStyle(AppColors.ink)
                                 .lineLimit(1)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
+                        .padding(.vertical, StampMetrics.pickerCardVerticalPadding)
                         .background(
                             presetID == preset.id ? AppColors.coral.opacity(0.18) : AppColors.surface,
                             in: RoundedRectangle(cornerRadius: 20, style: .continuous)

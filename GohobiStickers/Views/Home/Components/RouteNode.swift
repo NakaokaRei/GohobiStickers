@@ -16,13 +16,16 @@ struct RouteNode: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 88)
+        .frame(height: StampMetrics.routeNodeHeight)
         .offset(x: offset)
     }
 
     private func completedNode(_ entry: StampEntry) -> some View {
         Button(action: action) {
-            StampArtwork(preset: .preset(for: entry.presetID), size: 78)
+            StampArtwork(
+                preset: .preset(for: entry.presetID),
+                size: StampMetrics.routeArtworkSize
+            )
                 .overlay(alignment: .bottomTrailing) {
                     if !entry.comment.isEmpty {
                         Image(systemName: "text.bubble.fill")
@@ -62,7 +65,10 @@ struct RouteNode: View {
                         .foregroundStyle(AppColors.ink.opacity(0.48))
                 }
             }
-            .frame(width: 72, height: 72)
+            .frame(
+                width: StampMetrics.routeEmptyNodeSize,
+                height: StampMetrics.routeEmptyNodeSize
+            )
             .shadow(color: AppColors.ink.opacity(0.08), radius: 6, y: 4)
         }
         .buttonStyle(.plain)
