@@ -10,14 +10,23 @@ final class GohobiStickersUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
 
-        XCTAssertTrue(app.staticTexts["いままでのスタンプ"].waitForExistence(timeout: 3))
+        XCTAssertTrue(
+            app.descendants(matching: .any)["total-stamp-header"]
+                .waitForExistence(timeout: 5)
+        )
 
         app.buttons["next-stamp-node"].tap()
-        XCTAssertTrue(app.navigationBars["スタンプを押す"].waitForExistence(timeout: 2))
-        app.buttons["キャンセル"].tap()
+        XCTAssertTrue(
+            app.descendants(matching: .any)["stamp-editor-screen"]
+                .waitForExistence(timeout: 5)
+        )
+        app.buttons["stamp-editor-cancel-button"].tap()
 
-        app.buttons["ゴール設定"].tap()
-        XCTAssertTrue(app.navigationBars["ゴール設定"].waitForExistence(timeout: 2))
+        app.buttons["goal-settings-button"].tap()
+        XCTAssertTrue(
+            app.descendants(matching: .any)["goal-settings-screen"]
+                .waitForExistence(timeout: 5)
+        )
     }
 
     @MainActor

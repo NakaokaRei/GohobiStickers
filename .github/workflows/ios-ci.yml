@@ -1,0 +1,95 @@
+name: iOS CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ios-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_26.5.app/Contents/Developer
+  PROJECT: GohobiStickers.xcodeproj
+  SCHEME: GohobiStickers
+  DESTINATION: platform=iOS Simulator,name=iPhone 17,OS=26.5
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: macos-26
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Select Xcode 26.5
+        run: sudo xcode-select --switch "$DEVELOPER_DIR"
+
+      - name: Show build environment
+        run: |
+          xcodebuild -version
+          xcrun simctl list runtimes
+
+      - name: Run unit tests
+        run: |
+          mkdir -p TestResults
+          xcodebuild test \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "$DESTINATION" \
+            -only-testing:GohobiStickersTests \
+            -parallel-testing-enabled NO \
+            -resultBundlePath TestResults/UnitTests.xcresult
+
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: unit-test-results
+          path: TestResults/UnitTests.xcresult
+          if-no-files-found: warn
+          retention-days: 14
+
+  ui-tests:
+    name: UI Tests
+    runs-on: macos-26
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Select Xcode 26.5
+        run: sudo xcode-select --switch "$DEVELOPER_DIR"
+
+      - name: Show build environment
+        run: |
+          xcodebuild -version
+          xcrun simctl list runtimes
+
+      - name: Run UI tests
+        run: |
+          mkdir -p TestResults
+          xcodebuild test \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "$DESTINATION" \
+            -only-testing:GohobiStickersUITests \
+            -parallel-testing-enabled NO \
+            -resultBundlePath TestResults/UITests.xcresult
+
+      - name: Upload UI test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-test-results
+          path: TestResults/UITests.xcresult
+          if-no-files-found: warn
+          retention-days: 14
