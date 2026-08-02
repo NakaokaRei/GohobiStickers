@@ -10,6 +10,7 @@ xcuserdata/
 # Build products
 build/
 DerivedData/
+TestResults/
 *.ipa
 *.dSYM
 *.dSYM.zip

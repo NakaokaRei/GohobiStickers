@@ -32,12 +32,14 @@ struct StampEditorView: View {
                 }
                 .padding(20)
             }
+            .accessibilityIdentifier("stamp-editor-screen")
             .background(AppColors.background.ignoresSafeArea())
             .navigationTitle(L10n.string(entry == nil ? "stamp.editor.add.title" : "stamp.editor.edit.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(L10n.string("common.cancel")) { dismiss() }
+                        .accessibilityIdentifier("stamp-editor-cancel-button")
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(L10n.string("common.save")) { save() }

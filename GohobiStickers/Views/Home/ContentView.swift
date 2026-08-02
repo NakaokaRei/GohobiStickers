@@ -93,6 +93,7 @@ struct ContentView: View {
                             .fontWeight(.bold)
                     }
                     .accessibilityLabel(L10n.string("goal.settings.accessibility"))
+                    .accessibilityIdentifier("goal-settings-button")
                 }
             }
             .sheet(isPresented: $isAddingStamp) {
@@ -138,6 +139,7 @@ struct ContentView: View {
             }
             Spacer()
         }
+        .accessibilityIdentifier("total-stamp-header")
         .padding(18)
         .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
         .overlay {

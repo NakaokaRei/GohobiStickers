@@ -1,5 +1,7 @@
 # GohobiStickers
 
+[![iOS CI](https://github.com/NakaokaRei/GohobiStickers/actions/workflows/ios-ci.yml/badge.svg)](https://github.com/NakaokaRei/GohobiStickers/actions/workflows/ios-ci.yml)
+
 GohobiStickers is a SwiftUI app for collecting stamps on the way to personal rewards. Collected stamps and upcoming goals are presented on a winding, vertical path inspired by Duolingo's progression UI.
 
 ## Features
@@ -80,3 +82,5 @@ xcodebuild test \
   -scheme GohobiStickers \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
+
+GitHub Actions runs the unit and UI test suites as separate jobs for every pull request and every push to `main`. Each job uploads its `.xcresult` bundle for debugging failures.

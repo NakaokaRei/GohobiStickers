@@ -13,6 +13,7 @@ struct GoalSettingsView: View {
                 goalsSection
                 addGoalSection
             }
+            .accessibilityIdentifier("goal-settings-screen")
             .navigationTitle(L10n.string("goal.settings.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
