@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var isShowingAppearance = false
     @State private var editingEntry: StampEntry?
     @State private var shareCardData: GoalShareCardData?
+    @State private var didHandleUITestDeepLink = false
 
     private let routeOffsets: [CGFloat] = [-88, 0, 88, 0]
 
@@ -120,6 +121,20 @@ struct ContentView: View {
         }
         .tint(AppColors.coral)
         .sensoryFeedback(.success, trigger: store.celebration?.id)
+        .onOpenURL { url in
+            guard GohobiDeepLink.route(for: url) == .addStamp else { return }
+            presentNewStampEditor()
+        }
+        .task {
+            #if DEBUG
+            guard
+                !didHandleUITestDeepLink,
+                ProcessInfo.processInfo.arguments.contains("--open-stamp-editor")
+            else { return }
+            didHandleUITestDeepLink = true
+            presentNewStampEditor()
+            #endif
+        }
     }
 
     private var totalHeader: some View {
@@ -189,6 +204,20 @@ struct ContentView: View {
 
     private func presentShareCard(for placement: GoalPlacement) {
         shareCardData = store.goalShareCardData(for: placement)
+    }
+
+    private func presentNewStampEditor() {
+        store.clearCelebration()
+        isAddingStamp = false
+        isShowingGoals = false
+        isShowingAppearance = false
+        editingEntry = nil
+        shareCardData = nil
+
+        Task { @MainActor in
+            await Task.yield()
+            isAddingStamp = true
+        }
     }
 }
 

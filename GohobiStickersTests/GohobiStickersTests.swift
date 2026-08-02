@@ -233,6 +233,162 @@ struct GohobiStickersTests {
         #expect(store.cloudSyncStatus == .synced(syncDate))
     }
 
+    @Test func widgetSnapshotTracksGoalIntervalsAndCompletion() {
+        let goals = [
+            Goal(interval: 5, rewardName: "ケーキ"),
+            Goal(interval: 3, rewardName: "映画"),
+            Goal(interval: 2, rewardName: "本")
+        ]
+
+        func snapshot(stampCount: Int) -> WidgetSnapshot {
+            let entries = (0..<stampCount).map { index in
+                StampEntry(presetID: StampPreset.all[index % StampPreset.all.count].id)
+            }
+            return WidgetSnapshotFactory.make(
+                from: StampBookData(entries: entries, goals: goals)
+            )
+        }
+
+        let empty = snapshot(stampCount: 0)
+        #expect(empty.remainingCount == 5)
+        #expect(empty.intervalProgress == 0)
+        #expect(empty.intervalRequiredCount == 5)
+
+        let beforeFirstGoal = snapshot(stampCount: 4)
+        #expect(beforeFirstGoal.remainingCount == 1)
+        #expect(beforeFirstGoal.intervalProgress == 4)
+        #expect(beforeFirstGoal.intervalRequiredCount == 5)
+
+        let firstGoalReached = snapshot(stampCount: 5)
+        #expect(firstGoalReached.nextGoalTarget == 8)
+        #expect(firstGoalReached.nextGoalRewardName == "映画")
+        #expect(firstGoalReached.remainingCount == 3)
+        #expect(firstGoalReached.intervalProgress == 0)
+        #expect(firstGoalReached.intervalRequiredCount == 3)
+
+        let betweenGoals = snapshot(stampCount: 6)
+        #expect(betweenGoals.remainingCount == 2)
+        #expect(betweenGoals.intervalProgress == 1)
+        #expect(betweenGoals.intervalRequiredCount == 3)
+
+        let secondGoalReached = snapshot(stampCount: 8)
+        #expect(secondGoalReached.nextGoalTarget == 10)
+        #expect(secondGoalReached.remainingCount == 2)
+        #expect(secondGoalReached.intervalProgress == 0)
+        #expect(secondGoalReached.intervalRequiredCount == 2)
+
+        let allGoalsReached = snapshot(stampCount: 10)
+        #expect(allGoalsReached.totalStampCount == 10)
+        #expect(allGoalsReached.nextGoalTarget == nil)
+        #expect(allGoalsReached.remainingCount == nil)
+        #expect(allGoalsReached.intervalProgress == nil)
+    }
+
+    @Test func widgetSnapshotUsesLatestStampAndRecalculatesAfterGoalChanges() {
+        let oldEntry = StampEntry(
+            presetID: "frog_pink",
+            createdAt: Date(timeIntervalSince1970: 100)
+        )
+        let latestEntry = StampEntry(
+            presetID: "sea_lion",
+            createdAt: Date(timeIntervalSince1970: 200)
+        )
+        let data = StampBookData(
+            entries: [latestEntry, oldEntry],
+            goals: [Goal(interval: 3, rewardName: "映画")]
+        )
+
+        let snapshot = WidgetSnapshotFactory.make(from: data)
+        #expect(snapshot.latestStampAssetName == "stamp_sea_lion")
+        #expect(snapshot.remainingCount == 1)
+        #expect(snapshot.intervalProgress == 2)
+
+        let edited = StampBookData(
+            entries: [oldEntry],
+            goals: [Goal(interval: 5, rewardName: "旅行")]
+        )
+        let editedSnapshot = WidgetSnapshotFactory.make(from: edited)
+        #expect(editedSnapshot.latestStampAssetName == "stamp_frog_pink")
+        #expect(editedSnapshot.remainingCount == 4)
+        #expect(editedSnapshot.intervalProgress == 1)
+    }
+
+    @Test func widgetSnapshotStoreRoundTripsAndRecoversFromCorruption() throws {
+        let suiteName = "GohobiStickersTests.WidgetSnapshot.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let store = WidgetSnapshotStore(defaults: defaults)
+
+        #expect(store.load() == .empty)
+
+        let expected = WidgetSnapshot(
+            totalStampCount: 4,
+            latestStampAssetName: "stamp_shell",
+            nextGoalTarget: 5,
+            nextGoalRewardName: "ケーキ",
+            remainingCount: 1,
+            intervalProgress: 4,
+            intervalRequiredCount: 5,
+            updatedAt: Date(timeIntervalSince1970: 123)
+        )
+        #expect(store.save(expected))
+        #expect(store.load() == expected)
+
+        defaults.set(
+            Data("not-json".utf8),
+            forKey: GohobiSharedConfiguration.widgetSnapshotKey
+        )
+        #expect(store.load() == .empty)
+    }
+
+    @Test func stampStorePublishesWidgetSnapshotAfterLocalAndCloudChanges() async throws {
+        let suiteName = "GohobiStickersTests.WidgetPublisher.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let snapshotStore = WidgetSnapshotStore(defaults: defaults)
+
+        let remoteData = StampBookData(
+            entries: [StampEntry(presetID: "shell", comment: "iCloud")],
+            goals: [Goal(interval: 7, rewardName: "旅行")],
+            modifiedAt: .now.addingTimeInterval(60)
+        )
+        let service = FakeCloudSyncService(outcome: .downloaded(remoteData, .now))
+        let store = StampStore(
+            fileURL: temporaryURL(),
+            cloudSyncService: service,
+            widgetSnapshotStore: snapshotStore
+        )
+
+        store.addEntry(presetID: "frog_green", comment: "")
+        #expect(snapshotStore.load().latestStampAssetName == "stamp_frog_green")
+        #expect(snapshotStore.load().totalStampCount == 1)
+
+        let localEntry = try #require(store.entries.first)
+        store.updateEntry(id: localEntry.id, presetID: "blue_hero", comment: "更新")
+        #expect(snapshotStore.load().latestStampAssetName == "stamp_blue_hero")
+
+        store.moveGoals(from: IndexSet(integer: 2), to: 0)
+        #expect(snapshotStore.load().nextGoalTarget == 2)
+        #expect(snapshotStore.load().remainingCount == 1)
+
+        store.deleteGoals(at: IndexSet(integer: 0))
+        #expect(snapshotStore.load().nextGoalTarget == 5)
+        #expect(snapshotStore.load().remainingCount == 4)
+
+        await store.synchronizeWithCloud()
+        let cloudSnapshot = snapshotStore.load()
+        #expect(cloudSnapshot.latestStampAssetName == "stamp_shell")
+        #expect(cloudSnapshot.nextGoalRewardName == "旅行")
+        #expect(cloudSnapshot.remainingCount == 6)
+    }
+
+    @Test func deepLinkAcceptsOnlyTheNewStampRoute() {
+        #expect(GohobiDeepLink.route(for: GohobiDeepLink.addStampURL) == .addStamp)
+        #expect(GohobiDeepLink.route(for: URL(string: "gohobistickers://stamp/edit")!) == nil)
+        #expect(GohobiDeepLink.route(for: URL(string: "gohobistickers://goal/add")!) == nil)
+        #expect(GohobiDeepLink.route(for: URL(string: "https://stamp/add")!) == nil)
+    }
+
     @Test func presetCatalogContainsOnlyBundledArtwork() {
         #expect(
             StampPreset.all.map(\.id) == [

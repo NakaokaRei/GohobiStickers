@@ -30,6 +30,19 @@ final class GohobiStickersUITests: XCTestCase {
     }
 
     @MainActor
+    func testWidgetDeepLinkOpensANewStampEditorOnLaunch() throws {
+        let app = makeApp()
+        app.launchArguments.append("--open-stamp-editor")
+        app.launch()
+
+        XCTAssertTrue(
+            app.descendants(matching: .any)["stamp-editor-screen"]
+                .waitForExistence(timeout: 5)
+        )
+        XCTAssertTrue(app.buttons["stamp-editor-save-button"].exists)
+    }
+
+    @MainActor
     func testLongPressingCompletedNodeShowsStampDetails() throws {
         let app = makeApp()
         app.launch()
