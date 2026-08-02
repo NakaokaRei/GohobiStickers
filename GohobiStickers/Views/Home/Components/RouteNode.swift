@@ -46,6 +46,14 @@ struct RouteNode: View {
             )
         )
         .accessibilityIdentifier("stamp-node-\(position)")
+        .contextMenu {
+            Button(action: action) {
+                Label(L10n.string("node.quick-look.edit"), systemImage: "pencil")
+            }
+            .accessibilityIdentifier("stamp-node-quick-look-edit-button")
+        } preview: {
+            StampNodeQuickLook(entry: entry)
+        }
     }
 
     private var emptyNode: some View {

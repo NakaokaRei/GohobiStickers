@@ -44,6 +44,7 @@ struct StampEditorView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(L10n.string("common.save")) { save() }
                         .fontWeight(.bold)
+                        .accessibilityIdentifier("stamp-editor-save-button")
                 }
             }
             .confirmationDialog(

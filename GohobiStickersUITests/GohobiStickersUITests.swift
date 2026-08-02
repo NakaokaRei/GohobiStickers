@@ -30,6 +30,29 @@ final class GohobiStickersUITests: XCTestCase {
     }
 
     @MainActor
+    func testLongPressingCompletedNodeShowsStampDetails() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        let nextNode = app.buttons["next-stamp-node"]
+        XCTAssertTrue(nextNode.waitForExistence(timeout: 5))
+        nextNode.tap()
+
+        let saveButton = app.buttons["stamp-editor-save-button"]
+        XCTAssertTrue(saveButton.waitForExistence(timeout: 5))
+        saveButton.tap()
+
+        let firstStamp = app.buttons["stamp-node-1"]
+        XCTAssertTrue(firstStamp.waitForExistence(timeout: 5))
+        firstStamp.press(forDuration: 1.2)
+
+        XCTAssertTrue(
+            app.buttons["stamp-node-quick-look-edit-button"]
+                .waitForExistence(timeout: 5)
+        )
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
