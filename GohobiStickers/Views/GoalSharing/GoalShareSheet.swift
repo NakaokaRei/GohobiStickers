@@ -104,7 +104,19 @@ struct GoalShareSheet: View {
             .accessibilityIdentifier("goal-share-action-button")
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
-            .background(.ultraThinMaterial)
+            .background {
+                LinearGradient(
+                    stops: [
+                        .init(color: AppColors.background.opacity(0), location: 0),
+                        .init(color: AppColors.background.opacity(0.88), location: 0.46),
+                        .init(color: AppColors.background, location: 1)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .padding(.top, -48)
+                .ignoresSafeArea()
+            }
         }
     }
 
