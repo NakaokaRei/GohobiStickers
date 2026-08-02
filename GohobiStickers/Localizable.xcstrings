@@ -1399,6 +1399,57 @@
         }
       }
     },
+    "preset.glowing-fish" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glowing Fish"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "光るおさかな"
+          }
+        }
+      }
+    },
+    "preset.koala-green" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koala"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コアラ"
+          }
+        }
+      }
+    },
+    "preset.penguin-pink" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Penguin"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ペンギン"
+          }
+        }
+      }
+    },
     "preset.pink-hero" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1446,6 +1497,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "かい"
+          }
+        }
+      }
+    },
+    "preset.starfish-purple" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starfish"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヒトデ"
           }
         }
       }

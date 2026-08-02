@@ -6,6 +6,23 @@ import UIKit
 
 @MainActor
 struct GohobiStickersTests {
+    @Test func stampPresetsHaveUniqueIDsAndBundledArtwork() {
+        let presetIDs = StampPreset.all.map(\.id)
+        let newPresetIDs: Set<String> = [
+            "penguin_pink",
+            "glowing_fish",
+            "koala_green",
+            "starfish_purple"
+        ]
+
+        #expect(Set(presetIDs).count == presetIDs.count)
+        #expect(newPresetIDs.isSubset(of: Set(presetIDs)))
+
+        for preset in StampPreset.all {
+            #expect(UIImage(named: preset.assetName) != nil)
+        }
+    }
+
     @Test func goalIntervalsBecomeCumulativeTargets() {
         let store = makeStore()
 

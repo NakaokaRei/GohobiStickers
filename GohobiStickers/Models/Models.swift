@@ -60,7 +60,11 @@ struct StampPreset: Identifiable, Equatable, Sendable {
         .init(id: "frog_blue", name: L10n.string("preset.frog-blue"), assetName: "stamp_frog_blue", fallbackSymbol: "face.smiling", fallbackColorName: "sky"),
         .init(id: "frog_green", name: L10n.string("preset.frog-green"), assetName: "stamp_frog_green", fallbackSymbol: "face.smiling", fallbackColorName: "green"),
         .init(id: "sea_lion", name: L10n.string("preset.sea-lion"), assetName: "stamp_sea_lion", fallbackSymbol: "water.waves", fallbackColorName: "sky"),
-        .init(id: "shell", name: L10n.string("preset.shell"), assetName: "stamp_shell", fallbackSymbol: "fossil.shell.fill", fallbackColorName: "sun")
+        .init(id: "shell", name: L10n.string("preset.shell"), assetName: "stamp_shell", fallbackSymbol: "fossil.shell.fill", fallbackColorName: "sun"),
+        .init(id: "penguin_pink", name: L10n.string("preset.penguin-pink"), assetName: "stamp_penguin_pink", fallbackSymbol: "bird.fill", fallbackColorName: "flower"),
+        .init(id: "glowing_fish", name: L10n.string("preset.glowing-fish"), assetName: "stamp_glowing_fish", fallbackSymbol: "fish.fill", fallbackColorName: "sky"),
+        .init(id: "koala_green", name: L10n.string("preset.koala-green"), assetName: "stamp_koala_green", fallbackSymbol: "pawprint.fill", fallbackColorName: "green"),
+        .init(id: "starfish_purple", name: L10n.string("preset.starfish-purple"), assetName: "stamp_starfish_purple", fallbackSymbol: "star.fill", fallbackColorName: "sparkle")
     ]
 
     static func preset(for id: String) -> StampPreset {
