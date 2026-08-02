@@ -10,9 +10,14 @@ import SwiftUI
 @main
 struct GohobiStickersApp: App {
     @State private var store: StampStore
+    @State private var isShowingLaunchExperience: Bool
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        _isShowingLaunchExperience = State(
+            initialValue: !ProcessInfo.processInfo.arguments.contains("--ui-testing")
+        )
+
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-testing") {
             let testURL = FileManager.default.temporaryDirectory
@@ -33,13 +38,25 @@ struct GohobiStickersApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(store)
-                .preferredColorScheme(store.appearance.colorScheme)
-                .task(id: scenePhase) {
-                    guard scenePhase == .active else { return }
-                    await store.synchronizeWithCloud()
+            ZStack {
+                ContentView()
+                    .environment(store)
+
+                if isShowingLaunchExperience {
+                    LaunchExperienceView {
+                        withAnimation(.easeOut(duration: 0.28)) {
+                            isShowingLaunchExperience = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(100)
                 }
+            }
+            .preferredColorScheme(store.appearance.colorScheme)
+            .task(id: scenePhase) {
+                guard scenePhase == .active else { return }
+                await store.synchronizeWithCloud()
+            }
         }
     }
 }
