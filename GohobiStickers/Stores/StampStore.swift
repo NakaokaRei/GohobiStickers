@@ -10,6 +10,7 @@ final class StampStore {
     private(set) var cloudSyncStatus: CloudSyncStatus = .idle
     private let fileURL: URL
     private let cloudSyncService: (any CloudSyncing)?
+    private let widgetSnapshotStore: WidgetSnapshotStore?
     private var syncTask: Task<Void, Never>?
     private var isSynchronizing = false
     private var needsAnotherSync = false
@@ -30,10 +31,16 @@ final class StampStore {
         }
     }
 
-    init(fileURL: URL? = nil, cloudSyncService: (any CloudSyncing)? = nil) {
+    init(
+        fileURL: URL? = nil,
+        cloudSyncService: (any CloudSyncing)? = nil,
+        widgetSnapshotStore: WidgetSnapshotStore? = nil
+    ) {
         self.fileURL = fileURL ?? Self.defaultFileURL()
         self.cloudSyncService = cloudSyncService
+        self.widgetSnapshotStore = widgetSnapshotStore
         self.data = Self.load(from: self.fileURL) ?? .initial
+        publishWidgetSnapshot()
     }
 
     func addEntry(presetID: String, comment: String) {
@@ -187,6 +194,7 @@ final class StampStore {
         } catch {
             assertionFailure(L10n.format("error.persistence", error.localizedDescription))
         }
+        publishWidgetSnapshot()
     }
 
     private func persistLocalChange() {
@@ -203,6 +211,11 @@ final class StampStore {
             guard !Task.isCancelled else { return }
             await self?.synchronizeWithCloud()
         }
+    }
+
+    private func publishWidgetSnapshot() {
+        guard let widgetSnapshotStore else { return }
+        WidgetSnapshotPublisher.publish(data, to: widgetSnapshotStore)
     }
 
     private func normalizedRewardName(_ name: String) -> String {

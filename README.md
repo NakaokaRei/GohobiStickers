@@ -11,6 +11,8 @@ GohobiStickers is a SwiftUI app for collecting stamps on the way to personal rew
 - Add an optional comment to each stamp
 - Edit or delete stamps and comments
 - View the total number of collected stamps
+- Add Small and Medium Home Screen widgets showing the latest stamp and progress to the next goal
+- Open the new-stamp screen directly by tapping a widget
 - Set a different interval and reward name for every goal
 - Add, edit, delete, and reorder goals
 - Undo a recent goal deletion
@@ -32,7 +34,9 @@ Each goal interval is counted from the previous goal. For example, intervals of 
 1. Open `GohobiStickers.xcodeproj` in Xcode.
 2. Select your development team under Signing & Capabilities.
 3. Confirm that the iCloud capability uses the `iCloud.com.nakaokarei.GohobiStickers.7ZJJ7KR6WA` CloudKit container.
-4. Select a run destination and run the `GohobiStickers` scheme.
+4. Register the App Group `group.com.nakaokarei.GohobiStickers.7ZJJ7KR6WA` in Apple Developer, and enable it for both the app and widget App IDs.
+5. Refresh the provisioning profiles for `com.nakaokarei.GohobiStickers.7ZJJ7KR6WA` and `com.nakaokarei.GohobiStickers.7ZJJ7KR6WA.widget`.
+6. Select a run destination and run the `GohobiStickers` scheme once before adding the widget.
 
 ## Stamp Images
 
@@ -53,6 +57,8 @@ Presets without bundled artwork display SF Symbols as fallbacks. Preset metadata
 - `App`: app entry point and root configuration
 - `Models`: Codable data models and stamp preset definitions
 - `Services`: CloudKit integration
+- `GohobiShared`: App Group snapshot and deep-link types shared by the app and widget
+- `GohobiStickersWidget`: Small and Medium WidgetKit views and timeline provider
 - `Stores`: application state, persistence, and sync coordination
 - `DesignSystem`: shared colors and stamp artwork components
 - `Views`: feature-based SwiftUI screens and their components
@@ -71,6 +77,8 @@ Stamps, comments, goals, and appearance settings are stored in `GohobiStickers/s
 CloudKit requires an Apple Developer Program team, an iCloud-enabled provisioning profile, and a device signed in to iCloud. Before releasing the app, deploy the CloudKit development schema to production in CloudKit Console.
 
 To inspect `StampBook` records in CloudKit Console, add a `QUERYABLE` index for the `recordName` system field under Schema > Indexes.
+
+The widget does not read the main JSON file or CloudKit directly. The app publishes a compact snapshot to the shared App Group whenever stamps, goals, or downloaded CloudKit data change, then asks WidgetKit to refresh the timeline.
 
 ## Testing
 

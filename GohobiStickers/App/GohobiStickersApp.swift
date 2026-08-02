@@ -23,7 +23,12 @@ struct GohobiStickersApp: App {
         }
         #endif
 
-        _store = State(initialValue: StampStore(cloudSyncService: CloudKitSyncService()))
+        _store = State(
+            initialValue: StampStore(
+                cloudSyncService: CloudKitSyncService(),
+                widgetSnapshotStore: WidgetSnapshotStore()
+            )
+        )
     }
 
     var body: some Scene {
