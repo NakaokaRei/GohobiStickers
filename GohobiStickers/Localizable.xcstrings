@@ -479,6 +479,83 @@
         }
       }
     },
+    "goal.share.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share Image" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "画像をシェア" } }
+      }
+    },
+    "goal.share.card.date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Achieved on" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "達成した日" } }
+      }
+    },
+    "goal.share.card.range" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stamps %1$lld–%2$lld" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld〜%2$lldこ目のスタンプ" } }
+      }
+    },
+    "goal.share.card.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Goal achieved!" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ゴール達成！" } }
+      }
+    },
+    "goal.share.celebration.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share Your Card" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カードをシェア" } }
+      }
+    },
+    "goal.share.error.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please try creating the image again." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もう一度画像を作成してください。" } }
+      }
+    },
+    "goal.share.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't Create Image" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "画像を作成できませんでした" } }
+      }
+    },
+    "goal.share.preview.image.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Goal achievement card preview" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ゴール達成カードのプレビュー" } }
+      }
+    },
+    "goal.share.preview.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Achievement Card" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "達成カード" } }
+      }
+    },
+    "goal.share.rendering" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Creating your card…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カードを作成中…" } }
+      }
+    },
+    "goal.share.retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Try Again" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もう一度試す" } }
+      }
+    },
     "goal.reward.placeholder" : {
       "extractionState" : "manual",
       "localizations" : {
