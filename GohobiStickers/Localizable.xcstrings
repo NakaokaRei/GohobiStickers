@@ -4,71 +4,171 @@
     "appearance.dark" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Dark" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ダーク" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ダーク"
+          }
+        }
       }
     },
     "appearance.footer" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "System follows your device appearance setting." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "システムを選ぶと、端末の外観設定に合わせます。" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System follows your device appearance setting."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システムを選ぶと、端末の外観設定に合わせます。"
+          }
+        }
       }
     },
     "appearance.light" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Light" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ライト" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライト"
+          }
+        }
       }
     },
     "appearance.picker.title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "外観" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "外観"
+          }
+        }
       }
     },
     "appearance.settings.accessibility" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance settings" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "表示設定" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "表示設定"
+          }
+        }
       }
     },
     "appearance.settings.title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "表示設定" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "表示設定"
+          }
+        }
       }
     },
     "appearance.system" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "System" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "システム" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システム"
+          }
+        }
       }
     },
     "celebration.dismiss" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Awesome!" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "やった！" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awesome!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "やった！"
+          }
+        }
       }
     },
     "celebration.message" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "You reached the goal at stamp %lld." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lldこ目のゴールに到達しました。" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You reached the goal at stamp %lld."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldこ目のゴールに到達しました。"
+          }
+        }
       }
     },
     "celebration.title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Goal achieved!" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ゴール達成！" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal achieved!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゴール達成！"
+          }
+        }
       }
     },
     "common.cancel" : {
@@ -479,83 +579,6 @@
         }
       }
     },
-    "goal.share.action" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share Image" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "画像をシェア" } }
-      }
-    },
-    "goal.share.card.date" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Achieved on" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "達成した日" } }
-      }
-    },
-    "goal.share.card.range" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stamps %1$lld–%2$lld" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%1$lld〜%2$lldこ目のスタンプ" } }
-      }
-    },
-    "goal.share.card.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Goal achieved!" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ゴール達成！" } }
-      }
-    },
-    "goal.share.celebration.action" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share Your Card" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カードをシェア" } }
-      }
-    },
-    "goal.share.error.message" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please try creating the image again." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もう一度画像を作成してください。" } }
-      }
-    },
-    "goal.share.error.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn't Create Image" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "画像を作成できませんでした" } }
-      }
-    },
-    "goal.share.preview.image.accessibility" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Goal achievement card preview" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ゴール達成カードのプレビュー" } }
-      }
-    },
-    "goal.share.preview.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Achievement Card" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "達成カード" } }
-      }
-    },
-    "goal.share.rendering" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Creating your card…" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カードを作成中…" } }
-      }
-    },
-    "goal.share.retry" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Try Again" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もう一度試す" } }
-      }
-    },
     "goal.reward.placeholder" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -675,6 +698,197 @@
         }
       }
     },
+    "goal.share.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Image"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画像をシェア"
+          }
+        }
+      }
+    },
+    "goal.share.card.date" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achieved on"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "達成した日"
+          }
+        }
+      }
+    },
+    "goal.share.card.range" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stamps %1$lld–%2$lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld〜%2$lldこ目のスタンプ"
+          }
+        }
+      }
+    },
+    "goal.share.card.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal achieved!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゴール達成！"
+          }
+        }
+      }
+    },
+    "goal.share.celebration.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Your Card"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カードをシェア"
+          }
+        }
+      }
+    },
+    "goal.share.error.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please try creating the image again."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もう一度画像を作成してください。"
+          }
+        }
+      }
+    },
+    "goal.share.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't Create Image"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画像を作成できませんでした"
+          }
+        }
+      }
+    },
+    "goal.share.preview.image.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal achievement card preview"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ゴール達成カードのプレビュー"
+          }
+        }
+      }
+    },
+    "goal.share.preview.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achievement Card"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "達成カード"
+          }
+        }
+      }
+    },
+    "goal.share.rendering" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating your card…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カードを作成中…"
+          }
+        }
+      }
+    },
+    "goal.share.retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try Again"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もう一度試す"
+          }
+        }
+      }
+    },
+    "Gohobi Stickers" : {
+      "comment" : "The name of the app.",
+      "isCommentAutoGenerated" : true
+    },
     "home.count.unit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -763,78 +977,222 @@
     "icloud.error.account-unavailable" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sign in to iCloud in Settings to sync your data." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "データを同期するには、設定からiCloudにサインインしてください。" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to iCloud in Settings to sync your data."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "データを同期するには、設定からiCloudにサインインしてください。"
+          }
+        }
       }
     },
     "icloud.error.invalid-data" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "The iCloud data could not be read." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloudのデータを読み込めませんでした。" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The iCloud data could not be read."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloudのデータを読み込めませんでした。"
+          }
+        }
       }
     },
     "icloud.footer" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stamps, comments, goals, and settings sync privately through the iCloud account on this device. Local data remains available offline." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この端末のiCloudアカウントを使い、スタンプ・コメント・ゴール・設定を非公開で同期します。オフラインでもローカルデータを利用できます。" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stamps, comments, goals, and settings sync privately through the iCloud account on this device. Local data remains available offline."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この端末のiCloudアカウントを使い、スタンプ・コメント・ゴール・設定を非公開で同期します。オフラインでもローカルデータを利用できます。"
+          }
+        }
       }
     },
     "icloud.last-synced" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Last synced: %@" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最終同期: %@" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last synced: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最終同期: %@"
+          }
+        }
       }
     },
     "icloud.status.account-unavailable" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud is unavailable" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloudを利用できません" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud is unavailable"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloudを利用できません"
+          }
+        }
       }
     },
     "icloud.status.failed" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couldn’t sync" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期できませんでした" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t sync"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同期できませんでした"
+          }
+        }
       }
     },
     "icloud.status.idle" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Waiting to sync" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期を待機中" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting to sync"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同期を待機中"
+          }
+        }
       }
     },
     "icloud.status.synced" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Synced" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期済み" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synced"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同期済み"
+          }
+        }
       }
     },
     "icloud.status.syncing" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Syncing…" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同期中…" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Syncing…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同期中…"
+          }
+        }
       }
     },
     "icloud.sync-now" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sync Now" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今すぐ同期" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync Now"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今すぐ同期"
+          }
+        }
       }
     },
     "icloud.title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud Sync" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud同期" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud Sync"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud同期"
+          }
+        }
+      }
+    },
+    "launch.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gohobi Stickers is starting"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gohobi Stickersを起動しています"
+          }
+        }
+      }
+    },
+    "launch.tagline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One little win at a time!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "きょうも、ひとつえらい！"
+          }
+        }
       }
     },
     "node.completed.accessibility" : {
@@ -891,36 +1249,86 @@
     "node.quick-look.date" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Date" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日付" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日付"
+          }
+        }
       }
     },
     "node.quick-look.edit" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit stamp" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "スタンプを編集" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit stamp"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スタンプを編集"
+          }
+        }
       }
     },
     "node.quick-look.note" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Note" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "備考" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "備考"
+          }
+        }
       }
     },
     "node.quick-look.note.empty" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No note" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "備考はありません" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No note"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "備考はありません"
+          }
+        }
       }
     },
     "node.quick-look.title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stamp" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "スタンプ" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stamp"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スタンプ"
+          }
+        }
       }
     },
     "preset.blue-hero" : {
@@ -1178,20 +1586,6 @@
         }
       }
     },
-    "launch.accessibility" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Gohobi Stickers is starting" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Gohobi Stickersを起動しています" } }
-      }
-    },
-    "launch.tagline" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "One little win at a time!" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "きょうも、ひとつえらい！" } }
-      }
-    },
     "stamp.editor.edit.title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1210,5 +1604,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.1"
 }
