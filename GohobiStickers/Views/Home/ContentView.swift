@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var isShowingGoals = false
     @State private var isShowingAppearance = false
     @State private var editingEntry: StampEntry?
+    @State private var shareCardData: GoalShareCardData?
 
     private let routeOffsets: [CGFloat] = [-88, 0, 88, 0]
 
@@ -44,7 +45,8 @@ struct ContentView: View {
                             if let placement = goal(at: position) {
                                 GoalBadge(
                                     placement: placement,
-                                    isAchieved: store.totalStampCount >= placement.targetCount
+                                    isAchieved: store.totalStampCount >= placement.targetCount,
+                                    onShare: { presentShareCard(for: placement) }
                                 )
                                 .padding(.vertical, 8)
                             }
@@ -64,7 +66,10 @@ struct ContentView: View {
                 .scrollIndicators(.hidden)
 
                 if let celebration = store.celebration {
-                    GoalCelebrationView(placement: celebration) {
+                    GoalCelebrationView(
+                        placement: celebration,
+                        share: { presentShareCard(for: celebration) }
+                    ) {
                         withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                             store.clearCelebration()
                         }
@@ -107,6 +112,10 @@ struct ContentView: View {
             }
             .sheet(item: $editingEntry) { entry in
                 StampEditorView(entry: entry)
+            }
+            .sheet(item: $shareCardData) { data in
+                GoalShareSheet(data: data)
+                    .presentationDetents([.large])
             }
         }
         .tint(AppColors.coral)
@@ -176,6 +185,10 @@ struct ContentView: View {
 
     private func goal(at position: Int) -> GoalPlacement? {
         store.goalPlacements.first { $0.targetCount == position }
+    }
+
+    private func presentShareCard(for placement: GoalPlacement) {
+        shareCardData = store.goalShareCardData(for: placement)
     }
 }
 

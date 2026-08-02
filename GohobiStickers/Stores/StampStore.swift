@@ -97,6 +97,40 @@ final class StampStore {
         celebration = nil
     }
 
+    func goalShareCardData(for placement: GoalPlacement) -> GoalShareCardData? {
+        guard let currentPlacement = goalPlacements.first(where: { $0.id == placement.id }) else {
+            return nil
+        }
+
+        let currentEntries = entries
+        let rangeEnd = currentPlacement.targetCount
+        let interval = max(1, currentPlacement.goal.interval)
+        let rangeStart = rangeEnd - interval + 1
+        let lowerBound = rangeStart - 1
+
+        guard
+            rangeStart > 0,
+            currentEntries.count >= rangeEnd,
+            currentEntries.indices.contains(lowerBound),
+            currentEntries.indices.contains(rangeEnd - 1)
+        else {
+            return nil
+        }
+
+        let cardEntries = Array(currentEntries[lowerBound..<rangeEnd])
+        guard cardEntries.count == interval, let achievedAt = cardEntries.last?.createdAt else {
+            return nil
+        }
+
+        return GoalShareCardData(
+            placement: currentPlacement,
+            entries: cardEntries,
+            rangeStart: rangeStart,
+            rangeEnd: rangeEnd,
+            achievedAt: achievedAt
+        )
+    }
+
     func synchronizeWithCloud() async {
         guard let cloudSyncService else { return }
         guard !isSynchronizing else {

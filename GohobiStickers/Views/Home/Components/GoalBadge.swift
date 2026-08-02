@@ -3,6 +3,7 @@ import SwiftUI
 struct GoalBadge: View {
     let placement: GoalPlacement
     let isAchieved: Bool
+    let onShare: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
@@ -19,9 +20,21 @@ struct GoalBadge: View {
             }
             Spacer()
             if isAchieved {
-                Text(L10n.string("goal.achieved"))
-                    .font(.caption.bold())
-                    .foregroundStyle(AppColors.mint)
+                VStack(spacing: 4) {
+                    Text(L10n.string("goal.achieved"))
+                        .font(.caption.bold())
+                        .foregroundStyle(AppColors.mint)
+                    Button(action: onShare) {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.headline.bold())
+                            .foregroundStyle(AppColors.coral)
+                            .frame(width: 38, height: 38)
+                            .background(AppColors.coral.opacity(0.12), in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(L10n.string("goal.share.action"))
+                    .accessibilityIdentifier("goal-share-button-\(placement.targetCount)")
+                }
             }
         }
         .padding(.horizontal, 16)
@@ -33,6 +46,6 @@ struct GoalBadge: View {
                 .stroke(isAchieved ? AppColors.mint.opacity(0.45) : AppColors.coral.opacity(0.25), lineWidth: 2)
         }
         .shadow(color: AppColors.ink.opacity(0.06), radius: 8, y: 4)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .contain)
     }
 }

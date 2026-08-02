@@ -2,6 +2,7 @@ import SwiftUI
 
 struct GoalCelebrationView: View {
     let placement: GoalPlacement
+    let share: () -> Void
     let dismiss: () -> Void
     @State private var isBursting = false
 
@@ -64,12 +65,23 @@ struct GoalCelebrationView: View {
             }
             .multilineTextAlignment(.center)
 
-            Button(L10n.string("celebration.dismiss"), action: dismiss)
+            VStack(spacing: 10) {
+                Button(action: share) {
+                    Label(L10n.string("goal.share.celebration.action"), systemImage: "square.and.arrow.up")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
                 .font(.headline.bold())
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(AppColors.coral, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .accessibilityIdentifier("celebration-share-button")
+
+                Button(L10n.string("celebration.dismiss"), action: dismiss)
+                    .font(.headline.bold())
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(AppColors.coral, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .accessibilityIdentifier("celebration-dismiss-button")
+            }
         }
         .padding(28)
         .frame(maxWidth: 330)
