@@ -1178,6 +1178,20 @@
         }
       }
     },
+    "launch.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Gohobi Stickers is starting" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Gohobi Stickersを起動しています" } }
+      }
+    },
+    "launch.tagline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "One little win at a time!" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "きょうも、ひとつえらい！" } }
+      }
+    },
     "stamp.editor.edit.title" : {
       "extractionState" : "manual",
       "localizations" : {
