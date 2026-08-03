@@ -8,6 +8,8 @@ struct ContentView: View {
     @State private var editingEntry: StampEntry?
     @State private var shareCardData: GoalShareCardData?
     @State private var didHandleUITestDeepLink = false
+    @State private var pendingStampAnimationID: UUID?
+    @State private var animatingStampID: UUID?
 
     private let routeOffsets: [CGFloat] = [-88, 0, 88, 0]
 
@@ -34,7 +36,9 @@ struct ContentView: View {
                                 position: position,
                                 entry: entry,
                                 isNext: position == store.totalStampCount + 1,
-                                offset: offset
+                                offset: offset,
+                                shouldHidePlacement: entry?.id == pendingStampAnimationID,
+                                shouldAnimatePlacement: entry?.id == animatingStampID
                             ) {
                                 if let entry {
                                     editingEntry = entry
@@ -106,8 +110,10 @@ struct ContentView: View {
                     .accessibilityIdentifier("goal-settings-button")
                 }
             }
-            .sheet(isPresented: $isAddingStamp) {
-                StampEditorView()
+            .sheet(isPresented: $isAddingStamp, onDismiss: animatePendingStamp) {
+                StampEditorView { entryID in
+                    pendingStampAnimationID = entryID
+                }
             }
             .sheet(isPresented: $isShowingAppearance) {
                 AppearanceSettingsView()
@@ -208,6 +214,18 @@ struct ContentView: View {
 
     private func presentShareCard(for placement: GoalPlacement) {
         shareCardData = store.goalShareCardData(for: placement)
+    }
+
+    private func animatePendingStamp() {
+        guard let entryID = pendingStampAnimationID else { return }
+        pendingStampAnimationID = nil
+        animatingStampID = entryID
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(1_100))
+            guard animatingStampID == entryID else { return }
+            animatingStampID = nil
+        }
     }
 
     private func presentNewStampEditor() {

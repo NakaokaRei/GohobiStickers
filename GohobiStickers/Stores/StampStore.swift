@@ -43,13 +43,17 @@ final class StampStore {
         publishWidgetSnapshot()
     }
 
-    func addEntry(presetID: String, comment: String) {
+    @discardableResult
+    func addEntry(presetID: String, comment: String) -> UUID {
         let completedGoal = goalPlacements.first { $0.targetCount == data.entries.count + 1 }
-        data.entries.append(
-            StampEntry(presetID: presetID, comment: comment.trimmingCharacters(in: .whitespacesAndNewlines))
+        let entry = StampEntry(
+            presetID: presetID,
+            comment: comment.trimmingCharacters(in: .whitespacesAndNewlines)
         )
+        data.entries.append(entry)
         persistLocalChange()
         celebration = completedGoal
+        return entry.id
     }
 
     func updateEntry(id: UUID, presetID: String, comment: String) {
