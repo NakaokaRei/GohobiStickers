@@ -47,15 +47,15 @@ struct StampEditorView: View {
                         .accessibilityIdentifier("stamp-editor-save-button")
                 }
             }
-            .confirmationDialog(
+            .alert(
                 L10n.string("stamp.delete.confirm.title"),
-                isPresented: $isConfirmingDeletion,
-                titleVisibility: .visible
+                isPresented: $isConfirmingDeletion
             ) {
                 Button(L10n.string("common.delete"), role: .destructive) {
                     if let entry { store.deleteEntry(id: entry.id) }
                     dismiss()
                 }
+                Button(L10n.string("common.cancel"), role: .cancel) {}
             } message: {
                 Text(L10n.string("stamp.delete.confirm.message"))
             }
