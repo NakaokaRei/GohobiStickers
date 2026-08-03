@@ -12,13 +12,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A10000000000000000000001 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5C4994AE301DCAD300B12B15 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A10000000000000000000010;
-			remoteInfo = GohobiStickersWidgetExtension;
-		};
 		5C4994C4301DCAD400B12B15 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5C4994AE301DCAD300B12B15 /* Project object */;
@@ -32,6 +25,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 5C4994B5301DCAD300B12B15;
 			remoteInfo = GohobiStickers;
+		};
+		A10000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C4994AE301DCAD300B12B15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000000000000000000010;
+			remoteInfo = GohobiStickersWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -50,11 +50,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A10000000000000000000002 /* GohobiStickersWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GohobiStickersWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		A10000000000000000000003 /* Widget Stamp Assets */ = {isa = PBXFileReference; explicitFileType = folder.assetcatalog; name = "Widget Stamp Assets"; path = GohobiStickers/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		5C4994B6301DCAD300B12B15 /* GohobiStickers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GohobiStickers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C4994C3301DCAD400B12B15 /* GohobiStickersTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GohobiStickersTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C4994CD301DCAD400B12B15 /* GohobiStickersUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GohobiStickersUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C8DC99B3020A3CC0095936E /* GohobiStickers.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = GohobiStickers.xctestplan; path = GohobiStickersTests/GohobiStickers.xctestplan; sourceTree = "<group>"; };
+		A10000000000000000000002 /* GohobiStickersWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GohobiStickersWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000003 /* Widget Stamp Assets */ = {isa = PBXFileReference; explicitFileType = folder.assetcatalog; name = "Widget Stamp Assets"; path = GohobiStickers/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -75,19 +76,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A10000000000000000000006 /* GohobiShared */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GohobiShared;
-			sourceTree = "<group>";
-		};
-		A10000000000000000000007 /* GohobiStickersWidget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A10000000000000000000018 /* Exceptions for "GohobiStickersWidget" folder in "GohobiStickersWidgetExtension" target */,
-			);
-			path = GohobiStickersWidget;
-			sourceTree = "<group>";
-		};
 		5C4994B8301DCAD300B12B15 /* GohobiStickers */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -106,16 +94,22 @@
 			path = GohobiStickersUITests;
 			sourceTree = "<group>";
 		};
+		A10000000000000000000006 /* GohobiShared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GohobiShared;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000007 /* GohobiStickersWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A10000000000000000000018 /* Exceptions for "GohobiStickersWidget" folder in "GohobiStickersWidgetExtension" target */,
+			);
+			path = GohobiStickersWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A10000000000000000000008 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5C4994B3301DCAD300B12B15 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,12 +131,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A10000000000000000000008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		5C4994AD301DCAD300B12B15 = {
 			isa = PBXGroup;
 			children = (
+				5C8DC99B3020A3CC0095936E /* GohobiStickers.xctestplan */,
 				5C4994B8301DCAD300B12B15 /* GohobiStickers */,
 				A10000000000000000000006 /* GohobiShared */,
 				A10000000000000000000007 /* GohobiStickersWidget */,
@@ -192,29 +194,6 @@
 			productReference = 5C4994B6301DCAD300B12B15 /* GohobiStickers.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A10000000000000000000010 /* GohobiStickersWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A10000000000000000000016 /* Build configuration list for PBXNativeTarget "GohobiStickersWidgetExtension" */;
-			buildPhases = (
-				A10000000000000000000009 /* Sources */,
-				A10000000000000000000008 /* Frameworks */,
-				A10000000000000000000011 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				A10000000000000000000006 /* GohobiShared */,
-				A10000000000000000000007 /* GohobiStickersWidget */,
-			);
-			name = GohobiStickersWidgetExtension;
-			packageProductDependencies = (
-			);
-			productName = GohobiStickersWidgetExtension;
-			productReference = A10000000000000000000002 /* GohobiStickersWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		5C4994C2301DCAD400B12B15 /* GohobiStickersTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5C4994DA301DCAD400B12B15 /* Build configuration list for PBXNativeTarget "GohobiStickersTests" */;
@@ -261,6 +240,29 @@
 			productReference = 5C4994CD301DCAD400B12B15 /* GohobiStickersUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		A10000000000000000000010 /* GohobiStickersWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000016 /* Build configuration list for PBXNativeTarget "GohobiStickersWidgetExtension" */;
+			buildPhases = (
+				A10000000000000000000009 /* Sources */,
+				A10000000000000000000008 /* Frameworks */,
+				A10000000000000000000011 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A10000000000000000000006 /* GohobiShared */,
+				A10000000000000000000007 /* GohobiStickersWidget */,
+			);
+			name = GohobiStickersWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = GohobiStickersWidgetExtension;
+			productReference = A10000000000000000000002 /* GohobiStickersWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -271,14 +273,6 @@
 				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
-					A10000000000000000000010 = {
-						CreatedOnToolsVersion = 26.5;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
-							};
-						};
-					};
 					5C4994B5301DCAD300B12B15 = {
 						CreatedOnToolsVersion = 26.5;
 						SystemCapabilities = {
@@ -297,6 +291,14 @@
 					5C4994CC301DCAD400B12B15 = {
 						CreatedOnToolsVersion = 26.5;
 						TestTargetID = 5C4994B5301DCAD300B12B15;
+					};
+					A10000000000000000000010 = {
+						CreatedOnToolsVersion = 26.5;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -323,14 +325,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A10000000000000000000011 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A10000000000000000000005 /* Widget Stamp Assets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5C4994B4301DCAD300B12B15 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -352,16 +346,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		A10000000000000000000009 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
+		A10000000000000000000011 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000005 /* Widget Stamp Assets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
 		5C4994B2301DCAD300B12B15 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -383,14 +378,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A10000000000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A10000000000000000000013 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A10000000000000000000010 /* GohobiStickersWidgetExtension */;
-			targetProxy = A10000000000000000000001 /* PBXContainerItemProxy */;
-		};
 		5C4994C5301DCAD400B12B15 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5C4994B5301DCAD300B12B15 /* GohobiStickers */;
@@ -401,73 +398,14 @@
 			target = 5C4994B5301DCAD300B12B15 /* GohobiStickers */;
 			targetProxy = 5C4994CE301DCAD400B12B15 /* PBXContainerItemProxy */;
 		};
+		A10000000000000000000013 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10000000000000000000010 /* GohobiStickersWidgetExtension */;
+			targetProxy = A10000000000000000000001 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		A10000000000000000000014 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = GohobiStickersWidget/GohobiStickersWidget.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7ZJJ7KR6WA;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GohobiStickersWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Gohobi Stickers";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nakaokarei.GohobiStickers.7ZJJ7KR6WA.widget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A10000000000000000000015 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = GohobiStickersWidget/GohobiStickersWidget.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7ZJJ7KR6WA;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GohobiStickersWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Gohobi Stickers";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nakaokarei.GohobiStickers.7ZJJ7KR6WA.widget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		5C4994D5301DCAD400B12B15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -745,18 +683,73 @@
 			};
 			name = Release;
 		};
+		A10000000000000000000014 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = GohobiStickersWidget/GohobiStickersWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7ZJJ7KR6WA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GohobiStickersWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gohobi Stickers";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nakaokarei.GohobiStickers.7ZJJ7KR6WA.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A10000000000000000000015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = GohobiStickersWidget/GohobiStickersWidget.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7ZJJ7KR6WA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GohobiStickersWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Gohobi Stickers";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nakaokarei.GohobiStickers.7ZJJ7KR6WA.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A10000000000000000000016 /* Build configuration list for PBXNativeTarget "GohobiStickersWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A10000000000000000000014 /* Debug */,
-				A10000000000000000000015 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		5C4994B1301DCAD300B12B15 /* Build configuration list for PBXProject "GohobiStickers" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -789,6 +782,15 @@
 			buildConfigurations = (
 				5C4994DE301DCAD400B12B15 /* Debug */,
 				5C4994DF301DCAD400B12B15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000016 /* Build configuration list for PBXNativeTarget "GohobiStickersWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000014 /* Debug */,
+				A10000000000000000000015 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

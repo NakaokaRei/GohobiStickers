@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "9419F2A5-34A9-4791-AF2B-1E285C220DBB",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:GohobiStickers.xcodeproj",
+      "identifier" : "5C4994B5301DCAD300B12B15",
+      "name" : "GohobiStickers"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:GohobiStickers.xcodeproj",
+        "identifier" : "5C4994C2301DCAD400B12B15",
+        "name" : "GohobiStickersTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:GohobiStickers.xcodeproj",
+        "identifier" : "5C4994CC301DCAD400B12B15",
+        "name" : "GohobiStickersUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
