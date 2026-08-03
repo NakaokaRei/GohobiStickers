@@ -1586,6 +1586,23 @@
         }
       }
     },
+    "route.current-position.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Position"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在地へ"
+          }
+        }
+      }
+    },
     "stamp.add.button" : {
       "extractionState" : "manual",
       "localizations" : {

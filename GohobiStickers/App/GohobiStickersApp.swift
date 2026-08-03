@@ -23,7 +23,13 @@ struct GohobiStickersApp: App {
             let testURL = FileManager.default.temporaryDirectory
                 .appending(path: "GohobiStickersUITests.json", directoryHint: .notDirectory)
             try? FileManager.default.removeItem(at: testURL)
-            _store = State(initialValue: StampStore(fileURL: testURL))
+            let testStore = StampStore(fileURL: testURL)
+            if ProcessInfo.processInfo.arguments.contains("--ui-testing-long-route") {
+                for _ in 0..<12 {
+                    testStore.addEntry(presetID: "blue_hero", comment: "")
+                }
+            }
+            _store = State(initialValue: testStore)
             return
         }
         #endif

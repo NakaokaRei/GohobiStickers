@@ -10,6 +10,7 @@ struct ContentView: View {
     @State private var didHandleUITestDeepLink = false
     @State private var pendingStampAnimationID: UUID?
     @State private var animatingStampID: UUID?
+    @State private var isCurrentPositionVisible = true
 
     private let routeOffsets: [CGFloat] = [-88, 0, 88, 0]
 
@@ -17,74 +18,97 @@ struct ContentView: View {
         max(store.totalStampCount + 1, store.goalPlacements.last?.targetCount ?? 1, 1)
     }
 
+    private var currentPosition: Int {
+        store.totalStampCount + 1
+    }
+
     var body: some View {
         NavigationStack {
-            ZStack {
-                AppColors.background.ignoresSafeArea()
+            ScrollViewReader { scrollProxy in
+                ZStack {
+                    AppColors.background.ignoresSafeArea()
 
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        totalHeader
-                            .padding(.bottom, 28)
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            totalHeader
+                                .padding(.bottom, 28)
 
-                        ForEach(1...routeEnd, id: \.self) { position in
-                            let offset = routeOffsets[(position - 1) % routeOffsets.count]
-                            let nextOffset = routeOffsets[position % routeOffsets.count]
-                            let entry = entry(at: position)
+                            ForEach(1...routeEnd, id: \.self) { position in
+                                let offset = routeOffsets[(position - 1) % routeOffsets.count]
+                                let nextOffset = routeOffsets[position % routeOffsets.count]
+                                let entry = entry(at: position)
 
-                            RouteNode(
-                                position: position,
-                                entry: entry,
-                                isNext: position == store.totalStampCount + 1,
-                                offset: offset,
-                                shouldHidePlacement: entry?.id == pendingStampAnimationID,
-                                shouldAnimatePlacement: entry?.id == animatingStampID
-                            ) {
-                                if let entry {
-                                    editingEntry = entry
-                                } else if position == store.totalStampCount + 1 {
-                                    isAddingStamp = true
+                                RouteNode(
+                                    position: position,
+                                    entry: entry,
+                                    isNext: position == currentPosition,
+                                    offset: offset,
+                                    shouldHidePlacement: entry?.id == pendingStampAnimationID,
+                                    shouldAnimatePlacement: entry?.id == animatingStampID
+                                ) {
+                                    if let entry {
+                                        editingEntry = entry
+                                    } else if position == currentPosition {
+                                        isAddingStamp = true
+                                    }
+                                }
+                                .id(position)
+
+                                if let placement = goal(at: position) {
+                                    GoalBadge(
+                                        placement: placement,
+                                        isAchieved: store.totalStampCount >= placement.targetCount,
+                                        onShare: { presentShareCard(for: placement) }
+                                    )
+                                    .padding(.vertical, 8)
+                                }
+
+                                if position < routeEnd {
+                                    RouteConnector(
+                                        from: offset,
+                                        to: nextOffset,
+                                        isCompleted: position < store.totalStampCount
+                                    )
                                 }
                             }
 
-                            if let placement = goal(at: position) {
-                                GoalBadge(
-                                    placement: placement,
-                                    isAchieved: store.totalStampCount >= placement.targetCount,
-                                    onShare: { presentShareCard(for: placement) }
-                                )
-                                .padding(.vertical, 8)
-                            }
+                            endOfRoute
+                                .padding(.top, 24)
+                                .padding(.bottom, 40)
+                        }
+                        .scrollTargetLayout()
+                        .padding(.horizontal, 20)
+                        .padding(.top, 12)
+                    }
+                    .scrollIndicators(.hidden)
+                    .onScrollTargetVisibilityChange(idType: Int.self, threshold: 0.4) { positions in
+                        let isVisible = positions.contains(currentPosition)
+                        guard isCurrentPositionVisible != isVisible else { return }
+                        withAnimation(.spring(response: 0.34, dampingFraction: 0.82)) {
+                            isCurrentPositionVisible = isVisible
+                        }
+                    }
 
-                            if position < routeEnd {
-                                RouteConnector(
-                                    from: offset,
-                                    to: nextOffset,
-                                    isCompleted: position < store.totalStampCount
-                                )
+                    if let celebration = store.celebration {
+                        GoalCelebrationView(
+                            placement: celebration,
+                            share: { presentShareCard(for: celebration) }
+                        ) {
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                store.clearCelebration()
                             }
                         }
-
-                        endOfRoute
-                            .padding(.top, 24)
-                            .padding(.bottom, 40)
+                        .transition(.opacity.combined(with: .scale(scale: 0.88)))
+                        .zIndex(10)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12)
                 }
-                .scrollIndicators(.hidden)
-
-                if let celebration = store.celebration {
-                    GoalCelebrationView(
-                        placement: celebration,
-                        share: { presentShareCard(for: celebration) }
-                    ) {
-                        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-                            store.clearCelebration()
-                        }
+                .overlay(alignment: .bottomTrailing) {
+                    currentPositionButton(scrollProxy)
+                }
+                .onChange(of: currentPosition) {
+                    withAnimation(.spring(response: 0.34, dampingFraction: 0.82)) {
+                        isCurrentPositionVisible = false
                     }
-                    .transition(.opacity.combined(with: .scale(scale: 0.88)))
-                    .zIndex(10)
                 }
             }
             .navigationTitle(L10n.string("home.title"))
@@ -201,6 +225,42 @@ struct ContentView: View {
         .padding(22)
         .frame(maxWidth: .infinity)
         .background(AppColors.mint.opacity(0.12), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+
+    @ViewBuilder
+    private func currentPositionButton(_ scrollProxy: ScrollViewProxy) -> some View {
+        if !isCurrentPositionVisible && store.celebration == nil {
+            Button {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    scrollProxy.scrollTo(currentPosition, anchor: .center)
+                }
+            } label: {
+                Label(
+                    L10n.string("route.current-position.button"),
+                    systemImage: "location.fill"
+                )
+                .font(.subheadline.bold())
+                .foregroundStyle(AppColors.coral)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(AppColors.surface, in: Capsule())
+                .overlay {
+                    Capsule()
+                        .stroke(AppColors.surfaceHighlight, lineWidth: 2)
+                }
+                .shadow(color: AppColors.ink.opacity(0.14), radius: 12, y: 5)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("current-position-button")
+            .padding(.trailing, 18)
+            .padding(.bottom, 18)
+            .transition(
+                .asymmetric(
+                    insertion: .scale(scale: 0.82, anchor: .trailing).combined(with: .opacity),
+                    removal: .scale(scale: 0.92, anchor: .trailing).combined(with: .opacity)
+                )
+            )
+        }
     }
 
     private func entry(at position: Int) -> StampEntry? {

@@ -66,6 +66,31 @@ final class GohobiStickersUITests: XCTestCase {
     }
 
     @MainActor
+    func testCurrentPositionButtonJumpsToNextStamp() throws {
+        let app = makeApp()
+        app.launchArguments.append("--ui-testing-long-route")
+        app.launch()
+
+        let currentPositionButton = app.buttons["current-position-button"]
+        XCTAssertTrue(currentPositionButton.waitForExistence(timeout: 5))
+        currentPositionButton.tap()
+
+        let nextStampNode = app.buttons["next-stamp-node"]
+        XCTAssertTrue(nextStampNode.waitForExistence(timeout: 5))
+        let becameHittable = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "hittable == true"),
+            object: nextStampNode
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [becameHittable], timeout: 5), .completed)
+
+        let buttonDisappeared = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: currentPositionButton
+        )
+        XCTAssertEqual(XCTWaiter.wait(for: [buttonDisappeared], timeout: 5), .completed)
+    }
+
+    @MainActor
     func testCanPreviewGoalCardFromCelebrationAndGoalBadge() throws {
         let app = makeApp()
         app.launch()
