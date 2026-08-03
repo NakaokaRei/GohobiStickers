@@ -53,7 +53,11 @@ struct ContentView: View {
                             }
 
                             if position < routeEnd {
-                                RouteConnector(from: offset, to: nextOffset)
+                                RouteConnector(
+                                    from: offset,
+                                    to: nextOffset,
+                                    isCompleted: position < store.totalStampCount
+                                )
                             }
                         }
 

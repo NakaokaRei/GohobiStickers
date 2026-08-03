@@ -26,6 +26,10 @@ enum AppColors {
         light: UIColor(red: 0.76, green: 0.69, blue: 0.58, alpha: 0.55),
         dark: UIColor(red: 0.48, green: 0.49, blue: 0.53, alpha: 0.7)
     )
+    static let completedRoute = adaptive(
+        light: UIColor(red: 0.68, green: 0.60, blue: 0.49, alpha: 0.9),
+        dark: UIColor(red: 0.62, green: 0.56, blue: 0.47, alpha: 0.95)
+    )
     static let emptyNode = adaptive(
         light: UIColor(red: 0.91, green: 0.87, blue: 0.78, alpha: 1),
         dark: UIColor(red: 0.22, green: 0.23, blue: 0.26, alpha: 1)
