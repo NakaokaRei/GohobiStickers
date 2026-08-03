@@ -6,6 +6,28 @@ import UIKit
 
 @MainActor
 struct GohobiStickersTests {
+    @Test func stampPresetsHaveUniqueIDsAndBundledArtwork() {
+        let presetIDs = StampPreset.all.map(\.id)
+        let newPresetIDs: Set<String> = [
+            "penguin_pink",
+            "glowing_fish",
+            "koala_green",
+            "starfish_purple"
+        ]
+
+        #expect(Set(presetIDs).count == presetIDs.count)
+        #expect(newPresetIDs.isSubset(of: Set(presetIDs)))
+
+        for preset in StampPreset.all {
+            let image = UIImage(named: preset.assetName)
+            #expect(image != nil)
+
+            if newPresetIDs.contains(preset.id), let cgImage = image?.cgImage {
+                #expect(max(cgImage.width, cgImage.height) <= 1_024)
+            }
+        }
+    }
+
     @Test func goalIntervalsBecomeCumulativeTargets() {
         let store = makeStore()
 
@@ -313,6 +335,24 @@ struct GohobiStickersTests {
         #expect(editedSnapshot.intervalProgress == 1)
     }
 
+    @Test func widgetSnapshotUsesNewStampAssetNames() {
+        let newStamps = [
+            (presetID: "penguin_pink", assetName: "stamp_penguin_pink"),
+            (presetID: "glowing_fish", assetName: "stamp_glowing_fish"),
+            (presetID: "koala_green", assetName: "stamp_koala_green"),
+            (presetID: "starfish_purple", assetName: "stamp_starfish_purple")
+        ]
+
+        for stamp in newStamps {
+            let data = StampBookData(
+                entries: [StampEntry(presetID: stamp.presetID)],
+                goals: []
+            )
+            let snapshot = WidgetSnapshotFactory.make(from: data)
+            #expect(snapshot.latestStampAssetName == stamp.assetName)
+        }
+    }
+
     @Test func widgetSnapshotStoreRoundTripsAndRecoversFromCorruption() throws {
         let suiteName = "GohobiStickersTests.WidgetSnapshot.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suiteName))
@@ -398,7 +438,11 @@ struct GohobiStickersTests {
                 "frog_blue",
                 "frog_green",
                 "sea_lion",
-                "shell"
+                "shell",
+                "penguin_pink",
+                "glowing_fish",
+                "koala_green",
+                "starfish_purple"
             ]
         )
     }

@@ -49,7 +49,8 @@ struct GohobiTimelineProvider: TimelineProvider {
         completion: @escaping (Timeline<GohobiTimelineEntry>) -> Void
     ) {
         let entry = GohobiTimelineEntry(date: .now, snapshot: WidgetSnapshotStore().load())
-        completion(Timeline(entries: [entry], policy: .never))
+        let nextRefresh = Date.now.addingTimeInterval(15 * 60)
+        completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
     }
 
     private func snapshot(for context: Context) -> WidgetSnapshot {

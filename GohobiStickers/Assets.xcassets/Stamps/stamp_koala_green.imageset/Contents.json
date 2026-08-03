@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "stamp_koala_green.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -121,8 +121,8 @@ struct GohobiWidgetView: View {
 
     @ViewBuilder
     private func latestStamp(size: CGFloat) -> some View {
-        if let assetName = entry.snapshot.latestStampAssetName {
-            Image(assetName)
+        if let image = latestStampImage {
+            Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
                 .frame(width: size, height: size)
@@ -141,6 +141,11 @@ struct GohobiWidgetView: View {
             .frame(width: size, height: size)
             .accessibilityLabel(WidgetL10n.string("widget.no-stamp"))
         }
+    }
+
+    private var latestStampImage: UIImage? {
+        guard let assetName = entry.snapshot.latestStampAssetName else { return nil }
+        return UIImage(named: assetName, in: .main, compatibleWith: nil)
     }
 
     private var decorativeCircles: some View {

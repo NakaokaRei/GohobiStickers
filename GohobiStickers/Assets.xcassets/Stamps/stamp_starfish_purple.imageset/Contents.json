@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "stamp_starfish_purple.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
