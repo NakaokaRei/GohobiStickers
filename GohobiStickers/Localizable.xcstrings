@@ -1348,6 +1348,23 @@
         }
       }
     },
+    "preset.butterfly-blue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Butterfly"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ちょうちょ"
+          }
+        }
+      }
+    },
     "preset.frog-blue" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -12,7 +12,8 @@ struct GohobiStickersTests {
             "penguin_pink",
             "glowing_fish",
             "koala_green",
-            "starfish_purple"
+            "starfish_purple",
+            "butterfly_blue"
         ]
 
         #expect(Set(presetIDs).count == presetIDs.count)
@@ -341,7 +342,8 @@ struct GohobiStickersTests {
             (presetID: "penguin_pink", assetName: "stamp_penguin_pink"),
             (presetID: "glowing_fish", assetName: "stamp_glowing_fish"),
             (presetID: "koala_green", assetName: "stamp_koala_green"),
-            (presetID: "starfish_purple", assetName: "stamp_starfish_purple")
+            (presetID: "starfish_purple", assetName: "stamp_starfish_purple"),
+            (presetID: "butterfly_blue", assetName: "stamp_butterfly_blue")
         ]
 
         for stamp in newStamps {
@@ -443,7 +445,8 @@ struct GohobiStickersTests {
                 "penguin_pink",
                 "glowing_fish",
                 "koala_green",
-                "starfish_purple"
+                "starfish_purple",
+                "butterfly_blue"
             ]
         )
     }

@@ -64,7 +64,8 @@ struct StampPreset: Identifiable, Equatable, Sendable {
         .init(id: "penguin_pink", name: L10n.string("preset.penguin-pink"), assetName: "stamp_penguin_pink", fallbackSymbol: "bird.fill", fallbackColorName: "flower"),
         .init(id: "glowing_fish", name: L10n.string("preset.glowing-fish"), assetName: "stamp_glowing_fish", fallbackSymbol: "fish.fill", fallbackColorName: "sky"),
         .init(id: "koala_green", name: L10n.string("preset.koala-green"), assetName: "stamp_koala_green", fallbackSymbol: "pawprint.fill", fallbackColorName: "green"),
-        .init(id: "starfish_purple", name: L10n.string("preset.starfish-purple"), assetName: "stamp_starfish_purple", fallbackSymbol: "star.fill", fallbackColorName: "sparkle")
+        .init(id: "starfish_purple", name: L10n.string("preset.starfish-purple"), assetName: "stamp_starfish_purple", fallbackSymbol: "star.fill", fallbackColorName: "sparkle"),
+        .init(id: "butterfly_blue", name: L10n.string("preset.butterfly-blue"), assetName: "stamp_butterfly_blue", fallbackSymbol: "ladybug.fill", fallbackColorName: "sky")
     ]
 
     static func preset(for id: String) -> StampPreset {
