@@ -5,12 +5,17 @@ struct StampEditorView: View {
     @Environment(\.dismiss) private var dismiss
 
     private let entry: StampEntry?
+    private let onStampCreated: (UUID) -> Void
     @State private var presetID: String
     @State private var comment: String
     @State private var isConfirmingDeletion = false
 
-    init(entry: StampEntry? = nil) {
+    init(
+        entry: StampEntry? = nil,
+        onStampCreated: @escaping (UUID) -> Void = { _ in }
+    ) {
         self.entry = entry
+        self.onStampCreated = onStampCreated
         let savedPresetID = entry?.presetID
         let initialPresetID = savedPresetID.flatMap { id in
             StampPreset.all.contains { $0.id == id } ? id : nil
@@ -150,7 +155,8 @@ struct StampEditorView: View {
         if let entry {
             store.updateEntry(id: entry.id, presetID: presetID, comment: comment)
         } else {
-            store.addEntry(presetID: presetID, comment: comment)
+            let entryID = store.addEntry(presetID: presetID, comment: comment)
+            onStampCreated(entryID)
         }
         dismiss()
     }

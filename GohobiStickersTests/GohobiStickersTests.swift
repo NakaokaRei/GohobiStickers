@@ -57,10 +57,11 @@ struct GohobiStickersTests {
 
     @Test func stampCRUDUpdatesTotalAndContent() throws {
         let store = makeStore()
-        store.addEntry(presetID: "frog_pink", comment: "  できた！  ")
+        let addedEntryID = store.addEntry(presetID: "frog_pink", comment: "  できた！  ")
 
         #expect(store.totalStampCount == 1)
         let entry = try #require(store.entries.first)
+        #expect(entry.id == addedEntryID)
         #expect(entry.comment == "できた！")
 
         store.updateEntry(id: entry.id, presetID: "blue_hero", comment: "更新")
