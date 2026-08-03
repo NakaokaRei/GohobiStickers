@@ -8,22 +8,23 @@ import UIKit
 struct GohobiStickersTests {
     @Test func stampPresetsHaveUniqueIDsAndBundledArtwork() {
         let presetIDs = StampPreset.all.map(\.id)
-        let newPresetIDs: Set<String> = [
+        let widgetOptimizedPresetIDs: Set<String> = [
             "penguin_pink",
             "glowing_fish",
             "koala_green",
             "starfish_purple",
-            "butterfly_blue"
+            "butterfly_blue",
+            "sea_lion"
         ]
 
         #expect(Set(presetIDs).count == presetIDs.count)
-        #expect(newPresetIDs.isSubset(of: Set(presetIDs)))
+        #expect(widgetOptimizedPresetIDs.isSubset(of: Set(presetIDs)))
 
         for preset in StampPreset.all {
             let image = UIImage(named: preset.assetName)
             #expect(image != nil)
 
-            if newPresetIDs.contains(preset.id), let cgImage = image?.cgImage {
+            if widgetOptimizedPresetIDs.contains(preset.id), let cgImage = image?.cgImage {
                 #expect(max(cgImage.width, cgImage.height) <= 1_024)
             }
         }
@@ -86,6 +87,51 @@ struct GohobiStickersTests {
         #expect(reloadedStore.goals.last?.rewardName == "旅行")
     }
 
+    @Test func roadsKeepTheirStampsAndGoalsSeparate() {
+        let store = makeStore()
+        let firstRoadID = store.selectedRoadID
+        store.addEntry(presetID: "blue_hero", comment: "最初のロード")
+
+        let secondRoadID = store.addRoad(name: "運動ロード")
+        #expect(store.selectedRoadID == secondRoadID)
+        #expect(store.totalStampCount == 0)
+        #expect(store.goals.isEmpty)
+
+        store.addEntry(presetID: "shell", comment: "運動できた")
+        store.addGoal(interval: 3, rewardName: "アイス")
+
+        store.selectRoad(id: firstRoadID)
+        #expect(store.totalStampCount == 1)
+        #expect(store.entries.first?.comment == "最初のロード")
+        #expect(store.goalPlacements.map(\.targetCount) == [5, 8, 10])
+
+        store.selectRoad(id: secondRoadID)
+        #expect(store.totalStampCount == 1)
+        #expect(store.entries.first?.presetID == "shell")
+        #expect(store.goalPlacements.map(\.targetCount) == [3])
+    }
+
+    @Test func roadsAndSelectionPersistAndRoadsCanBeDeleted() {
+        let url = temporaryURL()
+        let store = StampStore(fileURL: url, cloudSyncService: nil)
+        let firstRoadID = store.selectedRoadID
+        let secondRoadID = store.addRoad(name: "  おてつだい  ")
+        store.addEntry(presetID: "koala_green", comment: "")
+
+        let reloadedStore = StampStore(fileURL: url, cloudSyncService: nil)
+        #expect(reloadedStore.roads.count == 2)
+        #expect(reloadedStore.selectedRoadID == secondRoadID)
+        #expect(reloadedStore.selectedRoad.name == "おてつだい")
+        #expect(reloadedStore.totalStampCount == 1)
+
+        reloadedStore.deleteRoad(id: secondRoadID)
+        #expect(reloadedStore.roads.count == 1)
+        #expect(reloadedStore.selectedRoadID == firstRoadID)
+
+        reloadedStore.deleteRoad(id: firstRoadID)
+        #expect(reloadedStore.roads.count == 1)
+    }
+
     @Test func corruptDataFallsBackToInitialContent() throws {
         let url = temporaryURL()
         try Data("not-json".utf8).write(to: url)
@@ -107,6 +153,8 @@ struct GohobiStickersTests {
 
         let store = StampStore(fileURL: url)
         #expect(store.appearance == .system)
+        #expect(store.roads.count == 1)
+        #expect(store.selectedRoad.name == L10n.string("road.default.name"))
         #expect(store.goalPlacements.map(\.targetCount) == [4])
     }
 
@@ -335,6 +383,32 @@ struct GohobiStickersTests {
         #expect(editedSnapshot.latestStampAssetName == "stamp_frog_pink")
         #expect(editedSnapshot.remainingCount == 4)
         #expect(editedSnapshot.intervalProgress == 1)
+    }
+
+    @Test func widgetSnapshotUsesTheSelectedRoad() {
+        let firstRoad = RewardRoad(
+            name: "勉強",
+            entries: [StampEntry(presetID: "blue_hero")],
+            goals: [Goal(interval: 5, rewardName: "ケーキ")]
+        )
+        let secondRoad = RewardRoad(
+            name: "運動",
+            entries: [
+                StampEntry(presetID: "shell"),
+                StampEntry(presetID: "koala_green")
+            ],
+            goals: [Goal(interval: 3, rewardName: "アイス")]
+        )
+        let data = StampBookData(
+            roads: [firstRoad, secondRoad],
+            selectedRoadID: secondRoad.id
+        )
+
+        let snapshot = WidgetSnapshotFactory.make(from: data)
+        #expect(snapshot.totalStampCount == 2)
+        #expect(snapshot.latestStampAssetName == "stamp_koala_green")
+        #expect(snapshot.nextGoalRewardName == "アイス")
+        #expect(snapshot.remainingCount == 1)
     }
 
     @Test func widgetSnapshotUsesNewStampAssetNames() {

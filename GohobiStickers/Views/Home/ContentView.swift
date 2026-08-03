@@ -3,6 +3,8 @@ import SwiftUI
 struct ContentView: View {
     @Environment(StampStore.self) private var store
     @State private var isAddingStamp = false
+    @State private var isAddingRoad = false
+    @State private var isShowingRoadSettings = false
     @State private var isShowingGoals = false
     @State private var isShowingAppearance = false
     @State private var editingEntry: StampEntry?
@@ -81,6 +83,7 @@ struct ContentView: View {
                         .padding(.top, 12)
                     }
                     .scrollIndicators(.hidden)
+                    .id(store.selectedRoadID)
                     .onScrollTargetVisibilityChange(idType: Int.self, threshold: 0.4) { positions in
                         let isVisible = positions.contains(currentPosition)
                         guard isCurrentPositionVisible != isVisible else { return }
@@ -111,7 +114,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle(L10n.string("home.title"))
+            .navigationTitle(store.selectedRoad.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -122,6 +125,9 @@ struct ContentView: View {
                             .fontWeight(.bold)
                     }
                     .accessibilityLabel(L10n.string("appearance.settings.accessibility"))
+                }
+                ToolbarItem(placement: .principal) {
+                    roadPicker
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -139,6 +145,12 @@ struct ContentView: View {
                     pendingStampAnimationID = entryID
                 }
             }
+            .sheet(isPresented: $isAddingRoad) {
+                RoadEditorView()
+            }
+            .sheet(isPresented: $isShowingRoadSettings) {
+                RoadSettingsView()
+            }
             .sheet(isPresented: $isShowingAppearance) {
                 AppearanceSettingsView()
             }
@@ -151,6 +163,13 @@ struct ContentView: View {
             .sheet(item: $shareCardData) { data in
                 GoalShareSheet(data: data)
                     .presentationDetents([.large])
+            }
+            .onChange(of: store.selectedRoadID) {
+                pendingStampAnimationID = nil
+                animatingStampID = nil
+                editingEntry = nil
+                shareCardData = nil
+                isCurrentPositionVisible = true
             }
         }
         .tint(AppColors.coral)
@@ -169,6 +188,51 @@ struct ContentView: View {
             presentNewStampEditor()
             #endif
         }
+    }
+
+    private var roadPicker: some View {
+        Menu {
+            ForEach(store.roads) { road in
+                Button {
+                    store.selectRoad(id: road.id)
+                } label: {
+                    Label(
+                        road.name,
+                        systemImage: road.id == store.selectedRoadID ? "checkmark" : "map"
+                    )
+                }
+            }
+
+            Divider()
+
+            Button {
+                isAddingRoad = true
+            } label: {
+                Label(L10n.string("road.add.button"), systemImage: "plus.circle.fill")
+            }
+            .accessibilityIdentifier("road-picker-add-button")
+
+            Button {
+                isShowingRoadSettings = true
+            } label: {
+                Label(L10n.string("road.settings.button"), systemImage: "slider.horizontal.3")
+            }
+            .accessibilityIdentifier("road-picker-settings-button")
+        } label: {
+            HStack(spacing: 6) {
+                Text(store.selectedRoad.name)
+                    .lineLimit(1)
+                Image(systemName: "chevron.down.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(AppColors.coral)
+            }
+            .font(.headline.bold())
+            .foregroundStyle(AppColors.ink)
+        }
+        .accessibilityLabel(
+            L10n.format("road.picker.accessibility", store.selectedRoad.name)
+        )
+        .accessibilityIdentifier("road-picker-button")
     }
 
     private var totalHeader: some View {
@@ -291,6 +355,8 @@ struct ContentView: View {
     private func presentNewStampEditor() {
         store.clearCelebration()
         isAddingStamp = false
+        isAddingRoad = false
+        isShowingRoadSettings = false
         isShowingGoals = false
         isShowingAppearance = false
         editingEntry = nil

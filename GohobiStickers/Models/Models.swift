@@ -46,6 +46,25 @@ struct GoalPlacement: Identifiable, Equatable, Sendable {
     var id: UUID { goal.id }
 }
 
+struct RewardRoad: Identifiable, Codable, Equatable, Sendable {
+    let id: UUID
+    var name: String
+    var entries: [StampEntry]
+    var goals: [Goal]
+
+    init(
+        id: UUID = UUID(),
+        name: String,
+        entries: [StampEntry] = [],
+        goals: [Goal] = []
+    ) {
+        self.id = id
+        self.name = name
+        self.entries = entries
+        self.goals = goals
+    }
+}
+
 struct StampPreset: Identifiable, Equatable, Sendable {
     let id: String
     let name: String
@@ -74,10 +93,32 @@ struct StampPreset: Identifiable, Equatable, Sendable {
 }
 
 struct StampBookData: Codable, Equatable, Sendable {
-    var entries: [StampEntry]
-    var goals: [Goal]
+    var roads: [RewardRoad]
+    var selectedRoadID: UUID
     var appearance: AppAppearance
     var modifiedAt: Date
+
+    var selectedRoad: RewardRoad {
+        roads.first(where: { $0.id == selectedRoadID }) ?? roads[0]
+    }
+
+    var entries: [StampEntry] { selectedRoad.entries }
+    var goals: [Goal] { selectedRoad.goals }
+
+    init(
+        roads: [RewardRoad],
+        selectedRoadID: UUID? = nil,
+        appearance: AppAppearance = .system,
+        modifiedAt: Date = .distantPast
+    ) {
+        let normalizedRoads = roads.isEmpty ? [Self.makeDefaultRoad()] : roads
+        self.roads = normalizedRoads
+        self.selectedRoadID = selectedRoadID.flatMap { selectedID in
+            normalizedRoads.contains(where: { $0.id == selectedID }) ? selectedID : nil
+        } ?? normalizedRoads[0].id
+        self.appearance = appearance
+        self.modifiedAt = modifiedAt
+    }
 
     init(
         entries: [StampEntry],
@@ -85,13 +126,20 @@ struct StampBookData: Codable, Equatable, Sendable {
         appearance: AppAppearance = .system,
         modifiedAt: Date = .distantPast
     ) {
-        self.entries = entries
-        self.goals = goals
+        let road = RewardRoad(
+            name: L10n.string("road.default.name"),
+            entries: entries,
+            goals: goals
+        )
+        self.roads = [road]
+        self.selectedRoadID = road.id
         self.appearance = appearance
         self.modifiedAt = modifiedAt
     }
 
     private enum CodingKeys: String, CodingKey {
+        case roads
+        case selectedRoadID
         case entries
         case goals
         case appearance
@@ -100,27 +148,48 @@ struct StampBookData: Codable, Equatable, Sendable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        entries = try container.decodeIfPresent([StampEntry].self, forKey: .entries) ?? []
-        goals = try container.decodeIfPresent([Goal].self, forKey: .goals) ?? []
+        let decodedRoads = try container.decodeIfPresent([RewardRoad].self, forKey: .roads) ?? []
+
+        if decodedRoads.isEmpty {
+            let legacyEntries = try container.decodeIfPresent([StampEntry].self, forKey: .entries) ?? []
+            let legacyGoals = try container.decodeIfPresent([Goal].self, forKey: .goals) ?? []
+            let migratedRoad = RewardRoad(
+                name: L10n.string("road.default.name"),
+                entries: legacyEntries,
+                goals: legacyGoals
+            )
+            roads = [migratedRoad]
+            selectedRoadID = migratedRoad.id
+        } else {
+            roads = decodedRoads
+            let decodedSelection = try container.decodeIfPresent(UUID.self, forKey: .selectedRoadID)
+            selectedRoadID = decodedSelection.flatMap { selectedID in
+                decodedRoads.contains(where: { $0.id == selectedID }) ? selectedID : nil
+            } ?? decodedRoads[0].id
+        }
+
         appearance = try container.decodeIfPresent(AppAppearance.self, forKey: .appearance) ?? .system
         modifiedAt = try container.decodeIfPresent(Date.self, forKey: .modifiedAt) ?? .distantPast
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(entries, forKey: .entries)
-        try container.encode(goals, forKey: .goals)
+        try container.encode(roads, forKey: .roads)
+        try container.encode(selectedRoadID, forKey: .selectedRoadID)
         try container.encode(appearance, forKey: .appearance)
         try container.encode(modifiedAt, forKey: .modifiedAt)
     }
 
-    static let initial = StampBookData(
-        entries: [],
-        goals: [
-            Goal(interval: 5, rewardName: L10n.string("default.reward.cake")),
-            Goal(interval: 3, rewardName: L10n.string("default.reward.movie")),
-            Goal(interval: 2, rewardName: L10n.string("default.reward.book"))
-        ],
-        appearance: .system
-    )
+    static let initial = StampBookData(roads: [makeDefaultRoad()], appearance: .system)
+
+    private static func makeDefaultRoad() -> RewardRoad {
+        RewardRoad(
+            name: L10n.string("road.default.name"),
+            goals: [
+                Goal(interval: 5, rewardName: L10n.string("default.reward.cake")),
+                Goal(interval: 3, rewardName: L10n.string("default.reward.movie")),
+                Goal(interval: 2, rewardName: L10n.string("default.reward.book"))
+            ]
+        )
+    }
 }

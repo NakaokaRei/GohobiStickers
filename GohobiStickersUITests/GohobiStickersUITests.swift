@@ -30,6 +30,30 @@ final class GohobiStickersUITests: XCTestCase {
     }
 
     @MainActor
+    func testCanAddAndSwitchRewardRoads() throws {
+        let app = makeApp()
+        app.launch()
+
+        let roadPicker = app.buttons["road-picker-button"]
+        XCTAssertTrue(roadPicker.waitForExistence(timeout: 5))
+        roadPicker.tap()
+
+        let addRoadButton = app.buttons["road-picker-add-button"]
+        XCTAssertTrue(addRoadButton.waitForExistence(timeout: 5))
+        addRoadButton.tap()
+
+        let nameField = app.textFields["road-editor-name-field"]
+        XCTAssertTrue(nameField.waitForExistence(timeout: 5))
+        nameField.tap()
+        nameField.typeText("運動ロード")
+        app.buttons["road-editor-save-button"].tap()
+
+        XCTAssertTrue(roadPicker.waitForExistence(timeout: 5))
+        XCTAssertTrue(roadPicker.label.contains("運動ロード"))
+        XCTAssertTrue(app.buttons["next-stamp-node"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
     func testWidgetDeepLinkOpensANewStampEditorOnLaunch() throws {
         let app = makeApp()
         app.launchArguments.append("--open-stamp-editor")

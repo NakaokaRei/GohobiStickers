@@ -15,17 +15,21 @@ final class StampStore {
     private var isSynchronizing = false
     private var needsAnotherSync = false
 
+    var roads: [RewardRoad] { data.roads }
+    var selectedRoadID: UUID { data.selectedRoadID }
+    var selectedRoad: RewardRoad { data.selectedRoad }
+
     var entries: [StampEntry] {
-        data.entries.sorted { $0.createdAt < $1.createdAt }
+        selectedRoad.entries.sorted { $0.createdAt < $1.createdAt }
     }
 
-    var goals: [Goal] { data.goals }
-    var totalStampCount: Int { data.entries.count }
+    var goals: [Goal] { selectedRoad.goals }
+    var totalStampCount: Int { selectedRoad.entries.count }
     var appearance: AppAppearance { data.appearance }
 
     var goalPlacements: [GoalPlacement] {
         var total = 0
-        return data.goals.map { goal in
+        return goals.map { goal in
             total += max(1, goal.interval)
             return GoalPlacement(goal: goal, targetCount: total)
         }
@@ -45,57 +49,112 @@ final class StampStore {
 
     @discardableResult
     func addEntry(presetID: String, comment: String) -> UUID {
-        let completedGoal = goalPlacements.first { $0.targetCount == data.entries.count + 1 }
+        guard let roadIndex = selectedRoadIndex else {
+            preconditionFailure("A selected reward road must always exist.")
+        }
+        let completedGoal = goalPlacements.first { $0.targetCount == totalStampCount + 1 }
         let entry = StampEntry(
             presetID: presetID,
             comment: comment.trimmingCharacters(in: .whitespacesAndNewlines)
         )
-        data.entries.append(entry)
+        data.roads[roadIndex].entries.append(entry)
         persistLocalChange()
         celebration = completedGoal
         return entry.id
     }
 
     func updateEntry(id: UUID, presetID: String, comment: String) {
-        guard let index = data.entries.firstIndex(where: { $0.id == id }) else { return }
-        data.entries[index].presetID = presetID
-        data.entries[index].comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard
+            let roadIndex = selectedRoadIndex,
+            let entryIndex = data.roads[roadIndex].entries.firstIndex(where: { $0.id == id })
+        else { return }
+        data.roads[roadIndex].entries[entryIndex].presetID = presetID
+        data.roads[roadIndex].entries[entryIndex].comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
         persistLocalChange()
     }
 
     func deleteEntry(id: UUID) {
-        data.entries.removeAll { $0.id == id }
+        guard let roadIndex = selectedRoadIndex else { return }
+        data.roads[roadIndex].entries.removeAll { $0.id == id }
         persistLocalChange()
     }
 
     func addGoal(interval: Int, rewardName: String) {
-        data.goals.append(
+        guard let roadIndex = selectedRoadIndex else { return }
+        data.roads[roadIndex].goals.append(
             Goal(interval: max(1, interval), rewardName: normalizedRewardName(rewardName))
         )
         persistLocalChange()
     }
 
     func updateGoal(id: UUID, interval: Int, rewardName: String) {
-        guard let index = data.goals.firstIndex(where: { $0.id == id }) else { return }
-        data.goals[index].interval = max(1, interval)
-        data.goals[index].rewardName = normalizedRewardName(rewardName)
+        guard
+            let roadIndex = selectedRoadIndex,
+            let goalIndex = data.roads[roadIndex].goals.firstIndex(where: { $0.id == id })
+        else { return }
+        data.roads[roadIndex].goals[goalIndex].interval = max(1, interval)
+        data.roads[roadIndex].goals[goalIndex].rewardName = normalizedRewardName(rewardName)
         persistLocalChange()
     }
 
     func deleteGoals(at offsets: IndexSet) {
-        data.goals.remove(atOffsets: offsets)
+        guard let roadIndex = selectedRoadIndex else { return }
+        data.roads[roadIndex].goals.remove(atOffsets: offsets)
         persistLocalChange()
     }
 
     func restoreGoals(_ indexedGoals: [(offset: Int, goal: Goal)]) {
+        guard let roadIndex = selectedRoadIndex else { return }
         for item in indexedGoals.sorted(by: { $0.offset < $1.offset }) {
-            data.goals.insert(item.goal, at: min(item.offset, data.goals.count))
+            data.roads[roadIndex].goals.insert(
+                item.goal,
+                at: min(item.offset, data.roads[roadIndex].goals.count)
+            )
         }
         persistLocalChange()
     }
 
     func moveGoals(from source: IndexSet, to destination: Int) {
-        data.goals.move(fromOffsets: source, toOffset: destination)
+        guard let roadIndex = selectedRoadIndex else { return }
+        data.roads[roadIndex].goals.move(fromOffsets: source, toOffset: destination)
+        persistLocalChange()
+    }
+
+    @discardableResult
+    func addRoad(name: String) -> UUID {
+        let road = RewardRoad(name: normalizedRoadName(name))
+        data.roads.append(road)
+        data.selectedRoadID = road.id
+        celebration = nil
+        persistLocalChange()
+        return road.id
+    }
+
+    func selectRoad(id: UUID) {
+        guard data.roads.contains(where: { $0.id == id }), data.selectedRoadID != id else {
+            return
+        }
+        data.selectedRoadID = id
+        celebration = nil
+        persistLocalChange()
+    }
+
+    func updateRoad(id: UUID, name: String) {
+        guard let index = data.roads.firstIndex(where: { $0.id == id }) else { return }
+        data.roads[index].name = normalizedRoadName(name)
+        persistLocalChange()
+    }
+
+    func deleteRoad(id: UUID) {
+        guard data.roads.count > 1, let index = data.roads.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+        let wasSelected = data.selectedRoadID == id
+        data.roads.remove(at: index)
+        if wasSelected {
+            data.selectedRoadID = data.roads[min(index, data.roads.count - 1)].id
+        }
+        celebration = nil
         persistLocalChange()
     }
 
@@ -225,6 +284,15 @@ final class StampStore {
     private func normalizedRewardName(_ name: String) -> String {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? L10n.string("default.reward.generic") : trimmed
+    }
+
+    private func normalizedRoadName(_ name: String) -> String {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? L10n.string("road.untitled.name") : trimmed
+    }
+
+    private var selectedRoadIndex: Int? {
+        data.roads.firstIndex(where: { $0.id == data.selectedRoadID })
     }
 
     private static func load(from url: URL) -> StampBookData? {
