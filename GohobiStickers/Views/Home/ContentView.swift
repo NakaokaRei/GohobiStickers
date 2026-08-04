@@ -13,6 +13,9 @@ struct ContentView: View {
     @State private var pendingStampAnimationID: UUID?
     @State private var animatingStampID: UUID?
     @State private var isCurrentPositionVisible = true
+    @State private var visibleGoalIDs: Set<UUID> = []
+    @State private var isGoalCrossingHapticEnabled = false
+    @State private var goalCrossingHapticTrigger = 0
 
     private let routeOffsets: [CGFloat] = [-88, 0, 88, 0]
 
@@ -64,6 +67,12 @@ struct ContentView: View {
                                         onShare: { presentShareCard(for: placement) }
                                     )
                                     .padding(.vertical, 8)
+                                    .onScrollVisibilityChange(threshold: 0.55) { isVisible in
+                                        updateGoalVisibility(
+                                            id: placement.id,
+                                            isVisible: isVisible
+                                        )
+                                    }
                                 }
 
                                 if position < routeEnd {
@@ -173,15 +182,28 @@ struct ContentView: View {
                     .presentationDetents([.large])
             }
             .onChange(of: store.selectedRoadID) {
+                isGoalCrossingHapticEnabled = false
+                visibleGoalIDs.removeAll()
                 pendingStampAnimationID = nil
                 animatingStampID = nil
                 editingEntry = nil
                 shareCardData = nil
                 isCurrentPositionVisible = true
             }
+            .task(id: store.selectedRoadID) {
+                isGoalCrossingHapticEnabled = false
+                visibleGoalIDs.removeAll()
+                try? await Task.sleep(for: .milliseconds(450))
+                guard !Task.isCancelled else { return }
+                isGoalCrossingHapticEnabled = true
+            }
         }
         .tint(AppColors.coral)
         .sensoryFeedback(.success, trigger: store.celebration?.id)
+        .sensoryFeedback(
+            .impact(weight: .medium, intensity: 0.75),
+            trigger: goalCrossingHapticTrigger
+        )
         .onOpenURL { url in
             guard GohobiDeepLink.route(for: url) == .addStamp else { return }
             presentNewStampEditor()
@@ -361,10 +383,21 @@ struct ContentView: View {
     }
 
     private func selectRoad(id: UUID) {
+        isGoalCrossingHapticEnabled = false
+        visibleGoalIDs.removeAll()
+
         var transaction = Transaction(animation: nil)
         transaction.disablesAnimations = true
         withTransaction(transaction) {
             store.selectRoad(id: id)
+        }
+    }
+
+    private func updateGoalVisibility(id: UUID, isVisible: Bool) {
+        if isVisible {
+            visibleGoalIDs.insert(id)
+        } else if visibleGoalIDs.remove(id) != nil, isGoalCrossingHapticEnabled {
+            goalCrossingHapticTrigger += 1
         }
     }
 
