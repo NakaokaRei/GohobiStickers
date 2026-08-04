@@ -33,6 +33,7 @@ struct ContentView: View {
                     ScrollView {
                         LazyVStack(spacing: 0) {
                             totalHeader
+                                .id(0)
                                 .padding(.bottom, 28)
 
                             ForEach(1...routeEnd, id: \.self) { position in
@@ -83,7 +84,6 @@ struct ContentView: View {
                         .padding(.top, 12)
                     }
                     .scrollIndicators(.hidden)
-                    .id(store.selectedRoadID)
                     .onScrollTargetVisibilityChange(idType: Int.self, threshold: 0.4) { positions in
                         let isVisible = positions.contains(currentPosition)
                         guard isCurrentPositionVisible != isVisible else { return }
@@ -111,6 +111,14 @@ struct ContentView: View {
                 .onChange(of: currentPosition) {
                     withAnimation(.spring(response: 0.34, dampingFraction: 0.82)) {
                         isCurrentPositionVisible = false
+                    }
+                }
+                .onChange(of: store.selectedRoadID) {
+                    var transaction = Transaction(animation: nil)
+                    transaction.disablesAnimations = true
+                    withTransaction(transaction) {
+                        scrollProxy.scrollTo(0, anchor: .top)
+                        isCurrentPositionVisible = true
                     }
                 }
             }
@@ -220,14 +228,30 @@ struct ContentView: View {
             .accessibilityIdentifier("road-picker-settings-button")
         } label: {
             HStack(spacing: 6) {
-                Text(store.selectedRoad.name)
+                ZStack {
+                    // Keep the title's layout width stable while the Menu dismisses.
+                    // Otherwise the toolbar can briefly clip the leading character
+                    // when switching from a shorter road name to a longer one.
+                    ForEach(store.roads) { road in
+                        Text(road.name)
+                            .hidden()
+                            .accessibilityHidden(true)
+                    }
+
+                    Text(store.selectedRoad.name)
+                }
                     .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .frame(maxWidth: 220)
                 Image(systemName: "chevron.down.circle.fill")
                     .font(.caption)
                     .foregroundStyle(AppColors.coral)
             }
             .font(.headline.bold())
             .foregroundStyle(AppColors.ink)
+            .transaction { transaction in
+                transaction.animation = nil
+            }
         }
         .accessibilityLabel(
             L10n.format("road.picker.accessibility", store.selectedRoad.name)
