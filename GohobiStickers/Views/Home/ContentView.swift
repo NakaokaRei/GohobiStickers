@@ -202,7 +202,7 @@ struct ContentView: View {
         Menu {
             ForEach(store.roads) { road in
                 Button {
-                    store.selectRoad(id: road.id)
+                    selectRoad(id: road.id)
                 } label: {
                     Label(
                         road.name,
@@ -358,6 +358,14 @@ struct ContentView: View {
 
     private func goal(at position: Int) -> GoalPlacement? {
         store.goalPlacements.first { $0.targetCount == position }
+    }
+
+    private func selectRoad(id: UUID) {
+        var transaction = Transaction(animation: nil)
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            store.selectRoad(id: id)
+        }
     }
 
     private func presentShareCard(for placement: GoalPlacement) {
