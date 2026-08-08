@@ -1365,23 +1365,6 @@
         }
       }
     },
-    "preset.frog-blue" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Blue Frog"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ブルーのかえる"
-          }
-        }
-      }
-    },
     "preset.frog-green" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1399,19 +1382,19 @@
         }
       }
     },
-    "preset.frog-pink" : {
+    "preset.frog-yellow" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pink Frog"
+            "value" : "Yellow Frog"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ピンクのかえる"
+            "value" : "イエローのかえる"
           }
         }
       }
@@ -1446,6 +1429,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "コアラ"
+          }
+        }
+      }
+    },
+    "preset.lemon-hero" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lemon Hero"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "レモンヒーロー"
           }
         }
       }

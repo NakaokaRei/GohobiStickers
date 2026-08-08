@@ -75,9 +75,9 @@ struct StampPreset: Identifiable, Equatable, Sendable {
     static let all: [StampPreset] = [
         .init(id: "blue_hero", name: L10n.string("preset.blue-hero"), assetName: "stamp_blue_hero", fallbackSymbol: "figure.wave", fallbackColorName: "sky"),
         .init(id: "pink_hero", name: L10n.string("preset.pink-hero"), assetName: "stamp_pink_hero", fallbackSymbol: "person.fill", fallbackColorName: "flower"),
-        .init(id: "frog_pink", name: L10n.string("preset.frog-pink"), assetName: "stamp_frog_pink", fallbackSymbol: "face.smiling", fallbackColorName: "flower"),
-        .init(id: "frog_blue", name: L10n.string("preset.frog-blue"), assetName: "stamp_frog_blue", fallbackSymbol: "face.smiling", fallbackColorName: "sky"),
+        .init(id: "frog_yellow", name: L10n.string("preset.frog-yellow"), assetName: "stamp_frog_yellow", fallbackSymbol: "face.smiling", fallbackColorName: "sun"),
         .init(id: "frog_green", name: L10n.string("preset.frog-green"), assetName: "stamp_frog_green", fallbackSymbol: "face.smiling", fallbackColorName: "green"),
+        .init(id: "lemon_hero", name: L10n.string("preset.lemon-hero"), assetName: "stamp_lemon_hero", fallbackSymbol: "figure.wave", fallbackColorName: "sun"),
         .init(id: "sea_lion", name: L10n.string("preset.sea-lion"), assetName: "stamp_sea_lion", fallbackSymbol: "water.waves", fallbackColorName: "sky"),
         .init(id: "shell", name: L10n.string("preset.shell"), assetName: "stamp_shell", fallbackSymbol: "fossil.shell.fill", fallbackColorName: "sun"),
         .init(id: "penguin_pink", name: L10n.string("preset.penguin-pink"), assetName: "stamp_penguin_pink", fallbackSymbol: "bird.fill", fallbackColorName: "flower"),
@@ -87,8 +87,14 @@ struct StampPreset: Identifiable, Equatable, Sendable {
         .init(id: "butterfly_blue", name: L10n.string("preset.butterfly-blue"), assetName: "stamp_butterfly_blue", fallbackSymbol: "ladybug.fill", fallbackColorName: "sky")
     ]
 
+    private static let legacyAliases = [
+        "frog_pink": "frog_yellow",
+        "frog_blue": "frog_green"
+    ]
+
     static func preset(for id: String) -> StampPreset {
-        all.first(where: { $0.id == id }) ?? all[0]
+        let resolvedID = legacyAliases[id] ?? id
+        return all.first(where: { $0.id == resolvedID }) ?? all[0]
     }
 }
 

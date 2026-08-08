@@ -9,6 +9,9 @@ struct GohobiStickersTests {
     @Test func stampPresetsHaveUniqueIDsAndBundledArtwork() {
         let presetIDs = StampPreset.all.map(\.id)
         let widgetOptimizedPresetIDs: Set<String> = [
+            "frog_yellow",
+            "frog_green",
+            "lemon_hero",
             "penguin_pink",
             "glowing_fish",
             "koala_green",
@@ -28,6 +31,9 @@ struct GohobiStickersTests {
                 #expect(max(cgImage.width, cgImage.height) <= 1_024)
             }
         }
+
+        #expect(StampPreset.preset(for: "frog_pink").id == "frog_yellow")
+        #expect(StampPreset.preset(for: "frog_blue").id == "frog_green")
     }
 
     @Test func goalIntervalsBecomeCumulativeTargets() {
@@ -59,7 +65,7 @@ struct GohobiStickersTests {
 
     @Test func stampCRUDUpdatesTotalAndContent() throws {
         let store = makeStore()
-        let addedEntryID = store.addEntry(presetID: "frog_pink", comment: "  できた！  ")
+        let addedEntryID = store.addEntry(presetID: "frog_yellow", comment: "  できた！  ")
 
         #expect(store.totalStampCount == 1)
         let entry = try #require(store.entries.first)
@@ -380,7 +386,7 @@ struct GohobiStickersTests {
             goals: [Goal(interval: 5, rewardName: "旅行")]
         )
         let editedSnapshot = WidgetSnapshotFactory.make(from: edited)
-        #expect(editedSnapshot.latestStampAssetName == "stamp_frog_pink")
+        #expect(editedSnapshot.latestStampAssetName == "stamp_frog_yellow")
         #expect(editedSnapshot.remainingCount == 4)
         #expect(editedSnapshot.intervalProgress == 1)
     }
@@ -413,6 +419,9 @@ struct GohobiStickersTests {
 
     @Test func widgetSnapshotUsesNewStampAssetNames() {
         let newStamps = [
+            (presetID: "frog_yellow", assetName: "stamp_frog_yellow"),
+            (presetID: "frog_green", assetName: "stamp_frog_green"),
+            (presetID: "lemon_hero", assetName: "stamp_lemon_hero"),
             (presetID: "penguin_pink", assetName: "stamp_penguin_pink"),
             (presetID: "glowing_fish", assetName: "stamp_glowing_fish"),
             (presetID: "koala_green", assetName: "stamp_koala_green"),
@@ -511,9 +520,9 @@ struct GohobiStickersTests {
             StampPreset.all.map(\.id) == [
                 "blue_hero",
                 "pink_hero",
-                "frog_pink",
-                "frog_blue",
+                "frog_yellow",
                 "frog_green",
+                "lemon_hero",
                 "sea_lion",
                 "shell",
                 "penguin_pink",

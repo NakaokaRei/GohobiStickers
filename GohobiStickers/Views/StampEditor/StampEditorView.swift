@@ -16,10 +16,8 @@ struct StampEditorView: View {
     ) {
         self.entry = entry
         self.onStampCreated = onStampCreated
-        let savedPresetID = entry?.presetID
-        let initialPresetID = savedPresetID.flatMap { id in
-            StampPreset.all.contains { $0.id == id } ? id : nil
-        } ?? StampPreset.all[0].id
+        let initialPresetID = entry.map { StampPreset.preset(for: $0.presetID).id }
+            ?? StampPreset.all[0].id
         _presetID = State(initialValue: initialPresetID)
         _comment = State(initialValue: entry?.comment ?? "")
     }
