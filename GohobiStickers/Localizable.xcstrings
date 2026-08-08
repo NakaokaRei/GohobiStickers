@@ -1014,13 +1014,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stamps, comments, goals, and settings sync privately through the iCloud account on this device. Local data remains available offline."
+            "value" : "Stamps, attached photos, comments, goals, and settings sync privately through the iCloud account on this device. Local data remains available offline."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "この端末のiCloudアカウントを使い、スタンプ・コメント・ゴール・設定を非公開で同期します。オフラインでもローカルデータを利用できます。"
+            "value" : "この端末のiCloudアカウントを使い、スタンプ・添付写真・コメント・ゴール・設定を非公開で同期します。オフラインでもローカルデータを利用できます。"
           }
         }
       }
@@ -1280,36 +1280,36 @@
         }
       }
     },
-    "node.quick-look.note" : {
+    "node.quick-look.comment" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Note"
+            "value" : "Comment"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "備考"
+            "value" : "コメント"
           }
         }
       }
     },
-    "node.quick-look.note.empty" : {
+    "node.quick-look.comment.empty" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No note"
+            "value" : "No comment"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "備考はありません"
+            "value" : "コメントはありません"
           }
         }
       }
@@ -1907,6 +1907,97 @@
             "value" : "スタンプを押す"
           }
         }
+      }
+    },
+    "stamp.image.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Attach Photo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "写真を添付" } }
+      }
+    },
+    "stamp.image.attachment.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add one photo to this comment" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "コメントに写真を1枚添付できます" } }
+      }
+    },
+    "stamp.image.badge.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Has an attached photo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "写真付き" } }
+      }
+    },
+    "stamp.image.change" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Change Photo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "写真を変更" } }
+      }
+    },
+    "stamp.image.error.invalid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The selected photo could not be read." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "選択した写真を読み込めませんでした。" } }
+      }
+    },
+    "stamp.image.error.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The photo could not be saved." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "写真を保存できませんでした。" } }
+      }
+    },
+    "stamp.image.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photo Error" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "写真のエラー" } }
+      }
+    },
+    "stamp.image.loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preparing photo…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "写真を準備中…" } }
+      }
+    },
+    "stamp.image.preview.accessibility" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Attached photo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "添付した写真" } }
+      }
+    },
+    "stamp.image.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Remove" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "削除" } }
+      }
+    },
+    "stamp.image.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Photo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "写真" } }
+      }
+    },
+    "stamp.image.view" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "View attached photo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "添付した写真を表示" } }
+      }
+    },
+    "stamp.image.view.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tap to view the full photo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "タップして写真全体を表示" } }
       }
     },
     "stamp.comment.placeholder" : {

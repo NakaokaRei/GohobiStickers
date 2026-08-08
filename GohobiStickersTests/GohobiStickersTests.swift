@@ -80,6 +80,99 @@ struct GohobiStickersTests {
         #expect(store.totalStampCount == 0)
     }
 
+    @Test func stampImageIsNormalizedToBoundedJPEG() throws {
+        let imageDirectory = temporaryDirectory().appending(path: "images", directoryHint: .isDirectory)
+        let imageStore = StampImageStore(directoryURL: imageDirectory)
+        let sourceImage = UIGraphicsImageRenderer(size: CGSize(width: 2_400, height: 1_200)).image { context in
+            UIColor.systemPink.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 2_400, height: 1_200))
+        }
+        let sourceData = try #require(sourceImage.pngData())
+
+        let normalizedData = try imageStore.normalizedJPEG(from: sourceData)
+        let normalizedImage = try #require(UIImage(data: normalizedData)?.cgImage)
+
+        #expect(max(normalizedImage.width, normalizedImage.height) == StampImageStore.maximumPixelLength)
+        #expect(normalizedData.starts(with: [0xff, 0xd8]))
+        #expect(normalizedData.suffix(2).elementsEqual([0xff, 0xd9]))
+    }
+
+    @Test func stampImageCanBeAddedReplacedRemovedAndDeleted() throws {
+        let directory = temporaryDirectory()
+        let fileURL = directory.appending(path: "stamp-book.json")
+        let imageDirectory = directory.appending(path: "images", directoryHint: .isDirectory)
+        let imageStore = StampImageStore(directoryURL: imageDirectory)
+        let store = StampStore(fileURL: fileURL, imageStore: imageStore)
+        let firstImage = try imageStore.normalizedJPEG(from: makeTestImageData(color: .systemBlue))
+        let secondImage = try imageStore.normalizedJPEG(from: makeTestImageData(color: .systemGreen))
+
+        let entryID = try store.addEntry(presetID: "shell", comment: "写真", imageData: firstImage)
+        var entry = try #require(store.entries.first)
+        let firstRevision = try #require(entry.imageRevision)
+        #expect(store.image(for: entry) != nil)
+        #expect(imageStore.contains(entryID: entryID, revision: firstRevision))
+
+        try store.updateEntry(
+            id: entryID,
+            presetID: "shell",
+            comment: "更新",
+            imageChange: .replace(secondImage)
+        )
+        entry = try #require(store.entries.first)
+        let secondRevision = try #require(entry.imageRevision)
+        #expect(secondRevision != firstRevision)
+        #expect(!imageStore.contains(entryID: entryID, revision: firstRevision))
+        #expect(imageStore.contains(entryID: entryID, revision: secondRevision))
+
+        let reloadedStore = StampStore(
+            fileURL: fileURL,
+            imageStore: StampImageStore(directoryURL: imageDirectory)
+        )
+        #expect(reloadedStore.entries.first?.imageRevision == secondRevision)
+        #expect(reloadedStore.entries.first.flatMap(reloadedStore.image(for:)) != nil)
+
+        try reloadedStore.updateEntry(
+            id: entryID,
+            presetID: "shell",
+            comment: "更新",
+            imageChange: .remove
+        )
+        #expect(reloadedStore.entries.first?.imageRevision == nil)
+        #expect(!imageStore.contains(entryID: entryID, revision: secondRevision))
+
+        let deletedEntryID = try reloadedStore.addEntry(
+            presetID: "frog_green",
+            comment: "",
+            imageData: firstImage
+        )
+        let deletedRevision = try #require(
+            reloadedStore.entries.first(where: { $0.id == deletedEntryID })?.imageRevision
+        )
+        reloadedStore.deleteEntry(id: deletedEntryID)
+        #expect(!imageStore.contains(entryID: deletedEntryID, revision: deletedRevision))
+    }
+
+    @Test func deletingRoadRemovesItsStampImages() throws {
+        let directory = temporaryDirectory()
+        let imageStore = StampImageStore(
+            directoryURL: directory.appending(path: "images", directoryHint: .isDirectory)
+        )
+        let store = StampStore(
+            fileURL: directory.appending(path: "stamp-book.json"),
+            imageStore: imageStore
+        )
+        let firstRoadID = store.selectedRoadID
+        let secondRoadID = store.addRoad(name: "写真ロード")
+        let imageData = try imageStore.normalizedJPEG(from: makeTestImageData(color: .systemOrange))
+        let entryID = try store.addEntry(presetID: "blue_hero", comment: "", imageData: imageData)
+        let revision = try #require(store.entries.first?.imageRevision)
+
+        store.selectRoad(id: firstRoadID)
+        store.deleteRoad(id: secondRoadID)
+
+        #expect(!imageStore.contains(entryID: entryID, revision: revision))
+    }
+
     @Test func dataPersistsAndReloads() {
         let url = temporaryURL()
         let firstStore = StampStore(fileURL: url)
@@ -162,6 +255,27 @@ struct GohobiStickersTests {
         #expect(store.roads.count == 1)
         #expect(store.selectedRoad.name == L10n.string("road.default.name"))
         #expect(store.goalPlacements.map(\.targetCount) == [4])
+    }
+
+    @Test func legacyStampWithoutImageRevisionMigratesWithoutAnImage() throws {
+        let url = temporaryURL()
+        let legacyJSON = """
+        {
+          "entries": [{
+            "id":"00000000-0000-0000-0000-000000000010",
+            "presetID":"shell",
+            "comment":"Legacy",
+            "createdAt":"2026-08-01T00:00:00Z"
+          }],
+          "goals":[]
+        }
+        """
+        try Data(legacyJSON.utf8).write(to: url)
+
+        let store = StampStore(fileURL: url)
+
+        #expect(store.entries.first?.comment == "Legacy")
+        #expect(store.entries.first?.imageRevision == nil)
     }
 
     @Test func appearancePersists() {
@@ -569,6 +683,19 @@ struct GohobiStickersTests {
     private func temporaryURL() -> URL {
         FileManager.default.temporaryDirectory
             .appending(path: "GohobiStickersTests-\(UUID().uuidString).json")
+    }
+
+    private func temporaryDirectory() -> URL {
+        FileManager.default.temporaryDirectory
+            .appending(path: "GohobiStickersImageTests-\(UUID().uuidString)", directoryHint: .isDirectory)
+    }
+
+    private func makeTestImageData(color: UIColor) throws -> Data {
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 120, height: 80)).image { context in
+            color.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 120, height: 80))
+        }
+        return try #require(image.pngData())
     }
 
     private func alphaValue(in image: CGImage, x: Int, y: Int) -> UInt8? {

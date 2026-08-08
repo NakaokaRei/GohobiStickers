@@ -90,6 +90,33 @@ final class GohobiStickersUITests: XCTestCase {
     }
 
     @MainActor
+    func testAttachedImageAppearsInBadgePreviewAndEditor() throws {
+        let app = makeApp()
+        app.launchArguments.append("--ui-testing-image-stamp")
+        app.launch()
+
+        let firstStamp = app.buttons["stamp-node-1"]
+        XCTAssertTrue(firstStamp.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.images["stamp-image-badge-1"].exists)
+        firstStamp.press(forDuration: 1.2)
+
+        let editButton = app.buttons["stamp-node-quick-look-edit-button"]
+        XCTAssertTrue(editButton.waitForExistence(timeout: 5))
+        editButton.tap()
+
+        let imagePreview = app.buttons["stamp-image-preview"]
+        XCTAssertTrue(imagePreview.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["stamp-image-picker-button"].exists)
+        XCTAssertTrue(app.buttons["stamp-image-remove-button"].exists)
+
+        imagePreview.tap()
+        let viewerCloseButton = app.buttons["stamp-image-viewer-close-button"]
+        XCTAssertTrue(viewerCloseButton.waitForExistence(timeout: 5))
+        viewerCloseButton.tap()
+        XCTAssertTrue(imagePreview.waitForExistence(timeout: 5))
+    }
+
+    @MainActor
     func testCurrentPositionButtonJumpsToNextStamp() throws {
         let app = makeApp()
         app.launchArguments.append("--ui-testing-long-route")

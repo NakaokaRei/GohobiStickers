@@ -12,17 +12,20 @@ struct StampEntry: Identifiable, Codable, Equatable, Sendable {
     let id: UUID
     var presetID: String
     var comment: String
+    var imageRevision: UUID?
     let createdAt: Date
 
     init(
         id: UUID = UUID(),
         presetID: String,
         comment: String = "",
+        imageRevision: UUID? = nil,
         createdAt: Date = .now
     ) {
         self.id = id
         self.presetID = presetID
         self.comment = comment
+        self.imageRevision = imageRevision
         self.createdAt = createdAt
     }
 }

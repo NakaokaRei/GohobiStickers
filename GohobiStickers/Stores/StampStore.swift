@@ -2,6 +2,12 @@ import Foundation
 import Observation
 import SwiftUI
 
+enum StampImageChange: Sendable {
+    case unchanged
+    case replace(Data)
+    case remove
+}
+
 @MainActor
 @Observable
 final class StampStore {
@@ -11,6 +17,7 @@ final class StampStore {
     private let fileURL: URL
     private let cloudSyncService: (any CloudSyncing)?
     private let widgetSnapshotStore: WidgetSnapshotStore?
+    private let imageStore: StampImageStore
     private var syncTask: Task<Void, Never>?
     private var isSynchronizing = false
     private var needsAnotherSync = false
@@ -38,24 +45,56 @@ final class StampStore {
     init(
         fileURL: URL? = nil,
         cloudSyncService: (any CloudSyncing)? = nil,
-        widgetSnapshotStore: WidgetSnapshotStore? = nil
+        widgetSnapshotStore: WidgetSnapshotStore? = nil,
+        imageStore: StampImageStore? = nil
     ) {
         self.fileURL = fileURL ?? Self.defaultFileURL()
         self.cloudSyncService = cloudSyncService
         self.widgetSnapshotStore = widgetSnapshotStore
+        self.imageStore = imageStore ?? StampImageStore(
+            directoryURL: self.fileURL.deletingLastPathComponent()
+                .appending(path: "StampImages", directoryHint: .isDirectory)
+        )
         self.data = Self.load(from: self.fileURL) ?? .initial
+        self.imageStore.removeUnreferencedImages(in: self.data)
         publishWidgetSnapshot()
     }
 
     @discardableResult
     func addEntry(presetID: String, comment: String) -> UUID {
+        addEntry(presetID: presetID, comment: comment, imageRevision: nil)
+    }
+
+    @discardableResult
+    func addEntry(presetID: String, comment: String, imageData: Data?) throws -> UUID {
+        let entryID = UUID()
+        let revision = imageData.map { _ in UUID() }
+        if let imageData, let revision {
+            try imageStore.saveNormalizedData(imageData, entryID: entryID, revision: revision)
+        }
+        return addEntry(
+            id: entryID,
+            presetID: presetID,
+            comment: comment,
+            imageRevision: revision
+        )
+    }
+
+    private func addEntry(
+        id: UUID = UUID(),
+        presetID: String,
+        comment: String,
+        imageRevision: UUID?
+    ) -> UUID {
         guard let roadIndex = selectedRoadIndex else {
             preconditionFailure("A selected reward road must always exist.")
         }
         let completedGoal = goalPlacements.first { $0.targetCount == totalStampCount + 1 }
         let entry = StampEntry(
+            id: id,
             presetID: presetID,
-            comment: comment.trimmingCharacters(in: .whitespacesAndNewlines)
+            comment: comment.trimmingCharacters(in: .whitespacesAndNewlines),
+            imageRevision: imageRevision
         )
         data.roads[roadIndex].entries.append(entry)
         persistLocalChange()
@@ -64,19 +103,49 @@ final class StampStore {
     }
 
     func updateEntry(id: UUID, presetID: String, comment: String) {
+        try? updateEntry(
+            id: id,
+            presetID: presetID,
+            comment: comment,
+            imageChange: .unchanged
+        )
+    }
+
+    func updateEntry(
+        id: UUID,
+        presetID: String,
+        comment: String,
+        imageChange: StampImageChange
+    ) throws {
         guard
             let roadIndex = selectedRoadIndex,
             let entryIndex = data.roads[roadIndex].entries.firstIndex(where: { $0.id == id })
         else { return }
+
+        let imageRevision: UUID?
+        switch imageChange {
+        case .unchanged:
+            imageRevision = data.roads[roadIndex].entries[entryIndex].imageRevision
+        case .replace(let sourceData):
+            let revision = UUID()
+            try imageStore.saveNormalizedData(sourceData, entryID: id, revision: revision)
+            imageRevision = revision
+        case .remove:
+            imageRevision = nil
+        }
+
         data.roads[roadIndex].entries[entryIndex].presetID = presetID
         data.roads[roadIndex].entries[entryIndex].comment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
+        data.roads[roadIndex].entries[entryIndex].imageRevision = imageRevision
         persistLocalChange()
+        imageStore.removeUnreferencedImages(in: data)
     }
 
     func deleteEntry(id: UUID) {
         guard let roadIndex = selectedRoadIndex else { return }
         data.roads[roadIndex].entries.removeAll { $0.id == id }
         persistLocalChange()
+        imageStore.removeImages(for: id)
     }
 
     func addGoal(interval: Int, rewardName: String) {
@@ -150,12 +219,16 @@ final class StampStore {
             return
         }
         let wasSelected = data.selectedRoadID == id
+        let deletedEntryIDs = data.roads[index].entries.map(\.id)
         data.roads.remove(at: index)
         if wasSelected {
             data.selectedRoadID = data.roads[min(index, data.roads.count - 1)].id
         }
         celebration = nil
         persistLocalChange()
+        for entryID in deletedEntryIDs {
+            imageStore.removeImages(for: entryID)
+        }
     }
 
     func setAppearance(_ appearance: AppAppearance) {
@@ -222,6 +295,7 @@ final class StampStore {
                     if data.modifiedAt <= snapshot.modifiedAt {
                         data = remoteData
                         save()
+                        imageStore.removeUnreferencedImages(in: data)
                     } else {
                         needsAnotherSync = true
                     }
@@ -258,6 +332,20 @@ final class StampStore {
             assertionFailure(L10n.format("error.persistence", error.localizedDescription))
         }
         publishWidgetSnapshot()
+    }
+
+    func image(for entry: StampEntry) -> UIImage? {
+        imageStore.image(for: entry)
+    }
+
+    func prepareImageData(_ sourceData: Data) throws -> Data {
+        try imageStore.normalizedJPEG(from: sourceData)
+    }
+
+    func prepareImageDataInBackground(_ sourceData: Data) async throws -> Data {
+        try await Task.detached(priority: .userInitiated) {
+            try StampImageStore.normalizedJPEGData(from: sourceData)
+        }.value
     }
 
     private func persistLocalChange() {
