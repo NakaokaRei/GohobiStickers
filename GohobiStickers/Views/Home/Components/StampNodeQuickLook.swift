@@ -2,15 +2,21 @@ import SwiftUI
 
 struct StampNodeQuickLook: View {
     let entry: StampEntry
+    let image: UIImage?
+
+    init(entry: StampEntry, image: UIImage? = nil) {
+        self.entry = entry
+        self.image = image
+    }
 
     private var preset: StampPreset {
         .preset(for: entry.presetID)
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack(spacing: 16) {
-                StampArtwork(preset: preset, size: 104)
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 14) {
+                StampArtwork(preset: preset, size: 78)
 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(L10n.string("node.quick-look.title"))
@@ -22,56 +28,72 @@ struct StampNodeQuickLook: View {
                         .lineLimit(2)
                 }
             }
+            .accessibilityIdentifier("stamp-node-quick-look")
 
-            Divider()
+            if let image {
+                HStack(alignment: .top, spacing: 14) {
+                    noteSummary
+                        .layoutPriority(1)
 
-            detailRow(
-                title: L10n.string("node.quick-look.date"),
-                systemImage: "calendar",
-                value: entry.createdAt.formatted(
-                    .dateTime.year().month().day().hour().minute()
-                )
-            )
+                    AttachedPhotoThumbnail(
+                        image: image,
+                        maximumSize: CGSize(width: 108, height: 132)
+                    )
+                    .accessibilityLabel(L10n.string("stamp.image.preview.accessibility"))
+                    .accessibilityIdentifier("stamp-quick-look-image")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                noteSummary
+            }
 
-            detailRow(
-                title: L10n.string("node.quick-look.note"),
-                systemImage: "text.bubble",
-                value: entry.comment.isEmpty
-                    ? L10n.string("node.quick-look.note.empty")
-                    : entry.comment,
-                isSecondary: entry.comment.isEmpty
-            )
+            dateSummary
         }
-        .padding(22)
+        .padding(18)
         .frame(width: 320, alignment: .leading)
         .background(AppColors.surface)
         .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("stamp-node-quick-look")
     }
 
-    private func detailRow(
-        title: String,
-        systemImage: String,
-        value: String,
-        isSecondary: Bool = false
-    ) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.body.weight(.semibold))
+    private var noteSummary: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Label(L10n.string("node.quick-look.comment"), systemImage: "text.bubble")
+                .font(.caption.weight(.semibold))
                 .foregroundStyle(AppColors.coral)
-                .frame(width: 22)
 
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                Text(value)
-                    .font(.body)
-                    .foregroundStyle(isSecondary ? Color.secondary : AppColors.ink)
-                    .lineLimit(5)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text(
+                entry.comment.isEmpty
+                    ? L10n.string("node.quick-look.comment.empty")
+                    : entry.comment
+            )
+            .font(.body)
+            .foregroundStyle(entry.comment.isEmpty ? Color.secondary : AppColors.ink)
+            .lineLimit(6)
+            .fixedSize(horizontal: false, vertical: true)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var dateSummary: some View {
+        Label {
+            Text(
+                entry.createdAt.formatted(
+                    .dateTime.year().month().day().hour().minute()
+                )
+            )
+        } icon: {
+            Image(systemName: "calendar")
+                .foregroundStyle(AppColors.coral)
+        }
+        .font(.caption.weight(.medium))
+        .foregroundStyle(.secondary)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            AppColors.background.opacity(0.6),
+            in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+        )
     }
 }
 

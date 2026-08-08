@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 @main
 struct GohobiStickersApp: App {
@@ -29,15 +30,29 @@ struct GohobiStickersApp: App {
                     testStore.addEntry(presetID: "blue_hero", comment: "")
                 }
             }
+            if ProcessInfo.processInfo.arguments.contains("--ui-testing-image-stamp") {
+                let imageData = UIGraphicsImageRenderer(size: CGSize(width: 32, height: 24))
+                    .jpegData(withCompressionQuality: 0.8) { context in
+                        UIColor.systemOrange.setFill()
+                        context.fill(CGRect(x: 0, y: 0, width: 32, height: 24))
+                    }
+                _ = try? testStore.addEntry(
+                    presetID: "blue_hero",
+                    comment: "photo",
+                    imageData: imageData
+                )
+            }
             _store = State(initialValue: testStore)
             return
         }
         #endif
 
+        let imageStore = StampImageStore()
         _store = State(
             initialValue: StampStore(
-                cloudSyncService: CloudKitSyncService(),
-                widgetSnapshotStore: WidgetSnapshotStore()
+                cloudSyncService: CloudKitSyncService(imageStore: imageStore),
+                widgetSnapshotStore: WidgetSnapshotStore(),
+                imageStore: imageStore
             )
         )
     }

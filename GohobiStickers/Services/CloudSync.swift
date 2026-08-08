@@ -40,13 +40,18 @@ final class CloudKitSyncService: CloudSyncing {
     private static let recordName = "primary-stamp-book"
     private static let payloadKey = "payload"
     private static let modifiedAtKey = "clientModifiedAt"
+    private static let imageRecordType = "StampImage"
+    private static let imageAssetKey = "asset"
+    private static let imageRevisionKey = "revision"
 
     private let container: CKContainer
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
+    private let imageStore: StampImageStore
 
-    init(container: CKContainer? = nil) {
+    init(container: CKContainer? = nil, imageStore: StampImageStore? = nil) {
         self.container = container ?? CKContainer(identifier: Self.containerIdentifier)
+        self.imageStore = imageStore ?? StampImageStore()
 
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -64,10 +69,22 @@ final class CloudKitSyncService: CloudSyncing {
 
         let database = container.privateCloudDatabase
         let recordID = CKRecord.ID(recordName: Self.recordName)
-        let newRecord = CKRecord(recordType: Self.recordType, recordID: recordID)
 
         do {
-            return try await upload(localData, to: newRecord, database: database)
+            let record: CKRecord
+            do {
+                record = try await database.record(for: recordID)
+            } catch {
+                guard Self.cloudErrorCode(for: error) == .unknownItem else { throw error }
+                let newRecord = CKRecord(recordType: Self.recordType, recordID: recordID)
+                return try await upload(
+                    localData,
+                    to: newRecord,
+                    previousData: nil,
+                    database: database
+                )
+            }
+            return try await reconcile(localData: localData, record: record, database: database)
         } catch {
             if Self.cloudErrorCode(for: error) == .serverRecordChanged,
                let serverRecord = Self.serverRecord(from: error) {
@@ -107,24 +124,127 @@ final class CloudKitSyncService: CloudSyncing {
         }
 
         if remoteData.modifiedAt > localData.modifiedAt {
+            try await downloadMissingImages(for: remoteData, database: database)
             return .downloaded(remoteData, record.modificationDate ?? .now)
         }
 
         if localData.modifiedAt > remoteData.modifiedAt {
-            return try await upload(localData, to: record, database: database)
+            return try await upload(
+                localData,
+                to: record,
+                previousData: remoteData,
+                database: database
+            )
         }
 
+        try await downloadMissingImages(for: remoteData, database: database)
         return .unchanged(record.modificationDate ?? .now)
     }
 
     private func upload(
         _ data: StampBookData,
         to record: CKRecord,
+        previousData: StampBookData?,
         database: CKDatabase
     ) async throws -> CloudSyncOutcome {
+        try await uploadImages(for: data, database: database)
         record[Self.payloadKey] = try encoder.encode(data) as CKRecordValue
         record[Self.modifiedAtKey] = data.modifiedAt as CKRecordValue
         let savedRecord = try await database.save(record)
+        if let previousData {
+            await deleteObsoleteImages(previousData: previousData, currentData: data, database: database)
+        }
         return .uploaded(savedRecord.modificationDate ?? .now)
+    }
+
+    private func uploadImages(for data: StampBookData, database: CKDatabase) async throws {
+        for reference in Self.imageReferences(in: data) {
+            let recordID = Self.imageRecordID(for: reference)
+            let imageRecord: CKRecord
+            do {
+                let existing = try await database.record(for: recordID)
+                if existing[Self.imageRevisionKey] as? String == reference.revision.uuidString.lowercased(),
+                   existing[Self.imageAssetKey] is CKAsset {
+                    continue
+                }
+                imageRecord = existing
+            } catch {
+                guard Self.cloudErrorCode(for: error) == .unknownItem else { throw error }
+                imageRecord = CKRecord(recordType: Self.imageRecordType, recordID: recordID)
+            }
+
+            let fileURL = imageStore.fileURL(entryID: reference.entryID, revision: reference.revision)
+            guard FileManager.default.fileExists(atPath: fileURL.path) else {
+                throw CloudSyncError.invalidRecord
+            }
+            imageRecord[Self.imageRevisionKey] = reference.revision.uuidString.lowercased() as CKRecordValue
+            imageRecord[Self.imageAssetKey] = CKAsset(fileURL: fileURL)
+            _ = try await database.save(imageRecord)
+        }
+    }
+
+    private func downloadMissingImages(for data: StampBookData, database: CKDatabase) async throws {
+        for reference in Self.imageReferences(in: data) where !imageStore.contains(
+            entryID: reference.entryID,
+            revision: reference.revision
+        ) {
+            let record: CKRecord
+            do {
+                record = try await database.record(for: Self.imageRecordID(for: reference))
+            } catch {
+                if Self.cloudErrorCode(for: error) == .unknownItem {
+                    throw CloudSyncError.invalidRecord
+                }
+                throw error
+            }
+            guard
+                record[Self.imageRevisionKey] as? String == reference.revision.uuidString.lowercased(),
+                let asset = record[Self.imageAssetKey] as? CKAsset,
+                let assetURL = asset.fileURL,
+                let assetData = try? Data(contentsOf: assetURL)
+            else {
+                throw CloudSyncError.invalidRecord
+            }
+            try imageStore.saveNormalizedData(
+                assetData,
+                entryID: reference.entryID,
+                revision: reference.revision
+            )
+        }
+    }
+
+    private func deleteObsoleteImages(
+        previousData: StampBookData,
+        currentData: StampBookData,
+        database: CKDatabase
+    ) async {
+        let previousReferences = Dictionary(
+            uniqueKeysWithValues: Self.imageReferences(in: previousData).map { ($0.entryID, $0) }
+        )
+        let currentEntryIDs = Set(Self.imageReferences(in: currentData).map(\.entryID))
+        for reference in previousReferences.values where !currentEntryIDs.contains(reference.entryID) {
+            do {
+                _ = try await database.deleteRecord(withID: Self.imageRecordID(for: reference))
+            } catch {
+                guard Self.cloudErrorCode(for: error) == .unknownItem else { continue }
+            }
+        }
+    }
+
+    private struct ImageReference: Hashable {
+        let entryID: UUID
+        let revision: UUID
+    }
+
+    private static func imageReferences(in data: StampBookData) -> [ImageReference] {
+        data.roads.flatMap(\.entries).compactMap { entry in
+            entry.imageRevision.map { ImageReference(entryID: entry.id, revision: $0) }
+        }
+    }
+
+    private static func imageRecordID(for reference: ImageReference) -> CKRecord.ID {
+        CKRecord.ID(
+            recordName: "stamp-image-\(reference.entryID.uuidString.lowercased())"
+        )
     }
 }

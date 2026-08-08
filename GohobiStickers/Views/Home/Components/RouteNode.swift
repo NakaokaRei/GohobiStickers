@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct RouteNode: View {
+    @Environment(StampStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private static let praiseKeys = [
@@ -92,14 +93,22 @@ struct RouteNode: View {
                     size: StampMetrics.routeArtworkSize
                 )
                 .overlay(alignment: .bottomTrailing) {
-                    if !entry.comment.isEmpty {
-                        Image(systemName: "text.bubble.fill")
-                            .font(.caption.bold())
-                            .foregroundStyle(.white)
-                            .padding(7)
-                            .background(AppColors.mint, in: Circle())
-                            .offset(x: 5, y: 5)
+                    HStack(spacing: 3) {
+                        if entry.imageRevision != nil {
+                            Image(systemName: "photo.fill")
+                                .accessibilityLabel(L10n.string("stamp.image.badge.accessibility"))
+                                .accessibilityIdentifier("stamp-image-badge-\(position)")
+                        }
+                        if !entry.comment.isEmpty {
+                            Image(systemName: "text.bubble.fill")
+                        }
                     }
+                    .font(.caption.bold())
+                    .foregroundStyle(.white)
+                    .padding(7)
+                    .background(AppColors.mint, in: Capsule())
+                    .offset(x: 5, y: 5)
+                    .opacity(entry.imageRevision != nil || !entry.comment.isEmpty ? 1 : 0)
                 }
                 .scaleEffect(renderedStampScale)
                 .rotationEffect(.degrees(renderedStampRotation))
@@ -152,7 +161,7 @@ struct RouteNode: View {
             }
             .accessibilityIdentifier("stamp-node-quick-look-edit-button")
         } preview: {
-            StampNodeQuickLook(entry: entry)
+            StampNodeQuickLook(entry: entry, image: store.image(for: entry))
         }
     }
 
