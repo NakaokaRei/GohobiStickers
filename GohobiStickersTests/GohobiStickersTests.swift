@@ -553,6 +553,31 @@ struct GohobiStickersTests {
         }
     }
 
+    @Test func widgetHistoryKeepsLatestSevenInChronologicalOrder() {
+        let entries = (0..<10).map { index in
+            StampEntry(presetID: StampPreset.all[index].id,
+                       createdAt: Date(timeIntervalSince1970: Double(index)))
+        }
+        let snapshot = WidgetSnapshotFactory.make(from: StampBookData(
+            entries: Array(entries.reversed()), goals: []))
+        let expected = entries.suffix(7).map { StampPreset.preset(for: $0.presetID).assetName }
+        #expect(snapshot.recentStampAssetNames == expected)
+        #expect(snapshot.recentStampAssetNames?.last == snapshot.latestStampAssetName)
+        #expect(snapshot.totalStampCount == 10)
+        let empty = WidgetSnapshotFactory.make(from: StampBookData(entries: [], goals: []))
+        #expect(empty.recentStampAssetNames == [])
+    }
+
+    @Test func widgetSnapshotDecodesBeforeHistoryWasAdded() throws {
+        let encoded = try JSONEncoder().encode(WidgetSnapshot.empty)
+        var json = try #require(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        json.removeValue(forKey: "recentStampAssetNames")
+        let legacy = try JSONSerialization.data(withJSONObject: json)
+        let decoded = try JSONDecoder().decode(WidgetSnapshot.self, from: legacy)
+        #expect(decoded == .empty)
+        #expect(decoded.recentStampAssetNames == nil)
+    }
+
     @Test func widgetSnapshotStoreRoundTripsAndRecoversFromCorruption() throws {
         let suiteName = "GohobiStickersTests.WidgetSnapshot.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suiteName))

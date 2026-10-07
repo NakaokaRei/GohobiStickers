@@ -34,6 +34,8 @@ struct WidgetSnapshot: Codable, Equatable, Sendable {
     let intervalProgress: Int?
     let intervalRequiredCount: Int?
     let updatedAt: Date
+    // Old snapshots decode without history until the app next publishes. Oldest first.
+    var recentStampAssetNames: [String]? = nil
 
     static let empty = WidgetSnapshot(
         totalStampCount: 0,

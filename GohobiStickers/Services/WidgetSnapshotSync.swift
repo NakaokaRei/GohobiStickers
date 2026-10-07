@@ -7,6 +7,7 @@ enum WidgetSnapshotFactory {
         let latestAssetName = entries.last.map { entry in
             StampPreset.preset(for: entry.presetID).assetName
         }
+        let recentAssets = entries.suffix(7).map { StampPreset.preset(for: $0.presetID).assetName }
         let totalStampCount = entries.count
 
         var cumulativeTarget = 0
@@ -25,7 +26,8 @@ enum WidgetSnapshotFactory {
                     remainingCount: cumulativeTarget - totalStampCount,
                     intervalProgress: max(0, totalStampCount - previousTarget),
                     intervalRequiredCount: requiredCount,
-                    updatedAt: updatedAt
+                    updatedAt: updatedAt,
+                    recentStampAssetNames: recentAssets
                 )
             }
 
@@ -40,7 +42,8 @@ enum WidgetSnapshotFactory {
             remainingCount: nil,
             intervalProgress: nil,
             intervalRequiredCount: nil,
-            updatedAt: updatedAt
+            updatedAt: updatedAt,
+            recentStampAssetNames: recentAssets
         )
     }
 }

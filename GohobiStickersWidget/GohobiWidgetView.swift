@@ -8,158 +8,140 @@ struct GohobiWidgetView: View {
 
     var body: some View {
         Group {
-            switch family {
-            case .systemMedium:
+            if family == .systemMedium {
                 mediumView
-            default:
+            } else {
                 smallView
             }
         }
-        .padding(16)
-        .foregroundStyle(WidgetPalette.ink)
         .accessibilityElement(children: .combine)
     }
 
     private var smallView: some View {
-        ZStack(alignment: .bottomTrailing) {
-            decorativeCircles
+        GeometryReader { proxy in
+            ZStack(alignment: .topLeading) {
+                Image(entry.artwork.assetName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .clipped()
+                    .accessibilityHidden(true)
 
-            VStack(alignment: .leading, spacing: 3) {
-                if let remainingCount = entry.snapshot.remainingCount {
-                    Text(WidgetL10n.string(
-                        entry.snapshot.totalStampCount == 0
-                            ? "widget.no-stamp"
-                            : "widget.next-goal"
-                    ))
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                    Text(WidgetL10n.format("widget.remaining.format", remainingCount))
-                        .font(.system(size: 27, weight: .black, design: .rounded))
-                        .minimumScaleFactor(0.72)
+                goalNote
+                    .frameInArtwork(entry.artwork.goal, size: proxy.size)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(WidgetL10n.string("widget.total"))
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                    Text(WidgetL10n.format("widget.count.format", entry.snapshot.totalStampCount))
+                        .font(.system(size: 30, weight: .heavy, design: .rounded))
                         .lineLimit(1)
-                } else {
-                    Text(WidgetL10n.format(
-                        "widget.total.format",
-                        entry.snapshot.totalStampCount
-                    ))
-                    .font(.system(size: 20, weight: .black, design: .rounded))
-                    .minimumScaleFactor(0.72)
-                    .lineLimit(1)
-
-                    Text(WidgetL10n.string("widget.no-goal"))
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                        .minimumScaleFactor(0.4)
                 }
+                .foregroundStyle(Color(red: 0.18, green: 0.26, blue: 0.32))
+                .frameInArtwork(entry.artwork.total, size: proxy.size)
 
-                Spacer(minLength: 42)
+                Text(WidgetL10n.string("widget.cheer"))
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color(red: 0.62, green: 0.28, blue: 0.12))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    .rotationEffect(.degrees(-5))
+                    .frameInArtwork(entry.artwork.cheer, size: proxy.size)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-
-            latestStamp(size: 76)
         }
+    }
+
+    private var goalNote: some View {
+        VStack(spacing: 1) {
+            if let remaining = entry.snapshot.remainingCount {
+                Text(WidgetL10n.string("widget.next-goal"))
+                    .font(.system(size: 9, weight: .medium, design: .rounded))
+                Text(WidgetL10n.format("widget.remaining.format", remaining))
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+            } else {
+                Text(WidgetL10n.string(entry.snapshot.totalStampCount == 0
+                    ? "widget.no-stamp" : "widget.no-goal"))
+                    .font(.system(size: 11, weight: .semibold, design: .rounded))
+            }
+        }
+        .multilineTextAlignment(.center)
+        .minimumScaleFactor(0.65)
+        .foregroundStyle(Color(red: 0.28, green: 0.33, blue: 0.22))
+        .padding(4)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(red: 0.94, green: 0.96, blue: 0.67).opacity(0.96),
+                    in: RoundedRectangle(cornerRadius: 13))
+    }
+
+    private var history: [String] {
+        entry.previousStampAssetNames
     }
 
     private var mediumView: some View {
-        HStack(spacing: 18) {
-            VStack(spacing: 5) {
-                latestStamp(size: 106)
-                Text(WidgetL10n.string(
-                    entry.snapshot.totalStampCount == 0
-                        ? "widget.no-stamp"
-                        : "widget.latest"
-                ))
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
-            }
-            .frame(width: 116)
-
-            VStack(alignment: .leading, spacing: 7) {
-                if let remainingCount = entry.snapshot.remainingCount {
-                    Text(WidgetL10n.string("widget.next-goal"))
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-
-                    Text(WidgetL10n.format("widget.remaining.format", remainingCount))
-                        .font(.system(size: 31, weight: .black, design: .rounded))
-                        .minimumScaleFactor(0.75)
-                        .lineLimit(1)
-
-                    Text(entry.snapshot.nextGoalRewardName ?? "")
-                        .font(.headline.weight(.bold))
-                        .lineLimit(1)
-
-                    progressView
-                } else {
-                    Text(WidgetL10n.format(
-                        "widget.total.format",
-                        entry.snapshot.totalStampCount
-                    ))
-                    .font(.system(size: 25, weight: .black, design: .rounded))
-                    .minimumScaleFactor(0.72)
-                    .lineLimit(1)
-
-                    Text(WidgetL10n.string("widget.no-goal"))
-                        .font(.headline.weight(.bold))
-                        .foregroundStyle(WidgetPalette.mint)
-                        .lineLimit(2)
+        GeometryReader { proxy in
+            let latestSize = min(proxy.size.height * 0.61, proxy.size.width * 0.30)
+            let stampSize = min((proxy.size.height - 55) / 2, (proxy.size.width * 0.57 - 36) / 3)
+            HStack(spacing: 14) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(WidgetL10n.string("widget.history"))
+                        .font(.system(size: 11, weight: .semibold, design: .rounded))
+                    VStack(spacing: 6) {
+                        ForEach(0..<2) { row in
+                            HStack(spacing: 9) {
+                                ForEach(0..<3) { column in
+                                    let index = row * 3 + column
+                                    stampCircle(asset: index < history.count ? history[index] : nil,
+                                                size: stampSize)
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-    @ViewBuilder
-    private var progressView: some View {
-        if let progress = entry.snapshot.intervalProgress,
-           let required = entry.snapshot.intervalRequiredCount {
-            ProgressView(value: Double(progress), total: Double(max(1, required)))
-                .tint(WidgetPalette.mint)
-                .accessibilityValue("\(progress) / \(required)")
-        }
-    }
-
-    @ViewBuilder
-    private func latestStamp(size: CGFloat) -> some View {
-        if let image = latestStampImage {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: size, height: size)
-                .clipShape(Circle())
-                .overlay {
-                    Circle().stroke(Color.white.opacity(0.9), lineWidth: max(4, size * 0.06))
+                .frame(maxWidth: .infinity)
+                VStack(spacing: 3) {
+                    Text(WidgetL10n.string(entry.snapshot.totalStampCount == 0
+                        ? "widget.no-stamp" : "widget.latest"))
+                        .font(.system(size: 10, weight: .semibold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.65)
+                    stampCircle(asset: entry.snapshot.latestStampAssetName == nil
+                                ? nil : entry.artwork.stampAssetName, size: latestSize)
+                    Text(WidgetL10n.format("widget.total.format", entry.snapshot.totalStampCount))
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                 }
-                .shadow(color: WidgetPalette.mint.opacity(0.2), radius: 8, y: 4)
-        } else {
-            ZStack {
-                Circle().fill(WidgetPalette.sun.opacity(0.18))
-                Image(systemName: "seal.fill")
-                    .font(.system(size: size * 0.44, weight: .bold))
-                    .foregroundStyle(WidgetPalette.sun)
+                .frame(width: proxy.size.width * 0.33)
             }
-            .frame(width: size, height: size)
-            .accessibilityLabel(WidgetL10n.string("widget.no-stamp"))
+            .padding(12)
+            .frame(width: proxy.size.width, height: proxy.size.height)
         }
+        .foregroundStyle(WidgetPalette.ink)
     }
 
-    private var latestStampImage: UIImage? {
-        guard let assetName = entry.snapshot.latestStampAssetName else { return nil }
-        return UIImage(named: assetName, in: .main, compatibleWith: nil)
-    }
-
-    private var decorativeCircles: some View {
+    private func stampCircle(asset: String?, size: CGFloat) -> some View {
         ZStack {
-            Circle()
-                .fill(WidgetPalette.sun.opacity(0.11))
-                .frame(width: 110, height: 110)
-                .offset(x: 54, y: -48)
-            Circle()
-                .fill(WidgetPalette.mint.opacity(0.09))
-                .frame(width: 92, height: 92)
-                .offset(x: -62, y: 60)
+            Circle().fill(WidgetPalette.sun.opacity(0.12))
+            if let asset, let image = UIImage(named: asset) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: max(1, size - 5), height: max(1, size - 5))
+                    .clipShape(Circle())
+            }
+            Circle().strokeBorder(WidgetPalette.ink.opacity(0.3), lineWidth: 1.5)
+            Circle().strokeBorder(WidgetPalette.ink.opacity(0.1), lineWidth: 1)
+                .padding(4)
         }
-        .allowsHitTesting(false)
+        .frame(width: max(1, size), height: max(1, size))
+        .accessibilityHidden(true)
+    }
+}
+
+private extension View {
+    func frameInArtwork(_ rect: CGRect, size: CGSize) -> some View {
+        self.frame(width: size.width * rect.width, height: size.height * rect.height)
+            .position(x: size.width * rect.midX, y: size.height * rect.midY)
     }
 }
 

@@ -30,6 +30,19 @@ struct GohobiStickersWidget: Widget {
 struct GohobiTimelineEntry: TimelineEntry {
     let date: Date
     let snapshot: WidgetSnapshot
+    let artwork: WidgetArtwork
+    let previousStampAssetNames: [String]
+
+    init(date: Date, snapshot: WidgetSnapshot) {
+        self.date = date
+        self.snapshot = snapshot
+        // Select once per timeline entry, never during SwiftUI body evaluation.
+        artwork = WidgetArtwork.matching(snapshot.latestStampAssetName)
+            ?? WidgetArtwork.all.randomElement()!
+        previousStampAssetNames = (snapshot.recentStampAssetNames ?? []).dropLast().suffix(6).map {
+            (WidgetArtwork.matching($0) ?? WidgetArtwork.all.randomElement()!).stampAssetName
+        }
+    }
 }
 
 struct GohobiTimelineProvider: TimelineProvider {
@@ -60,14 +73,15 @@ struct GohobiTimelineProvider: TimelineProvider {
 
 private extension WidgetSnapshot {
     static let preview = WidgetSnapshot(
-        totalStampCount: 6,
+        totalStampCount: 7,
         latestStampAssetName: "stamp_frog_green",
         nextGoalTarget: 8,
         nextGoalRewardName: WidgetL10n.string("widget.preview.reward"),
-        remainingCount: 2,
-        intervalProgress: 1,
+        remainingCount: 1,
+        intervalProgress: 2,
         intervalRequiredCount: 3,
-        updatedAt: .now
+        updatedAt: .now,
+        recentStampAssetNames: ["stamp_shell", "stamp_blue_hero", "stamp_penguin_pink", "stamp_lemon_hero", "stamp_butterfly_blue", "stamp_koala_green", "stamp_frog_green"]
     )
 
     static let emptyWithGoal = WidgetSnapshot(

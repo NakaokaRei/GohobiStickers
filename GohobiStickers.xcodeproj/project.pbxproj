@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A10000000000000000000004 /* GohobiStickersWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* GohobiStickersWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A10000000000000000000005 /* Widget Stamp Assets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* Widget Stamp Assets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +54,6 @@
 		5C4994CD301DCAD400B12B15 /* GohobiStickersUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GohobiStickersUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C8DC99B3020A3CC0095936E /* GohobiStickers.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = GohobiStickers.xctestplan; path = GohobiStickersTests/GohobiStickers.xctestplan; sourceTree = "<group>"; };
 		A10000000000000000000002 /* GohobiStickersWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GohobiStickersWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		A10000000000000000000003 /* Widget Stamp Assets */ = {isa = PBXFileReference; explicitFileType = folder.assetcatalog; name = "Widget Stamp Assets"; path = GohobiStickers/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -148,7 +146,6 @@
 				5C4994B8301DCAD300B12B15 /* GohobiStickers */,
 				A10000000000000000000006 /* GohobiShared */,
 				A10000000000000000000007 /* GohobiStickersWidget */,
-				A10000000000000000000003 /* Widget Stamp Assets */,
 				5C4994C6301DCAD400B12B15 /* GohobiStickersTests */,
 				5C4994D0301DCAD400B12B15 /* GohobiStickersUITests */,
 				5C4994B7301DCAD300B12B15 /* Products */,
@@ -350,7 +347,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10000000000000000000005 /* Widget Stamp Assets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
