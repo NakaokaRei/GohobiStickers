@@ -553,14 +553,14 @@ struct GohobiStickersTests {
         }
     }
 
-    @Test func widgetHistoryKeepsLatestSevenInChronologicalOrder() {
+    @Test func widgetHistoryKeepsLatestSixInChronologicalOrder() {
         let entries = (0..<10).map { index in
             StampEntry(presetID: StampPreset.all[index].id,
                        createdAt: Date(timeIntervalSince1970: Double(index)))
         }
         let snapshot = WidgetSnapshotFactory.make(from: StampBookData(
             entries: Array(entries.reversed()), goals: []))
-        let expected = entries.suffix(7).map { StampPreset.preset(for: $0.presetID).assetName }
+        let expected = entries.suffix(6).map { StampPreset.preset(for: $0.presetID).assetName }
         #expect(snapshot.recentStampAssetNames == expected)
         #expect(snapshot.recentStampAssetNames?.last == snapshot.latestStampAssetName)
         #expect(snapshot.totalStampCount == 10)

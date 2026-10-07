@@ -31,7 +31,7 @@ struct GohobiTimelineEntry: TimelineEntry {
     let date: Date
     let snapshot: WidgetSnapshot
     let artwork: WidgetArtwork
-    let previousStampAssetNames: [String]
+    let recentStampAssetNames: [String]
 
     init(date: Date, snapshot: WidgetSnapshot) {
         self.date = date
@@ -39,7 +39,7 @@ struct GohobiTimelineEntry: TimelineEntry {
         // Select once per timeline entry, never during SwiftUI body evaluation.
         artwork = WidgetArtwork.matching(snapshot.latestStampAssetName)
             ?? WidgetArtwork.all.randomElement()!
-        previousStampAssetNames = (snapshot.recentStampAssetNames ?? []).dropLast().suffix(6).map {
+        recentStampAssetNames = (snapshot.recentStampAssetNames ?? snapshot.latestStampAssetName.map { [$0] } ?? []).suffix(6).map {
             (WidgetArtwork.matching($0) ?? WidgetArtwork.all.randomElement()!).stampAssetName
         }
     }

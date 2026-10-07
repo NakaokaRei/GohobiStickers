@@ -188,6 +188,40 @@
         }
       }
     },
+    "widget.reward-short" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next reward"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ごほうびまで"
+          }
+        }
+      }
+    },
+    "widget.set-reward" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a\nreward"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ごほうびを\nきめよう"
+          }
+        }
+      }
+    },
     "widget.total" : {
       "extractionState" : "stale",
       "localizations" : {
