@@ -6,34 +6,34 @@ import UIKit
 
 @MainActor
 struct GohobiStickersTests {
-    @Test func stampPresetsHaveUniqueIDsAndBundledArtwork() {
+    @Test func stampPresetsHaveUniqueIDsAndBundledArtwork() throws {
         let presetIDs = StampPreset.all.map(\.id)
-        let widgetOptimizedPresetIDs: Set<String> = [
-            "frog_yellow",
-            "frog_green",
-            "lemon_hero",
-            "penguin_pink",
-            "glowing_fish",
-            "koala_green",
-            "starfish_purple",
-            "butterfly_blue",
-            "sea_lion"
-        ]
 
         #expect(Set(presetIDs).count == presetIDs.count)
-        #expect(widgetOptimizedPresetIDs.isSubset(of: Set(presetIDs)))
 
         for preset in StampPreset.all {
-            let image = UIImage(named: preset.assetName)
-            #expect(image != nil)
-
-            if widgetOptimizedPresetIDs.contains(preset.id), let cgImage = image?.cgImage {
-                #expect(max(cgImage.width, cgImage.height) <= 1_024)
-            }
+            _ = try #require(UIImage(named: preset.assetName), "Missing app artwork: \(preset.assetName)")
         }
 
         #expect(StampPreset.preset(for: "frog_pink").id == "frog_yellow")
         #expect(StampPreset.preset(for: "frog_blue").id == "frog_green")
+    }
+
+    @Test func widgetStampArtworkIsBundledAndOptimized() throws {
+        let plugInsURL = try #require(Bundle.main.builtInPlugInsURL)
+        let widgetBundle = try #require(
+            Bundle(url: plugInsURL.appending(path: "GohobiStickersWidgetExtension.appex"))
+        )
+
+        // The app keeps high-resolution artwork; the widget ships separate, smaller images.
+        for preset in StampPreset.all {
+            let image = try #require(
+                UIImage(named: preset.assetName, in: widgetBundle, compatibleWith: nil),
+                "Missing widget artwork: \(preset.assetName)"
+            )
+            let cgImage = try #require(image.cgImage)
+            #expect(max(cgImage.width, cgImage.height) <= 1_024, "Oversized widget artwork: \(preset.assetName)")
+        }
     }
 
     @Test func goalIntervalsBecomeCumulativeTargets() {

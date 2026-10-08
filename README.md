@@ -97,4 +97,8 @@ xcodebuild test \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
 
-GitHub Actions runs the unit and UI test suites as separate jobs for every pull request and every push to `main`. Each job uploads its `.xcresult` bundle for debugging failures.
+GitHub Actions runs the unit and UI test suites as separate jobs for every pull request and every push to `main`, using Xcode 26.5 and an iPhone 17 simulator running iOS 26.5 on `macos-26`. You can also start both suites from **Actions > iOS CI > Run workflow**.
+
+To run only one suite locally, add `-only-testing:GohobiStickersTests` or `-only-testing:GohobiStickersUITests` to the command above. The shared scheme's test plan includes both targets. UI tests launch with `--ui-testing` to use test data.
+
+Each CI job uploads its `.xcresult` bundle even when tests fail. Download `unit-test-results` or `ui-test-results` from the workflow run's **Artifacts** section and open the bundle in Xcode to inspect failures and UI screenshots. Artifacts are retained for 14 days.
