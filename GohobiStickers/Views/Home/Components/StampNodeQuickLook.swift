@@ -15,10 +15,10 @@ struct StampNodeQuickLook: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            HStack(spacing: 14) {
-                StampArtwork(preset: preset, size: 78)
+            VStack(spacing: 12) {
+                StampArtwork(preset: preset, size: StampMetrics.quickLookArtworkSize)
 
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(spacing: 5) {
                     Text(L10n.string("node.quick-look.title"))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
@@ -27,7 +27,9 @@ struct StampNodeQuickLook: View {
                         .foregroundStyle(AppColors.ink)
                         .lineLimit(2)
                 }
+                .multilineTextAlignment(.center)
             }
+            .frame(maxWidth: .infinity)
             .accessibilityIdentifier("stamp-node-quick-look")
 
             if let image {

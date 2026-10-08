@@ -11,11 +11,12 @@ struct StampArtwork: View {
                 .fill(fallbackColor.opacity(0.17))
 
             if let image = UIImage(named: preset.assetName) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: size, height: size)
-                    .clipShape(Circle())
+                FittedStampImage(
+                    image: image,
+                    assetName: preset.assetName,
+                    size: size,
+                    borderWidth: borderWidth
+                )
             } else {
                 Image(systemName: preset.fallbackSymbol)
                     .font(.system(size: size * 0.43, weight: .bold))
@@ -23,11 +24,13 @@ struct StampArtwork: View {
             }
 
             Circle()
-                .strokeBorder(AppColors.surfaceHighlight, lineWidth: max(3, size * 0.06))
+                .strokeBorder(AppColors.surfaceHighlight, lineWidth: borderWidth)
         }
         .frame(width: size, height: size)
         .shadow(color: fallbackColor.opacity(0.2), radius: 7, y: 4)
     }
+
+    private var borderWidth: CGFloat { min(6, max(3, size * 0.06)) }
 
     private var fallbackColor: Color {
         switch preset.fallbackColorName {

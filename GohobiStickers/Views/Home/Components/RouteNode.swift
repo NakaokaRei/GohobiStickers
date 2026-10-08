@@ -119,7 +119,7 @@ struct RouteNode: View {
                     .font(.system(size: 25, weight: .bold))
                     .foregroundStyle(AppColors.sun)
                     .scaleEffect(sparkleScale)
-                    .offset(x: 43, y: -42)
+                    .offset(x: StampMetrics.routeArtworkSize * 0.46, y: -StampMetrics.routeArtworkSize * 0.45)
                     .opacity(sparkleOpacity)
 
                 Text(praiseText)
@@ -134,7 +134,7 @@ struct RouteNode: View {
                     }
                     .shadow(color: AppColors.sun.opacity(0.28), radius: 8, y: 3)
                     .scaleEffect(praiseScale)
-                    .offset(y: -68 + praiseOffsetY)
+                    .offset(y: -StampMetrics.routeArtworkSize / 2 - 21 + praiseOffsetY)
                     .opacity(praiseOpacity)
             }
         }

@@ -81,12 +81,17 @@ final class GohobiStickersUITests: XCTestCase {
 
         let firstStamp = app.buttons["stamp-node-1"]
         XCTAssertTrue(firstStamp.waitForExistence(timeout: 5))
+        saveScreenshot(named: "01-stamp-road", in: app)
         firstStamp.press(forDuration: 1.2)
 
         XCTAssertTrue(
             app.buttons["stamp-node-quick-look-edit-button"]
                 .waitForExistence(timeout: 5)
         )
+        saveScreenshot(named: "02-enlarged-stamp-preview", in: app)
+        app.buttons["stamp-node-quick-look-edit-button"].tap()
+        XCTAssertTrue(app.buttons["stamp-editor-save-button"].waitForExistence(timeout: 5))
+        saveScreenshot(named: "03-replaced-stamp-picker", in: app)
     }
 
     @MainActor
@@ -102,6 +107,7 @@ final class GohobiStickersUITests: XCTestCase {
 
         let editButton = app.buttons["stamp-node-quick-look-edit-button"]
         XCTAssertTrue(editButton.waitForExistence(timeout: 5))
+        saveScreenshot(named: "04-stamp-preview-with-photo", in: app)
         editButton.tap()
 
         let imagePreview = app.buttons["stamp-image-preview"]

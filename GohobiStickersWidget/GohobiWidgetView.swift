@@ -172,12 +172,12 @@ struct GohobiWidgetView: View {
         ZStack {
             Circle().fill(Color.white.opacity(0.38))
             if let asset, let image = UIImage(named: asset) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: max(1, size - 5) * 1.18, height: max(1, size - 5) * 1.18)
-                    .frame(width: max(1, size - 5), height: max(1, size - 5))
-                    .clipShape(Circle())
+                FittedStampImage(
+                    image: image,
+                    assetName: asset,
+                    size: max(1, size - 5),
+                    borderWidth: 2
+                )
             }
             Circle().strokeBorder(entry.artwork.mediumInk.opacity(0.4), lineWidth: 1.3)
             Circle().strokeBorder(Color.brown.opacity(0.18), lineWidth: 0.7)
