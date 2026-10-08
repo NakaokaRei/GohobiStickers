@@ -25,6 +25,15 @@ struct GohobiStickersApp: App {
                 .appending(path: "GohobiStickersUITests.json", directoryHint: .notDirectory)
             try? FileManager.default.removeItem(at: testURL)
             let testStore = StampStore(fileURL: testURL)
+            if ProcessInfo.processInfo.arguments.contains("--ui-testing-goal-badges") {
+                testStore.deleteGoals(at: IndexSet(integersIn: 0..<testStore.goals.count))
+                let reward = ProcessInfo.processInfo.arguments.contains("--ui-testing-long-reward")
+                    ? "ずっと楽しみにしていた大きな花束をごほうびに" : "はなたば"
+                testStore.addGoal(interval: 1, rewardName: reward)
+                testStore.addGoal(interval: 1, rewardName: "映画を観にいく")
+                testStore.addEntry(presetID: "blue_hero", comment: "")
+                testStore.clearCelebration()
+            }
             if ProcessInfo.processInfo.arguments.contains("--ui-testing-long-route") {
                 for _ in 0..<12 {
                     testStore.addEntry(presetID: "blue_hero", comment: "")

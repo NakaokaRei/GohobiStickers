@@ -66,7 +66,7 @@ struct ContentView: View {
                                         isAchieved: store.totalStampCount >= placement.targetCount,
                                         onShare: { presentShareCard(for: placement) }
                                     )
-                                    .padding(.vertical, 8)
+                                    .padding(.vertical, store.totalStampCount >= placement.targetCount ? 18 : 8)
                                     .onScrollVisibilityChange(threshold: 0.55) { isVisible in
                                         updateGoalVisibility(
                                             id: placement.id,

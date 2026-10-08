@@ -178,11 +178,57 @@ final class GohobiStickersUITests: XCTestCase {
     }
 
     @MainActor
+    func testAchievedGoalIsLargerAndCanShare() throws {
+        let app = makeApp()
+        app.launchArguments += ["--ui-testing-goal-badges", "-AppleLanguages", "(ja)"]
+        app.launch()
+
+        let achieved = app.otherElements["goal-badge-1"]
+        let upcoming = app.otherElements["goal-badge-2"]
+        XCTAssertTrue(achieved.waitForExistence(timeout: 5))
+        app.swipeUp()
+        XCTAssertTrue(upcoming.waitForExistence(timeout: 5))
+        XCTAssertGreaterThan(achieved.frame.width, upcoming.frame.width)
+        XCTAssertGreaterThan(achieved.frame.height, upcoming.frame.height)
+        saveScreenshot(named: "05-achieved-and-upcoming-goals", in: app)
+        app.buttons["goal-share-button-1"].tap()
+        assertSharePreview(in: app)
+    }
+
+    @MainActor
+    func testLongGoalAtAccessibilityTextSize() throws {
+        let app = makeApp()
+        app.launchArguments += [
+            "--ui-testing-goal-badges", "--ui-testing-long-reward",
+            "-AppleLanguages", "(ja)",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ]
+        app.launch()
+        let share = app.buttons["goal-share-button-1"]
+        for _ in 0..<6 {
+            if share.isHittable { break }
+            app.swipeUp()
+        }
+        XCTAssertTrue(share.isHittable)
+        saveScreenshot(named: "06-long-goal-accessibility-text", in: app)
+        share.tap()
+        assertSharePreview(in: app)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         let app = makeApp()
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             app.launch()
         }
+    }
+
+    @MainActor
+    private func saveScreenshot(named name: String, in app: XCUIApplication) {
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 
     @MainActor
