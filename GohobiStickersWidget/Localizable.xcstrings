@@ -239,6 +239,22 @@
         }
       }
     },
+    "widget.total.compact-format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "累計%lldこ"
+          }
+        }
+      }
+    },
     "widget.total.format" : {
       "extractionState" : "stale",
       "localizations" : {

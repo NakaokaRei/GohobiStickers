@@ -17,6 +17,25 @@ struct WidgetArtwork {
     var mediumIsCentered: Bool { ["blue_hero", "butterfly_blue", "penguin_pink"].contains(id) }
     var mediumContentOnRight: Bool { ["shell", "sea_lion"].contains(id) }
 
+    /// These two supplied 2:1 illustrations already contain their stamp trails.
+    var mediumHasPrintedTrail: Bool { id == "pink_hero" || id == "penguin_pink" }
+
+    /// Oldest to newest, in artwork coordinates (before aspect-fill cropping).
+    var mediumStampCenters: [CGPoint] {
+        if id == "pink_hero" {
+            return [
+                CGPoint(x: 0.10, y: 0.24), CGPoint(x: 0.31, y: 0.28),
+                CGPoint(x: 0.53, y: 0.32), CGPoint(x: 0.585, y: 0.59),
+                CGPoint(x: 0.37, y: 0.70), CGPoint(x: 0.175, y: 0.835)
+            ]
+        }
+        return [
+            CGPoint(x: 0.169, y: 0.19), CGPoint(x: 0.115, y: 0.44),
+            CGPoint(x: 0.087, y: 0.705), CGPoint(x: 0.861, y: 0.82),
+            CGPoint(x: 0.918, y: 0.565), CGPoint(x: 0.875, y: 0.22)
+        ]
+    }
+
     var stampAssetName: String { "stamp_\(id)" }
 
     static let all: [WidgetArtwork] = [
