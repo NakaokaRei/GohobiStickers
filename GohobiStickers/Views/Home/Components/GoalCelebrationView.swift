@@ -4,6 +4,7 @@ struct GoalCelebrationView: View {
     let placement: GoalPlacement
     let share: () -> Void
     let dismiss: () -> Void
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isBursting = false
 
     var body: some View {
@@ -11,11 +12,16 @@ struct GoalCelebrationView: View {
             Color.black.opacity(0.58)
                 .ignoresSafeArea()
 
-            particles
-            celebrationCard
+            if !reduceMotion { particles }
+            ScrollView {
+                celebrationCard
+                    .frame(maxWidth: .infinity)
+            }
+            .scrollIndicators(.hidden)
+            .defaultScrollAnchor(.center)
         }
         .onAppear {
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.62)) {
+            withAnimation(reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.62)) {
                 isBursting = true
             }
         }
@@ -42,23 +48,16 @@ struct GoalCelebrationView: View {
 
     private var celebrationCard: some View {
         VStack(spacing: 18) {
-            ZStack {
-                Circle()
-                    .fill(AppColors.sun.opacity(0.2))
-                    .frame(width: 104, height: 104)
-                Image(systemName: "gift.fill")
-                    .font(.system(size: 50, weight: .bold))
-                    .foregroundStyle(AppColors.sun)
-                    .symbolEffect(.bounce, value: isBursting)
-            }
+            CelebrationCompanion(id: placement.id)
 
             VStack(spacing: 8) {
                 Text(L10n.string("celebration.title"))
                     .font(.system(size: 30, weight: .black, design: .rounded))
                     .foregroundStyle(AppColors.ink)
-                Text(placement.goal.rewardName)
-                    .font(.title2.bold())
-                    .foregroundStyle(AppColors.coral)
+                RewardRibbon {
+                    Text(placement.goal.rewardName)
+                        .font(.title2.bold())
+                }
                 Text(L10n.format("celebration.message", placement.targetCount))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -86,10 +85,12 @@ struct GoalCelebrationView: View {
         .padding(28)
         .frame(maxWidth: 330)
         .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .background(AppColors.background, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 30, style: .continuous)
                 .stroke(AppColors.surfaceHighlight, lineWidth: 2)
         }
+        .compositingGroup()
         .shadow(color: .black.opacity(0.28), radius: 30, y: 14)
         .padding(24)
     }

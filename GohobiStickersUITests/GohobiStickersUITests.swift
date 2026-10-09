@@ -150,7 +150,9 @@ final class GohobiStickersUITests: XCTestCase {
     @MainActor
     func testCanPreviewGoalCardFromCelebrationAndGoalBadge() throws {
         let app = makeApp()
+        app.launchArguments += ["-AppleLanguages", "(ja)"]
         app.launch()
+        saveScreenshot(named: "companions-01-road", in: app)
 
         for _ in 0..<5 {
             let nextNode = app.buttons["next-stamp-node"]
@@ -164,8 +166,12 @@ final class GohobiStickersUITests: XCTestCase {
 
         let celebrationShareButton = app.buttons["celebration-share-button"]
         XCTAssertTrue(celebrationShareButton.waitForExistence(timeout: 5))
+        saveScreenshot(named: "companions-02-celebration", in: app)
         celebrationShareButton.tap()
         assertSharePreview(in: app)
+        saveScreenshot(named: "companions-03-card", in: app)
+        app.swipeUp()
+        saveScreenshot(named: "ribbon-04-card-date", in: app)
         app.buttons["goal-share-close-button"].tap()
 
         let celebrationDismissButton = app.buttons["celebration-dismiss-button"]
@@ -219,6 +225,7 @@ final class GohobiStickersUITests: XCTestCase {
         saveScreenshot(named: "06-long-goal-accessibility-text", in: app)
         share.tap()
         assertSharePreview(in: app)
+        saveScreenshot(named: "ribbon-05-long-reward", in: app)
     }
 
     @MainActor

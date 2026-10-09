@@ -4,13 +4,14 @@ struct GoalAchievementCard: View {
     static let width: CGFloat = 360
     static let cornerRadius: CGFloat = 34
     private static let columns = 3
-    private static let stampSize: CGFloat = 82
+    private static let stampSize: CGFloat = 74
+    private static let columnSpacing: CGFloat = 20
+    private static let rowSpacing: CGFloat = 28
 
     let data: GoalShareCardData
 
     private let cardBackground = Color(red: 0.99, green: 0.96, blue: 0.89)
     private let cardInk = Color(red: 0.18, green: 0.20, blue: 0.24)
-    private let cardSurface = Color.white.opacity(0.88)
 
     var body: some View {
         VStack(spacing: 22) {
@@ -43,6 +44,7 @@ struct GoalAchievementCard: View {
             RoundedRectangle(cornerRadius: Self.cornerRadius, style: .continuous)
                 .stroke(Color.white.opacity(0.9), lineWidth: 3)
         }
+        .compositingGroup()
         .shadow(color: cardInk.opacity(0.15), radius: 18, y: 10)
         .environment(\.colorScheme, .light)
         .accessibilityElement(children: .contain)
@@ -51,24 +53,16 @@ struct GoalAchievementCard: View {
 
     private var header: some View {
         VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(AppColors.sun.opacity(0.2))
-                    .frame(width: 82, height: 82)
-                Image(systemName: "trophy.fill")
-                    .font(.system(size: 39, weight: .bold))
-                    .foregroundStyle(AppColors.sun)
-            }
+            CelebrationCompanion(id: data.placement.id, compact: true)
 
             Text(L10n.string("goal.share.card.title"))
                 .font(.system(size: 27, weight: .black, design: .rounded))
                 .foregroundStyle(cardInk)
 
-            Text(data.placement.goal.rewardName)
-                .font(.title2.bold())
-                .foregroundStyle(AppColors.coral)
-                .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+            RewardRibbon {
+                Text(data.placement.goal.rewardName)
+                    .font(.title2.bold())
+            }
 
             Text(L10n.format("goal.share.card.range", data.rangeStart, data.rangeEnd))
                 .font(.subheadline.bold())
@@ -80,11 +74,11 @@ struct GoalAchievementCard: View {
     }
 
     private var stampGrid: some View {
-        Grid(horizontalSpacing: 10, verticalSpacing: 12) {
+        Grid(horizontalSpacing: Self.columnSpacing, verticalSpacing: Self.rowSpacing) {
             ForEach(stampRows.indices, id: \.self) { rowIndex in
                 GridRow {
                     ForEach(0..<Self.columns, id: \.self) { columnIndex in
-                        let entryIndex = rowIndex * Self.columns + columnIndex
+                        let entryIndex = rowIndex * Self.columns + (rowIndex.isMultiple(of: 2) ? columnIndex : Self.columns - 1 - columnIndex)
                         if data.entries.indices.contains(entryIndex) {
                             StampArtwork(
                                 preset: .preset(for: data.entries[entryIndex].presetID),
@@ -98,31 +92,59 @@ struct GoalAchievementCard: View {
                 }
             }
         }
-        .padding(14)
-        .background(cardSurface, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(Color.white, lineWidth: 2)
+        .background {
+            Canvas { context, size in
+                guard !data.entries.isEmpty else { return }
+                let stepX = Self.stampSize + Self.columnSpacing
+                let stepY = Self.stampSize + Self.rowSpacing
+                func center(_ index: Int) -> CGPoint {
+                    let row = index / Self.columns
+                    let column = row.isMultiple(of: 2) ? index % Self.columns : Self.columns - 1 - index % Self.columns
+                    return CGPoint(x: Self.stampSize / 2 + CGFloat(column) * stepX,
+                                   y: Self.stampSize / 2 + CGFloat(row) * stepY)
+                }
+                var path = Path()
+                let first = center(0)
+                path.move(to: CGPoint(x: -8, y: -10))
+                path.addQuadCurve(to: first, control: CGPoint(x: -8, y: first.y))
+                for index in 1..<data.entries.count {
+                    let previous = center(index - 1)
+                    let next = center(index)
+                    if index.isMultiple(of: Self.columns) {
+                        let bendX: CGFloat = (index / Self.columns).isMultiple(of: 2) ? -16 : size.width + 16
+                        path.addCurve(to: next,
+                                      control1: CGPoint(x: bendX, y: previous.y),
+                                      control2: CGPoint(x: bendX, y: next.y))
+                    } else {
+                        path.addLine(to: next)
+                    }
+                }
+                let lastIndex = data.entries.count - 1
+                let last = center(lastIndex)
+                let direction: CGFloat = (lastIndex / Self.columns).isMultiple(of: 2) ? 1 : -1
+                // Mirror the entrance curve downward, using one continuous, broad bend.
+                let exitX = last.x + direction * (Self.stampSize / 2 + 8)
+                path.addQuadCurve(to: CGPoint(x: exitX, y: size.height + 10),
+                                  control: CGPoint(x: exitX, y: last.y))
+                context.stroke(path, with: .color(Color(red: 0.64, green: 0.51, blue: 0.35)),
+                               style: StrokeStyle(lineWidth: 3.5, lineCap: .round, dash: [1, 8]))
+            }
+            .accessibilityHidden(true)
         }
+        .padding(.horizontal, 18)
+        .padding(.top, 8)
+        .padding(.bottom, 20)
     }
 
     private var achievementDetails: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "calendar")
-                .font(.headline)
-                .foregroundStyle(AppColors.coral)
-            VStack(alignment: .leading, spacing: 2) {
+        RewardRibbon {
+            VStack(spacing: 3) {
                 Text(L10n.string("goal.share.card.date"))
                     .font(.caption.bold())
-                    .foregroundStyle(cardInk.opacity(0.55))
                 Text(data.achievedAt, format: .dateTime.year().month().day())
                     .font(.headline)
-                    .foregroundStyle(cardInk)
             }
-            Spacer()
         }
-        .padding(16)
-        .background(cardSurface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private var brand: some View {

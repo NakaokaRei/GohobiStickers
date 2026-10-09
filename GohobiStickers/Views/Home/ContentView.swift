@@ -58,6 +58,9 @@ struct ContentView: View {
                                         isAddingStamp = true
                                     }
                                 }
+                                .background {
+                                    RoadCompanion(roadID: store.selectedRoadID, position: position, nodeOffset: offset)
+                                }
                                 .id(position)
 
                                 if let placement = goal(at: position) {
