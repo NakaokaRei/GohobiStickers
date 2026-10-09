@@ -9,7 +9,11 @@ struct GohobiWidgetView: View {
     var body: some View {
         Group {
             if family == .systemMedium {
-                mediumView
+                if entry.artwork.mediumHasPrintedTrail {
+                    PrintedTrailMediumWidgetView(entry: entry)
+                } else {
+                    mediumView
+                }
             } else {
                 smallView
             }
