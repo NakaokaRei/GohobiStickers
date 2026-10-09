@@ -1,6 +1,74 @@
 {
   "sourceLanguage" : "ja",
   "strings" : {
+    "celebration.cheer.amazing" : {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すっご〜い！"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amazing!"
+          }
+        }
+      }
+    },
+    "celebration.cheer.celebrate" : {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お祝いしよう！"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let’s celebrate!"
+          }
+        }
+      }
+    },
+    "celebration.cheer.rest" : {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゆっくり休んでね！"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take a lovely rest!"
+          }
+        }
+      }
+    },
+    "celebration.cheer.congratulations" : {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おめでとう！"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Congratulations!"
+          }
+        }
+      }
+    },
     "appearance.dark" : {
       "extractionState" : "manual",
       "localizations" : {
