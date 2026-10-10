@@ -9,6 +9,7 @@ struct AppearanceSettingsView: View {
             Form {
                 appearanceSection
                 cloudSyncSection
+                supportSection
             }
             .navigationTitle(L10n.string("appearance.settings.title"))
             .navigationBarTitleDisplayMode(.inline)
@@ -42,6 +43,19 @@ struct AppearanceSettingsView: View {
             Text(L10n.string("appearance.picker.title"))
         } footer: {
             Text(L10n.string("appearance.footer"))
+        }
+    }
+
+    private var supportSection: some View {
+        Section {
+            Link(destination: URL(string: "https://github.com/NakaokaRei/GohobiStickers/blob/main/docs/app-store/privacy-policy.md")!) {
+                Label(L10n.string("settings.privacy-policy"), systemImage: "hand.raised")
+            }
+            Link(destination: URL(string: "https://github.com/NakaokaRei/GohobiStickers/blob/main/docs/app-store/support.md")!) {
+                Label(L10n.string("settings.support"), systemImage: "questionmark.circle")
+            }
+        } header: {
+            Text(L10n.string("settings.about"))
         }
     }
 
