@@ -130,7 +130,10 @@ final class GohobiStickersUITests: XCTestCase {
 
         let currentPositionButton = app.buttons["current-position-button"]
         XCTAssertTrue(currentPositionButton.waitForExistence(timeout: 5))
-        currentPositionButton.tap()
+        XCTAssertTrue(currentPositionButton.wait(for: \.isHittable, toEqual: true, timeout: 5))
+        // XCTest can choose the accessibility frame's corner, outside the capsule.
+        // Tap its center so the event lands inside the visible button.
+        currentPositionButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
 
         let nextStampNode = app.buttons["next-stamp-node"]
         XCTAssertTrue(nextStampNode.waitForExistence(timeout: 5))
