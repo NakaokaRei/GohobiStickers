@@ -17,11 +17,13 @@
 - サポートURL：https://github.com/NakaokaRei/GohobiStickers/blob/main/docs/app-store/support.md
 - プライバシーポリシーURL：https://github.com/NakaokaRei/GohobiStickers/blob/main/docs/app-store/privacy-policy.md
 - 「データの収集なし」はユーザーがすでに公開済み。コード確認と整合するため維持。
+- 価格：無料（全通貨で0）
+- 配信地域：日本のみ。今後追加される地域への自動配信なし。
+- コンテンツ配信権：第三者コンテンツなし（イラストは自作とユーザー確認済み）
 
 ## 残り
 
 - App Review連絡先（氏名・電話・メール）：ユーザーが後で入力する指定
-- 価格・配信地域の確認、コンテンツ配信権の確認
 - アプリ内ポリシー／サポートリンクを含む配布ビルドのアップロードと選択
 - CloudKitの本番スキーマ・実機同期確認（README参照）
 - 審査提出。現時点で未実施。
