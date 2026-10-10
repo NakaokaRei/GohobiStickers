@@ -690,7 +690,7 @@
 				DEVELOPMENT_TEAM = 7ZJJ7KR6WA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GohobiStickersWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Gohobi Stickers";
+				INFOPLIST_KEY_CFBundleDisplayName = "ごほうびロード";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -722,7 +722,7 @@
 				DEVELOPMENT_TEAM = 7ZJJ7KR6WA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GohobiStickersWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Gohobi Stickers";
+				INFOPLIST_KEY_CFBundleDisplayName = "ごほうびロード";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
