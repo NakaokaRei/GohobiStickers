@@ -1,0 +1,149 @@
+[
+  {
+    "file": "ja/iphone-6.9/01-reward-road.png",
+    "width": 1320,
+    "height": 2868,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.9/02-stickers.png",
+    "width": 1320,
+    "height": 2868,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.9/03-widgets.png",
+    "width": 1320,
+    "height": 2868,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.5/01-reward-road.png",
+    "width": 1284,
+    "height": 2778,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.5/02-stickers.png",
+    "width": 1284,
+    "height": 2778,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.5/03-widgets.png",
+    "width": 1284,
+    "height": 2778,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.3/01-reward-road.png",
+    "width": 1206,
+    "height": 2622,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.3/02-stickers.png",
+    "width": 1206,
+    "height": 2622,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.3/03-widgets.png",
+    "width": 1206,
+    "height": 2622,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.1/01-reward-road.png",
+    "width": 1179,
+    "height": 2556,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.1/02-stickers.png",
+    "width": 1179,
+    "height": 2556,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/iphone-6.1/03-widgets.png",
+    "width": 1179,
+    "height": 2556,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-13/01-reward-road.png",
+    "width": 2064,
+    "height": 2752,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-13/02-stickers.png",
+    "width": 2064,
+    "height": 2752,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-13/03-widgets.png",
+    "width": 2064,
+    "height": 2752,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-12.9/01-reward-road.png",
+    "width": 2048,
+    "height": 2732,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-12.9/02-stickers.png",
+    "width": 2048,
+    "height": 2732,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-12.9/03-widgets.png",
+    "width": 2048,
+    "height": 2732,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-11/01-reward-road.png",
+    "width": 1668,
+    "height": 2420,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-11/02-stickers.png",
+    "width": 1668,
+    "height": 2420,
+    "color": "RGB",
+    "alpha": false
+  },
+  {
+    "file": "ja/ipad-11/03-widgets.png",
+    "width": 1668,
+    "height": 2420,
+    "color": "RGB",
+    "alpha": false
+  }
+]
