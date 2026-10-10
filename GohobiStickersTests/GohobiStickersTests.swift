@@ -658,17 +658,17 @@ struct GohobiStickersTests {
         #expect(
             StampPreset.all.map(\.id) == [
                 "blue_hero",
+                "lemon_hero",
                 "pink_hero",
                 "frog_yellow",
+                "butterfly_blue",
                 "frog_green",
-                "lemon_hero",
-                "sea_lion",
                 "shell",
                 "penguin_pink",
-                "glowing_fish",
                 "koala_green",
+                "sea_lion",
                 "starfish_purple",
-                "butterfly_blue"
+                "glowing_fish"
             ]
         )
     }
