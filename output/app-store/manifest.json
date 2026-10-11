@@ -1,149 +1,198 @@
 [
   {
-    "file": "ja/iphone-6.9/01-reward-road.png",
-    "width": 1320,
-    "height": 2868,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.9\/01-reward-road.png",
+    "height" : 2868,
+    "width" : 1320
   },
   {
-    "file": "ja/iphone-6.9/02-stickers.png",
-    "width": 1320,
-    "height": 2868,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.9\/02-stickers.png",
+    "height" : 2868,
+    "width" : 1320
   },
   {
-    "file": "ja/iphone-6.9/03-widgets.png",
-    "width": 1320,
-    "height": 2868,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.9\/03-widgets.png",
+    "height" : 2868,
+    "width" : 1320
   },
   {
-    "file": "ja/iphone-6.5/01-reward-road.png",
-    "width": 1284,
-    "height": 2778,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.9\/04-goal-card.png",
+    "height" : 2868,
+    "width" : 1320
   },
   {
-    "file": "ja/iphone-6.5/02-stickers.png",
-    "width": 1284,
-    "height": 2778,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.5\/01-reward-road.png",
+    "height" : 2778,
+    "width" : 1284
   },
   {
-    "file": "ja/iphone-6.5/03-widgets.png",
-    "width": 1284,
-    "height": 2778,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.5\/02-stickers.png",
+    "height" : 2778,
+    "width" : 1284
   },
   {
-    "file": "ja/iphone-6.3/01-reward-road.png",
-    "width": 1206,
-    "height": 2622,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.5\/03-widgets.png",
+    "height" : 2778,
+    "width" : 1284
   },
   {
-    "file": "ja/iphone-6.3/02-stickers.png",
-    "width": 1206,
-    "height": 2622,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.5\/04-goal-card.png",
+    "height" : 2778,
+    "width" : 1284
   },
   {
-    "file": "ja/iphone-6.3/03-widgets.png",
-    "width": 1206,
-    "height": 2622,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.3\/01-reward-road.png",
+    "height" : 2622,
+    "width" : 1206
   },
   {
-    "file": "ja/iphone-6.1/01-reward-road.png",
-    "width": 1179,
-    "height": 2556,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.3\/02-stickers.png",
+    "height" : 2622,
+    "width" : 1206
   },
   {
-    "file": "ja/iphone-6.1/02-stickers.png",
-    "width": 1179,
-    "height": 2556,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.3\/03-widgets.png",
+    "height" : 2622,
+    "width" : 1206
   },
   {
-    "file": "ja/iphone-6.1/03-widgets.png",
-    "width": 1179,
-    "height": 2556,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.3\/04-goal-card.png",
+    "height" : 2622,
+    "width" : 1206
   },
   {
-    "file": "ja/ipad-13/01-reward-road.png",
-    "width": 2064,
-    "height": 2752,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.1\/01-reward-road.png",
+    "height" : 2556,
+    "width" : 1179
   },
   {
-    "file": "ja/ipad-13/02-stickers.png",
-    "width": 2064,
-    "height": 2752,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.1\/02-stickers.png",
+    "height" : 2556,
+    "width" : 1179
   },
   {
-    "file": "ja/ipad-13/03-widgets.png",
-    "width": 2064,
-    "height": 2752,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.1\/03-widgets.png",
+    "height" : 2556,
+    "width" : 1179
   },
   {
-    "file": "ja/ipad-12.9/01-reward-road.png",
-    "width": 2048,
-    "height": 2732,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/iphone-6.1\/04-goal-card.png",
+    "height" : 2556,
+    "width" : 1179
   },
   {
-    "file": "ja/ipad-12.9/02-stickers.png",
-    "width": 2048,
-    "height": 2732,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-13\/01-reward-road.png",
+    "height" : 2752,
+    "width" : 2064
   },
   {
-    "file": "ja/ipad-12.9/03-widgets.png",
-    "width": 2048,
-    "height": 2732,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-13\/02-stickers.png",
+    "height" : 2752,
+    "width" : 2064
   },
   {
-    "file": "ja/ipad-11/01-reward-road.png",
-    "width": 1668,
-    "height": 2420,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-13\/03-widgets.png",
+    "height" : 2752,
+    "width" : 2064
   },
   {
-    "file": "ja/ipad-11/02-stickers.png",
-    "width": 1668,
-    "height": 2420,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-13\/04-goal-card.png",
+    "height" : 2752,
+    "width" : 2064
   },
   {
-    "file": "ja/ipad-11/03-widgets.png",
-    "width": 1668,
-    "height": 2420,
-    "color": "RGB",
-    "alpha": false
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-12.9\/01-reward-road.png",
+    "height" : 2732,
+    "width" : 2048
+  },
+  {
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-12.9\/02-stickers.png",
+    "height" : 2732,
+    "width" : 2048
+  },
+  {
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-12.9\/03-widgets.png",
+    "height" : 2732,
+    "width" : 2048
+  },
+  {
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-12.9\/04-goal-card.png",
+    "height" : 2732,
+    "width" : 2048
+  },
+  {
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-11\/01-reward-road.png",
+    "height" : 2420,
+    "width" : 1668
+  },
+  {
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-11\/02-stickers.png",
+    "height" : 2420,
+    "width" : 1668
+  },
+  {
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-11\/03-widgets.png",
+    "height" : 2420,
+    "width" : 1668
+  },
+  {
+    "alpha" : false,
+    "color" : "RGB",
+    "file" : "ja\/ipad-11\/04-goal-card.png",
+    "height" : 2420,
+    "width" : 1668
   }
 ]
